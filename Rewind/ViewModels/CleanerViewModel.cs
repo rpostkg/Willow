@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Dispatching;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -10,6 +11,8 @@ namespace Rewind.ViewModels;
 
 public partial class CleanerViewModel : ObservableObject
 {
+    private readonly DispatcherQueue _dispatcher;
+
     [ObservableProperty]
     private string tempSize = "Calculating...";
 
@@ -21,6 +24,7 @@ public partial class CleanerViewModel : ObservableObject
 
     public CleanerViewModel()
     {
+        _dispatcher = DispatcherQueue.GetForCurrentThread();
         _ = CalculateSizesAsync();
     }
 
@@ -32,7 +36,8 @@ public partial class CleanerViewModel : ObservableObject
             long size = 0;
             size += GetDirectorySize(Path.GetTempPath());
             size += GetDirectorySize(@"C:\Windows\Temp");
-            TempSize = $"{size / 1024 / 1024} MB";
+            string result = $"{size / 1024 / 1024} MB";
+            _dispatcher?.TryEnqueue(() => TempSize = result);
         });
     }
 
