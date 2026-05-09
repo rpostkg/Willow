@@ -29,20 +29,26 @@ public partial class DashboardViewModel : ObservableObject
         _isUpdating = true;
         while (_isUpdating)
         {
-            UpdateMetrics();
+            var (cpu, ram, disk) = await Task.Run(() => GetMetrics());
+            CpuUsage = cpu;
+            RamUsage = ram;
+            DiskUsage = disk;
             await Task.Delay(2000);
         }
     }
 
-    private void UpdateMetrics()
+    private (double, double, double) GetMetrics()
     {
+        double cpu = 0;
+        double ram = 0;
+        double disk = 0;
         try
         {
             using (var searcher = new ManagementObjectSearcher("select LoadPercentage from Win32_Processor"))
             {
                 foreach (var obj in searcher.Get())
                 {
-                    CpuUsage = Convert.ToDouble(obj["LoadPercentage"]);
+                    cpu = Convert.ToDouble(obj["LoadPercentage"]);
                 }
             }
 
@@ -52,7 +58,7 @@ public partial class DashboardViewModel : ObservableObject
                 {
                     double free = Convert.ToDouble(obj["FreePhysicalMemory"]);
                     double total = Convert.ToDouble(obj["TotalVisibleMemorySize"]);
-                    RamUsage = Math.Round(((total - free) / total) * 100, 1);
+                    ram = Math.Round(((total - free) / total) * 100, 1);
                 }
             }
 
@@ -62,10 +68,11 @@ public partial class DashboardViewModel : ObservableObject
                 {
                     double free = Convert.ToDouble(obj["FreeSpace"]);
                     double total = Convert.ToDouble(obj["Size"]);
-                    DiskUsage = Math.Round(((total - free) / total) * 100, 1);
+                    disk = Math.Round(((total - free) / total) * 100, 1);
                 }
             }
         }
         catch { }
+        return (cpu, ram, disk);
     }
 }

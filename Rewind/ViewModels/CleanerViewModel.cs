@@ -28,6 +28,7 @@ public partial class CleanerViewModel : ObservableObject
     {
         await Task.Run(() =>
         {
+            Debug.Print("Async calculation task running");
             long size = 0;
             size += GetDirectorySize(Path.GetTempPath());
             size += GetDirectorySize(@"C:\Windows\Temp");
