@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Rewind (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Rewind (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
