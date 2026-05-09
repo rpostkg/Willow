@@ -1,0 +1,26 @@
+<Page
+    x:Class="Rewind.Views.CleanerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Padding="24" Spacing="20">
+        <TextBlock Text="Cleaner" Style="{StaticResource TitleTextBlockStyle}" />
+        
+        <TextBlock Text="{x:Bind ViewModel.Status, Mode=OneWay}" Foreground="Gray" />
+
+        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+            <TextBlock Text="Temporary Files:" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Bind ViewModel.TempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
+            <Button Content="Clean Temp" Command="{x:Bind ViewModel.CleanCommand}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+            <TextBlock Text="WinSxS Backup:" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Bind ViewModel.WinSxSSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
+            <Button Content="Clean WinSxS (Admin)" Command="{x:Bind ViewModel.CleanWinSxSCommand}" />
+        </StackPanel>
+    </StackPanel>
+</Page>

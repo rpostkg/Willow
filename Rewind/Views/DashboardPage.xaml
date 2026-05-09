@@ -1,0 +1,30 @@
+<Page
+    x:Class="Rewind.Views.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Padding="24" Spacing="20">
+        <TextBlock Text="Dashboard" Style="{StaticResource TitleTextBlockStyle}" />
+        
+        <StackPanel Spacing="10">
+            <TextBlock Text="CPU Usage" />
+            <ProgressBar Value="{x:Bind ViewModel.CpuUsage, Mode=OneWay}" Maximum="100" />
+            <TextBlock Text="{x:Bind ViewModel.CpuUsage, Mode=OneWay}" />
+        </StackPanel>
+
+        <StackPanel Spacing="10">
+            <TextBlock Text="RAM Usage" />
+            <ProgressBar Value="{x:Bind ViewModel.RamUsage, Mode=OneWay}" Maximum="100" />
+            <TextBlock Text="{x:Bind ViewModel.RamUsage, Mode=OneWay}" />
+        </StackPanel>
+
+        <StackPanel Spacing="10">
+            <TextBlock Text="Disk Usage" />
+            <ProgressBar Value="{x:Bind ViewModel.DiskUsage, Mode=OneWay}" Maximum="100" />
+            <TextBlock Text="{x:Bind ViewModel.DiskUsage, Mode=OneWay}" />
+        </StackPanel>
+    </StackPanel>
+</Page>

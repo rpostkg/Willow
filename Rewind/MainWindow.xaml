@@ -14,6 +14,13 @@
     </Window.SystemBackdrop>
 
     <Grid>
-
+        <NavigationView x:Name="NavView" SelectionChanged="NavView_SelectionChanged" IsBackButtonVisible="Collapsed">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Tag="Dashboard" Content="Dashboard" Icon="Home" />
+                <NavigationViewItem Tag="Cleaner" Content="Cleaner" Icon="Delete" />
+                <NavigationViewItem Tag="Optimizer" Content="Optimizer" Icon="Repair" />
+            </NavigationView.MenuItems>
+            <Frame x:Name="ContentFrame" />
+        </NavigationView>
     </Grid>
 </Window>
