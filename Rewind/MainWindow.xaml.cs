@@ -29,6 +29,9 @@ namespace Rewind
                     case "Optimizer":
                         ContentFrame.Navigate(typeof(OptimizerPage));
                         break;
+                    case "Settings":
+                        ContentFrame.Navigate(typeof(SettingsPage));
+                        break;
                 }
             }
         }
