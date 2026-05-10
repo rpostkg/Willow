@@ -4,10 +4,41 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Rewind.Models"
     mc:Ignorable="d">
 
-    <StackPanel Padding="24" Spacing="20">
-        <TextBlock Text="Optimizer" Style="{StaticResource TitleTextBlockStyle}" />
-        <TextBlock Text="{x:Bind ViewModel.Message, Mode=OneWay}" />
-    </StackPanel>
+    <Grid Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Optimizer" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,20"/>
+        
+        <ScrollViewer Grid.Row="1">
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.Tweaks}">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout MinItemWidth="300" MinRowSpacing="12" MinColumnSpacing="12" />
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="models:Tweak">
+                        <StackPanel BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="16" CornerRadius="8">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <ToggleSwitch IsOn="{x:Bind IsEnabled, Mode=TwoWay}" />
+                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{x:Bind Category}" Foreground="Gray" Margin="0,4,0,0" FontSize="12"/>
+                            <TextBlock Text="{x:Bind Description}" TextWrapping="Wrap" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="12" Margin="0,20,0,0" HorizontalAlignment="Right">
+            <Button Content="Revert Selected (Admin)" Command="{x:Bind ViewModel.RevertSelectedTweaksCommand}" />
+            <Button Content="Apply Selected (Admin)" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.ApplySelectedTweaksCommand}" />
+        </StackPanel>
+    </Grid>
 </Page>

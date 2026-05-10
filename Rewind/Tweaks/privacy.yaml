@@ -1,0 +1,26 @@
+tweaks:
+  - id: disable_telemetry
+    name: "Disable Windows Telemetry"
+    category: "Privacy"
+    description: "Disables the Connected User Experiences and Telemetry service to reduce data collection."
+    minversion: 19041
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
+        key: "AllowTelemetry"
+        value: "0"
+        valueType: DWord
+      - type: Service
+        name: "DiagTrack"
+        targetState: Disabled
+    revertActions:
+      - type: Registry
+        hive: LocalMachine
+        path: "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
+        key: "AllowTelemetry"
+        value: "3"
+        valueType: DWord
+      - type: Service
+        name: "DiagTrack"
+        targetState: Automatic
