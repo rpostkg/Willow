@@ -37,8 +37,8 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="12" Margin="0,20,0,0" HorizontalAlignment="Right">
-            <Button Content="Revert Selected (Admin)" Command="{x:Bind ViewModel.RevertSelectedTweaksCommand}" />
-            <Button Content="Apply Selected (Admin)" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.ApplySelectedTweaksCommand}" />
+            <Button Content="Revert Selected" Click="RevertButton_Click" />
+            <Button Content="Review Selected" Style="{StaticResource AccentButtonStyle}" Click="ReviewButton_Click" />
         </StackPanel>
     </Grid>
 </Page>

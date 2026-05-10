@@ -1,14 +1,84 @@
+using Microsoft.Win32;
 using Rewind.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.ServiceProcess;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Rewind.Services;
 
 public class TweakEngineService
 {
+    public async Task<List<ChangeItem>> GenerateChangeReportAsync(List<Tweak> tweaks, bool isRevert)
+    {
+        var changes = new List<ChangeItem>();
+        
+        await Task.Run(() => 
+        {
+            foreach (var tweak in tweaks)
+            {
+                var actions = isRevert ? tweak.RevertActions : tweak.Actions;
+                if (actions == null) continue;
+
+                foreach (var action in actions)
+                {
+                    var item = new ChangeItem
+                    {
+                        Type = action.Type,
+                        NewValue = action.Type == ActionType.Registry ? action.Value : action.TargetState
+                    };
+
+                    if (action.Type == ActionType.Registry)
+                    {
+                        item.Target = $"{action.Hive}\\{action.Path}\\{action.Key}";
+                        RegistryKey root = action.Hive == "CurrentUser" ? Registry.CurrentUser : Registry.LocalMachine;
+                        try
+                        {
+                            using (var key = root.OpenSubKey(action.Path))
+                            {
+                                if (key != null)
+                                {
+                                    var val = key.GetValue(action.Key);
+                                    item.OldValue = val != null ? val.ToString() : "New Key";
+                                }
+                                else
+                                {
+                                    item.OldValue = "New Key";
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            item.OldValue = "Unknown/Error";
+                        }
+                    }
+                    else if (action.Type == ActionType.Service)
+                    {
+                        item.Target = $"Service: {action.Name}";
+                        try
+                        {
+                            using (var sc = new ServiceController(action.Name))
+                            {
+                                item.OldValue = sc.StartType.ToString();
+                            }
+                        }
+                        catch
+                        {
+                            item.OldValue = "Not Found";
+                        }
+                    }
+                    
+                    changes.Add(item);
+                }
+            }
+        });
+
+        return changes;
+    }
+
     public bool ApplyTweaks(List<Tweak> tweaks)
     {
         return ExecuteActions(tweaks, false);

@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Rewind.Models;
 using Rewind.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,22 +32,22 @@ public partial class OptimizerViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ApplySelectedTweaksAsync()
+    private void SelectAll()
     {
-        var selectedTweaks = Tweaks.Where(t => t.IsEnabled).ToList();
-        if (selectedTweaks.Any())
-        {
-            await Task.Run(() => _engineService.ApplyTweaks(selectedTweaks));
-        }
+        foreach(var t in Tweaks) t.IsEnabled = true;
     }
 
-    [RelayCommand]
-    private async Task RevertSelectedTweaksAsync()
+    public async Task<List<ChangeItem>> GenerateReportAsync(List<Tweak> tweaks, bool isRevert)
     {
-        var selectedTweaks = Tweaks.Where(t => t.IsEnabled).ToList();
-        if (selectedTweaks.Any())
+        return await _engineService.GenerateChangeReportAsync(tweaks, isRevert);
+    }
+
+    public async Task ExecuteTweaksAsync(List<Tweak> tweaks, bool isRevert)
+    {
+        await Task.Run(() => 
         {
-            await Task.Run(() => _engineService.RevertTweaks(selectedTweaks));
-        }
+            if (isRevert) _engineService.RevertTweaks(tweaks);
+            else _engineService.ApplyTweaks(tweaks);
+        });
     }
 }
