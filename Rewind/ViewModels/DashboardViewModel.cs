@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.UI.Dispatching;
 using System;
 using System.Diagnostics;
 using System.Management;
@@ -8,6 +9,8 @@ namespace Rewind.ViewModels;
 
 public partial class DashboardViewModel : ObservableObject
 {
+    private readonly DispatcherQueue _dispatcher;
+
     [ObservableProperty]
     private double cpuUsage;
 
@@ -16,11 +19,12 @@ public partial class DashboardViewModel : ObservableObject
 
     [ObservableProperty]
     private double diskUsage;
-    
+
     private bool _isUpdating;
 
     public DashboardViewModel()
     {
+        _dispatcher = DispatcherQueue.GetForCurrentThread();
         StartUpdating();
     }
 
@@ -30,9 +34,12 @@ public partial class DashboardViewModel : ObservableObject
         while (_isUpdating)
         {
             var (cpu, ram, disk) = await Task.Run(() => GetMetrics());
-            CpuUsage = cpu;
-            RamUsage = ram;
-            DiskUsage = disk;
+            _dispatcher?.TryEnqueue(() =>
+            {
+                CpuUsage = cpu;
+                RamUsage = ram;
+                DiskUsage = disk;
+            });
             await Task.Delay(2000);
         }
     }
