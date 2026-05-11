@@ -23,10 +23,10 @@
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="models:Tweak">
-                        <StackPanel BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="16" CornerRadius="8">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <ToggleSwitch IsOn="{x:Bind IsEnabled, Mode=TwoWay}" />
-                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Center"/>
+                        <StackPanel  BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="16" CornerRadius="8">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Content="{x:Bind Name}" IsChecked="{x:Bind IsEnabled, Mode=TwoWay}" Style="{StaticResource PivotTitleContentControlStyle}" Margin="0,0,0,0" Padding="8,3,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <!--<TextBlock Text="{x:Bind Name}" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Left"/>-->
                             </StackPanel>
                             <TextBlock Text="{x:Bind Category}" Foreground="Gray" Margin="0,4,0,0" FontSize="12"/>
                             <TextBlock Text="{x:Bind Description}" TextWrapping="Wrap" Margin="0,8,0,0"/>
