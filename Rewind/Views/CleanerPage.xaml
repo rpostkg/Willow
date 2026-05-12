@@ -20,7 +20,12 @@
         <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
             <TextBlock Text="WinSxS Backup:" VerticalAlignment="Center" />
             <TextBlock Text="{x:Bind ViewModel.WinSxSSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
-            <Button Content="Clean WinSxS (Admin)" Command="{x:Bind ViewModel.CleanWinSxSCommand}" />
+            <Button Command="{x:Bind ViewModel.CleanWinSxSCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA18;"/>
+                    <TextBlock Text=" Clean up WinSxS"/> <!-- That space is intentional -->
+                </StackPanel>
+            </Button>
         </StackPanel>
     </StackPanel>
 </Page>
