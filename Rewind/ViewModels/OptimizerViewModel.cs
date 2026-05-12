@@ -42,12 +42,12 @@ public partial class OptimizerViewModel : ObservableObject
         return await _engineService.GenerateChangeReportAsync(tweaks, isRevert);
     }
 
-    public async Task ExecuteTweaksAsync(List<Tweak> tweaks, bool isRevert)
+    public async Task ExecuteTweaksAsync(List<Tweak> tweaks, List<ChangeItem> report, bool isRevert)
     {
         await Task.Run(() => 
         {
             if (isRevert) _engineService.RevertTweaks(tweaks);
-            else _engineService.ApplyTweaks(tweaks);
+            else _engineService.ApplyTweaks(tweaks, report);
         });
     }
 }

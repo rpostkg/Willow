@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,29 +13,53 @@ namespace Rewind.Services;
 
 public class TweakEngineService
 {
+    private readonly PreferencesService _prefsService = new();
+
     public async Task<List<ChangeItem>> GenerateChangeReportAsync(List<Tweak> tweaks, bool isRevert)
     {
         var changes = new List<ChangeItem>();
-        
-        await Task.Run(() => 
+        var prefs = _prefsService.LoadPreferences();
+
+        await Task.Run(() =>
         {
             foreach (var tweak in tweaks)
             {
                 var actions = isRevert ? tweak.RevertActions : tweak.Actions;
                 if (actions == null) continue;
 
-                foreach (var action in actions)
+                // Check if we have backup data for this tweak (from userpreferences.yaml)
+                List<BackedUpState> backups = null;
+                bool hasBackup = isRevert && prefs.OldRegistryData.TryGetValue(tweak.Id, out backups);
+
+                for (int i = 0; i < actions.Count; i++)
                 {
+                    var action = actions[i];
                     var item = new ChangeItem
                     {
+                        TweakId = tweak.Id,
                         Type = action.Type,
-                        NewValue = action.Type == ActionType.Registry ? action.Value : 
-                                   (action.Type == ActionType.Service ? action.TargetState : "Execute Script")
+                        NewValue = action.Type == ActionType.Registry ? action.Value :
+                                   (action.Type == ActionType.Service ? action.TargetState : "Execute Script"),
+                        Hive = action.Hive,
+                        Path = action.Path,
+                        Key = action.Key,
+                        ValueType = action.ValueType
                     };
 
                     if (action.Type == ActionType.Registry)
                     {
                         item.Target = $"{action.Hive}\\{action.Path}\\{action.Key}";
+
+                        // If we have a backup for this specific target, override the NewValue shown in the UI
+                        if (hasBackup)
+                        {
+                            var matchingBackup = backups.Find(b => b.Target == item.Target);
+                            if (matchingBackup != null)
+                            {
+                                item.NewValue = matchingBackup.OldValue;
+                            }
+                        }
+
                         RegistryKey root = action.Hive == "CurrentUser" ? Registry.CurrentUser : Registry.LocalMachine;
                         try
                         {
@@ -59,6 +84,16 @@ public class TweakEngineService
                     else if (action.Type == ActionType.Service)
                     {
                         item.Target = $"Service: {action.Name}";
+
+                        if (hasBackup)
+                        {
+                            var matchingBackup = backups.Find(b => b.Target == item.Target);
+                            if (matchingBackup != null)
+                            {
+                                item.NewValue = matchingBackup.OldValue;
+                            }
+                        }
+
                         try
                         {
                             using (var sc = new ServiceController(action.Name))
@@ -75,8 +110,9 @@ public class TweakEngineService
                     {
                         item.Target = "Powershell Script";
                         item.OldValue = "N/A";
+                        item.NewValue = isRevert ? "Execute Undo Script" : "Execute Script";
                     }
-                    
+
                     changes.Add(item);
                 }
             }
@@ -85,60 +121,146 @@ public class TweakEngineService
         return changes;
     }
 
-    public bool ApplyTweaks(List<Tweak> tweaks)
+    public bool ApplyTweaks(List<Tweak> tweaks, List<ChangeItem> report)
     {
-        return ExecuteActions(tweaks, false);
-    }
-    
-    public bool RevertTweaks(List<Tweak> tweaks)
-    {
-        return ExecuteActions(tweaks, true);
-    }
+        var prefs = _prefsService.LoadPreferences();
+        bool prefsChanged = false;
 
-    // The main meat of the optimization tab
-    private bool ExecuteActions(List<Tweak> tweaks, bool revert)
-    {
-        var sb = new StringBuilder();
-        
-        foreach (var tweak in tweaks)
+        // Group report by TweakId to process backups per tweak
+        var tweakGroups = report.GroupBy(r => r.TweakId);
+
+        foreach (var group in tweakGroups)
         {
-            var actions = revert ? tweak.RevertActions : tweak.Actions;
-            if (actions == null) continue;
+            string tweakId = group.Key;
 
-            foreach (var action in actions)
+            // If we already have a backup for this Tweak ID, do not overwrite or append. We don't want duplicate data.
+            if (prefs.OldRegistryData.ContainsKey(tweakId)) continue;
+
+            prefsChanged = true;
+            prefs.OldRegistryData[tweakId] = new List<BackedUpState>();
+
+            foreach (var change in group)
             {
-                if (action.Type == ActionType.Registry)
+                if (change.Type == ActionType.Script) continue;
+
+                prefs.OldRegistryData[tweakId].Add(new BackedUpState
                 {
-                    string root = action.Hive == "CurrentUser" ? "HKCU:" : "HKLM:";
-                    string fullPath = $"{root}\\{action.Path}";
-                    sb.AppendLine($"if (!(Test-Path '{fullPath}')) {{ New-Item -Path '{fullPath}' -Force | Out-Null }}");
-                    sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{action.Key}' -Value {action.Value} -Type {action.ValueType} -Force");
-                }
-                else if (action.Type == ActionType.Service)
-                {
-                    string startupType = action.TargetState == "Disabled" ? "Disabled" : 
-                                         (action.TargetState == "Automatic" ? "Automatic" : "Manual");
-                    sb.AppendLine($"Set-Service -Name '{action.Name}' -StartupType {startupType}");
-                    if (action.TargetState == "Disabled")
-                    {
-                        sb.AppendLine($"Stop-Service -Name '{action.Name}' -Force -ErrorAction SilentlyContinue");
-                    }
-                    else if (action.TargetState == "Automatic")
-                    {
-                        sb.AppendLine($"Start-Service -Name '{action.Name}' -ErrorAction SilentlyContinue");
-                    }
-                }
-                else if (action.Type == ActionType.Script)
-                {
-                    sb.AppendLine(action.Script);
-                }
+                    Type = change.Type,
+                    Target = change.Target,
+                    OldValue = change.OldValue,
+                    Hive = change.Hive,
+                    Path = change.Path,
+                    Key = change.Key,
+                    ValueType = change.ValueType
+                });
             }
         }
 
-        if (sb.Length == 0) return true;
+        if (prefsChanged)
+        {
+            _prefsService.SavePreferences(prefs);
+        }
+
+        var sb = new StringBuilder();
+        foreach (var tweak in tweaks)
+        {
+            if (tweak.Actions == null) continue;
+            AppendActions(sb, tweak.Actions);
+        }
+
+        return ExecutePowerShell(sb.ToString());
+    }
+
+    public bool RevertTweaks(List<Tweak> tweaks)
+    {
+        var prefs = _prefsService.LoadPreferences();
+        var sb = new StringBuilder();
+
+        foreach (var tweak in tweaks)
+        {
+            if (prefs.OldRegistryData.TryGetValue(tweak.Id, out var backups) && backups.Count > 0)
+            {
+                foreach (var backup in backups)
+                {
+                    if (backup.Type == ActionType.Registry)
+                    {
+                        string root = backup.Hive == "CurrentUser" ? "HKCU:" : "HKLM:";
+                        string fullPath = $"{root}\\{backup.Path}";
+
+                        if (backup.OldValue == "New Key")
+                        {
+                            sb.AppendLine($"Remove-ItemProperty -Path '{fullPath}' -Name '{backup.Key}' -Force -ErrorAction SilentlyContinue");
+                        }
+                        else if (backup.OldValue != "Unknown/Error")
+                        {
+                            sb.AppendLine($"if (!(Test-Path '{fullPath}')) {{ New-Item -Path '{fullPath}' -Force | Out-Null }}");
+                            sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{backup.Key}' -Value {backup.OldValue} -Type {backup.ValueType} -Force");
+                        }
+                    }
+                    else if (backup.Type == ActionType.Service)
+                    {
+                        if (backup.OldValue != "Not Found")
+                        {
+                            sb.AppendLine($"Set-Service -Name '{backup.Target.Replace("Service: ", "")}' -StartupType {backup.OldValue}");
+                        }
+                    }
+                }
+
+                if (tweak.RevertActions != null)
+                {
+                    foreach (var action in tweak.RevertActions)
+                    {
+                        if (action.Type == ActionType.Script) sb.AppendLine(action.Script);
+                    }
+                }
+            }
+            else
+            {
+                if (tweak.RevertActions != null) AppendActions(sb, tweak.RevertActions);
+            }
+        }
+
+        return ExecutePowerShell(sb.ToString());
+    }
+
+    private void AppendActions(StringBuilder sb, List<TweakAction> actions)
+    {
+        foreach (var action in actions)
+        {
+            if (action.Type == ActionType.Registry)
+            {
+                string root = action.Hive == "CurrentUser" ? "HKCU:" : "HKLM:";
+                string fullPath = $"{root}\\{action.Path}";
+                sb.AppendLine($"if (!(Test-Path '{fullPath}')) {{ New-Item -Path '{fullPath}' -Force | Out-Null }}");
+                sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{action.Key}' -Value {action.Value} -Type {action.ValueType} -Force");
+            }
+            else if (action.Type == ActionType.Service)
+            {
+                string startupType = action.TargetState == "Disabled" ? "Disabled" :
+                                     (action.TargetState == "Automatic" ? "Automatic" : "Manual");
+                sb.AppendLine($"Set-Service -Name '{action.Name}' -StartupType {startupType}");
+                if (action.TargetState == "Disabled")
+                {
+                    sb.AppendLine($"Stop-Service -Name '{action.Name}' -Force -ErrorAction SilentlyContinue");
+                }
+                else if (action.TargetState == "Automatic")
+                {
+                    sb.AppendLine($"Start-Service -Name '{action.Name}' -ErrorAction SilentlyContinue");
+                }
+            }
+            else if (action.Type == ActionType.Script)
+            {
+                sb.AppendLine(action.Script);
+            }
+        }
+    }
+
+    private bool ExecutePowerShell(string scriptContent)
+    {
+        if (string.IsNullOrWhiteSpace(scriptContent)) return true;
 
         string scriptPath = Path.Combine(Path.GetTempPath(), "RewindTweak.ps1");
-        File.WriteAllText(scriptPath, sb.ToString());
+        File.WriteAllText(scriptPath, scriptContent);
 
         try
         {

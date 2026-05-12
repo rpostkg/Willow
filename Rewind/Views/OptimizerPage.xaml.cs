@@ -24,7 +24,7 @@ public sealed partial class OptimizerPage : Page
         
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
-            await ViewModel.ExecuteTweaksAsync(selected, false);
+            await ViewModel.ExecuteTweaksAsync(selected, report, false);
         }
     }
 
@@ -38,7 +38,7 @@ public sealed partial class OptimizerPage : Page
         
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
-            await ViewModel.ExecuteTweaksAsync(selected, true);
+            await ViewModel.ExecuteTweaksAsync(selected, report, true);
         }
     }
 }
