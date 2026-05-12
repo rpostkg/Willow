@@ -11,10 +11,24 @@
         
         <TextBlock Text="{x:Bind ViewModel.Status, Mode=OneWay}" Foreground="Gray" />
 
-        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-            <TextBlock Text="Temporary Files:" VerticalAlignment="Center" />
-            <TextBlock Text="{x:Bind ViewModel.TempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
-            <Button Content="Clean Temp" Command="{x:Bind ViewModel.CleanCommand}" />
+        <StackPanel Spacing="8">
+            <TextBlock Text="Temporary Files:" Style="{StaticResource SubtitleTextBlockStyle}" />
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock Text="User Temp:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="{x:Bind ViewModel.UserTempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock Text="Windows Temp:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="{x:Bind ViewModel.WindowsTempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock Text="Combined:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="{x:Bind ViewModel.TempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
+                <Button Content="Clean Temp" Command="{x:Bind ViewModel.CleanCommand}" />
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">

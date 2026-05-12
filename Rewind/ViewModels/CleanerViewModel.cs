@@ -17,6 +17,12 @@ public partial class CleanerViewModel : ObservableObject
     private string tempSize = "Calculating...";
 
     [ObservableProperty]
+    private string userTempSize = "Calculating...";
+
+    [ObservableProperty]
+    private string windowsTempSize = "Calculating...";
+
+    [ObservableProperty]
     private string winSxSSize = "Unknown";
 
     [ObservableProperty]
@@ -33,11 +39,22 @@ public partial class CleanerViewModel : ObservableObject
         await Task.Run(() =>
         {
             Debug.Print("Async calculation task running");
-            long size = 0;
-            size += GetDirectorySize(Path.GetTempPath());
-            size += GetDirectorySize(@"C:\Windows\Temp");
+
+            string userTempPath = Path.GetTempPath();
+            long userSize = GetDirectorySize(userTempPath);
+            long winSize = GetDirectorySize(@"C:\Windows\Temp");
+            long size = userSize + winSize;
+
             string result = $"{size / 1024 / 1024} MB";
-            _dispatcher?.TryEnqueue(() => TempSize = result);
+            string userResult = $"{userSize / 1024 / 1024} MB";
+            string windowsResult = $"{winSize / 1024 / 1024} MB";
+
+            _dispatcher?.TryEnqueue(() =>
+            {
+                TempSize = result;
+                UserTempSize = userResult;
+                WindowsTempSize = windowsResult;
+            });
         });
     }
 
