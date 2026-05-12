@@ -28,7 +28,8 @@ public class TweakEngineService
                     var item = new ChangeItem
                     {
                         Type = action.Type,
-                        NewValue = action.Type == ActionType.Registry ? action.Value : action.TargetState
+                        NewValue = action.Type == ActionType.Registry ? action.Value : 
+                                   (action.Type == ActionType.Service ? action.TargetState : "Execute Script")
                     };
 
                     if (action.Type == ActionType.Registry)
@@ -69,6 +70,11 @@ public class TweakEngineService
                         {
                             item.OldValue = "Not Found";
                         }
+                    }
+                    else if (action.Type == ActionType.Script)
+                    {
+                        item.Target = "Powershell Script";
+                        item.OldValue = "N/A";
                     }
                     
                     changes.Add(item);
@@ -121,6 +127,10 @@ public class TweakEngineService
                     {
                         sb.AppendLine($"Start-Service -Name '{action.Name}' -ErrorAction SilentlyContinue");
                     }
+                }
+                else if (action.Type == ActionType.Script)
+                {
+                    sb.AppendLine(action.Script);
                 }
             }
         }

@@ -23,7 +23,8 @@ public class Tweak
 public enum ActionType
 {
     Registry,
-    Service
+    Service,
+    Script
 }
 
 public class TweakAction
@@ -40,4 +41,7 @@ public class TweakAction
     // Service specific
     public string Name { get; set; } = string.Empty;
     public string TargetState { get; set; } = string.Empty;
+    
+    // Script specific
+    public string Script { get; set; } = string.Empty;
 }

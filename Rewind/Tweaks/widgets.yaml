@@ -1,0 +1,17 @@
+tweaks:
+  - id: disable_widgets
+    name: "Disable widgets"
+    category: "Visual"
+    description: "Disables widgets entirely."
+    minversion: 22000
+    actions:
+      - type: Script
+        script: |
+          Get-Process *Widget* | Stop-Process -ErrorAction SilentlyContinue
+          Get-AppxPackage Microsoft.WidgetsPlatformRuntime -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+          Get-AppxPackage MicrosoftWindows.Client.WebExperience -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+    revertActions:
+      - type: Script
+        script: |
+          Add-AppxPackage -Register "C:\Program Files\WindowsApps\Microsoft.WidgetsPlatformRuntime*\AppxManifest.xml" -DisableDevelopmentMode -ErrorAction SilentlyContinue
+          Add-AppxPackage -Register "C:\Program Files\WindowsApps\MicrosoftWindows.Client.WebExperience*\AppxManifest.xml" -DisableDevelopmentMode -ErrorAction SilentlyContinue
