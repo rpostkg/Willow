@@ -1,26 +1,41 @@
 tweaks:
-  - id: disable_telemetry
-    name: "Disable Windows Telemetry"
-    category: "Privacy"
-    description: "Disables the Connected User Experiences and Telemetry service to reduce data collection."
-    minversion: 19041
+  - id: telemetry_master
+    name: Disable System Telemetry
+    category: Privacy
+    description: Disables Microsoft Telemetry, Advertising ID, and Online Speech recognition.
     actions:
       - type: Registry
-        hive: LocalMachine
-        path: "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
-        key: "AllowTelemetry"
-        value: "0"
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo
+        key: Enabled
+        value: 0
         valueType: DWord
-      - type: Service
-        name: "DiagTrack"
-        targetState: Disabled
-    revertActions:
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\Privacy
+        key: TailoredExperiencesWithDiagnosticDataEnabled
+        value: 0
+        valueType: DWord
       - type: Registry
         hive: LocalMachine
-        path: "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
-        key: "AllowTelemetry"
-        value: "3"
+        path: SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection
+        key: AllowTelemetry
+        value: 0
         valueType: DWord
       - type: Service
-        name: "DiagTrack"
+        name: diagtrack
+        targetState: Disabled
+      - type: Service
+        name: wermgr
+        targetState: Disabled
+      - type: Script
+        script: Set-MpPreference -SubmitSamplesConsent 2
+    revertActions:
+      - type: Service
+        name: diagtrack
         targetState: Automatic
+      - type: Service
+        name: wermgr
+        targetState: Automatic
+      - type: Script
+        script: Set-MpPreference -SubmitSamplesConsent 1
