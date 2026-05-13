@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Rewind.Models;
 
@@ -7,7 +8,7 @@ public class TweakFile
     public List<Tweak> Tweaks { get; set; } = new();
 }
 
-public class Tweak
+public partial class Tweak : ObservableObject
 {
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -15,7 +16,14 @@ public class Tweak
     public string Description { get; set; } = string.Empty;
     public int MinVersion { get; set; } = 0;
     public int MaxVersion { get; set; } = int.MaxValue;
-    public bool IsEnabled { get; set; } = false;
+
+    private bool _isEnabled = false;
+    public bool IsEnabled
+    {
+        get => _isEnabled;
+        set => SetProperty(ref _isEnabled, value);
+    }
+
     public List<TweakAction> Actions { get; set; } = new();
     public List<TweakAction> RevertActions { get; set; } = new();
 }

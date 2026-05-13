@@ -162,6 +162,20 @@ public class TweakEngineService
         }
 
         var sb = new StringBuilder();
+
+        if (!prefs.DisableBackups)
+        {
+            sb.AppendLine("# Ensure restore points can be created frequently");
+            sb.AppendLine("Set-ItemProperty -Path \"HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore\" -Name \"SystemRestorePointCreationFrequency\" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue");
+            sb.AppendLine();
+            sb.AppendLine("# Enable restore if needed");
+            sb.AppendLine("if (-not (Get-ComputerRestorePoint)) { Enable-ComputerRestore -Drive $Env:SystemDrive }");
+            sb.AppendLine();
+            sb.AppendLine("# Create the point");
+            sb.AppendLine("Checkpoint-Computer -Description \"System Restore Point created by Rewind\" -RestorePointType MODIFY_SETTINGS -ErrorAction SilentlyContinue");
+            sb.AppendLine();
+        }
+
         foreach (var tweak in tweaks)
         {
             if (tweak.Actions == null) continue;

@@ -4,7 +4,8 @@ namespace Rewind.Models;
 
 public class UserPreferences
 {
-    public bool DisableBackupWarnings { get; set; } = false;
+    public bool DisableBackups { get; set; } = false;
+    public bool InformedOfBackups { get; set; } = false;
     public Dictionary<string, List<BackedUpState>> OldRegistryData { get; set; } = new();
 }
 

@@ -17,8 +17,20 @@ public partial class OptimizerViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<Tweak> tweaks = new();
 
+    [ObservableProperty]
+    private bool isInformedOfBackups;
+
+    [ObservableProperty]
+    private bool isInfoBarOpen;
+
+    public bool AreTweaksSelected => Tweaks.Any(t => t.IsEnabled);
+    public bool CanReviewOrRevert => AreTweaksSelected && IsInformedOfBackups;
+
     public OptimizerViewModel()
     {
+        var prefs = new PreferencesService().LoadPreferences();
+        isInformedOfBackups = prefs.InformedOfBackups;
+        
         LoadTweaks();
     }
 
@@ -27,8 +39,34 @@ public partial class OptimizerViewModel : ObservableObject
         var loadedTweaks = _loaderService.LoadTweaks();
         foreach (var tweak in loadedTweaks)
         {
+            tweak.PropertyChanged += (s, e) => {
+                if (e.PropertyName == nameof(Tweak.IsEnabled))
+                {
+                    OnPropertyChanged(nameof(AreTweaksSelected));
+                    OnPropertyChanged(nameof(CanReviewOrRevert));
+                    
+                    if (AreTweaksSelected && !IsInformedOfBackups)
+                    {
+                        IsInfoBarOpen = true;
+                    }
+                }
+            };
             Tweaks.Add(tweak);
         }
+    }
+
+    [RelayCommand]
+    private void MarkAsInformed()
+    {
+        IsInformedOfBackups = true;
+        IsInfoBarOpen = false;
+        
+        var prefsService = new PreferencesService();
+        var prefs = prefsService.LoadPreferences();
+        prefs.InformedOfBackups = true;
+        prefsService.SavePreferences(prefs);
+        
+        OnPropertyChanged(nameof(CanReviewOrRevert));
     }
 
     [RelayCommand]

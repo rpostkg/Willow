@@ -15,6 +15,12 @@ namespace Rewind
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
+            if (args.IsSettingsSelected)
+            {
+                ContentFrame.Navigate(typeof(SettingsPage));
+                return;
+            }
+
             var item = args.SelectedItem as NavigationViewItem;
             if (item != null)
             {
@@ -28,9 +34,6 @@ namespace Rewind
                         break;
                     case "Optimizer":
                         ContentFrame.Navigate(typeof(OptimizerPage));
-                        break;
-                    case "Settings":
-                        ContentFrame.Navigate(typeof(SettingsPage));
                         break;
                 }
             }

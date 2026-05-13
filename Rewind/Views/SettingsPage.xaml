@@ -6,8 +6,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Padding="24" Spacing="20">
-        <TextBlock Text="Settings" Style="{StaticResource TitleTextBlockStyle}" />
-        <TextBlock Text="{x:Bind ViewModel.Message, Mode=OneWay}" />
-    </StackPanel>
+    <Grid Padding="24">
+        <StackPanel Spacing="20">
+            <TextBlock Text="Settings" Style="{StaticResource TitleTextBlockStyle}" />
+
+            <StackPanel Spacing="8" MaxWidth="600" HorizontalAlignment="Left" />
+            <TextBlock Text="Tweaks" Style="{StaticResource SubheaderTextBlockStyle}" />
+            <ToggleSwitch Header="Automatic System Restore Points" IsOn="{x:Bind ViewModel.EnableBackups, Mode=TwoWay}" OnContent="Enabled" OffContent="Disabled" />
+
+        </StackPanel>
+    </Grid>
 </Page>

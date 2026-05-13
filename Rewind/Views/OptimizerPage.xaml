@@ -10,13 +10,22 @@
     <Grid Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="Optimizer" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,20"/>
+
+        <InfoBar Grid.Row="1"
+                 IsOpen="{x:Bind ViewModel.IsInfoBarOpen, Mode=TwoWay}"
+                 Severity="Warning"
+                 Title="System restore point notice"
+                 Message="While the revert system takes into account your current registry keys and has default fallbacks, the chance of in-depth tweaks breaking the OS is never truly zero. A system restore point will be created automatically before any tweaks are applied. This notice will only be shown once. Closing this notice will let you apply tweaks."
+                 Margin="0,0,0,20"
+                 CloseButtonClick="InfoBar_CloseButtonClick" />
         
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="2">
             <ItemsRepeater ItemsSource="{x:Bind ViewModel.Tweaks}">
                 <ItemsRepeater.Layout>
                     <UniformGridLayout MinItemWidth="300" MinRowSpacing="12" MinColumnSpacing="12" />
@@ -26,7 +35,6 @@
                         <StackPanel  BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="16" CornerRadius="8">
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Content="{x:Bind Name}" IsChecked="{x:Bind IsEnabled, Mode=TwoWay}" Style="{StaticResource PivotTitleContentControlStyle}" Margin="0,0,0,0" Padding="8,3,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                <!--<TextBlock Text="{x:Bind Name}" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Left"/>-->
                             </StackPanel>
                             <TextBlock Text="{x:Bind Category}" Foreground="Gray" Margin="0,4,0,0" FontSize="12"/>
                             <TextBlock Text="{x:Bind Description}" TextWrapping="Wrap" Margin="0,8,0,0"/>
@@ -36,9 +44,9 @@
             </ItemsRepeater>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="12" Margin="0,20,0,0" HorizontalAlignment="Right">
-            <Button Content="Revert Selected" Click="RevertButton_Click" />
-            <Button Content="Review Selected" Style="{StaticResource AccentButtonStyle}" Click="ReviewButton_Click" />
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="12" Margin="0,20,0,0" HorizontalAlignment="Right">
+            <Button Content="Revert Selected" Click="RevertButton_Click" IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />
+            <Button Content="Review Selected" Style="{StaticResource AccentButtonStyle}" Click="ReviewButton_Click" IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />
         </StackPanel>
     </Grid>
 </Page>

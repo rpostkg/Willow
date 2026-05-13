@@ -41,4 +41,9 @@ public sealed partial class OptimizerPage : Page
             await ViewModel.ExecuteTweaksAsync(selected, report, true);
         }
     }
+
+    private void InfoBar_CloseButtonClick(InfoBar sender, object args)
+    {
+        ViewModel.MarkAsInformedCommand.Execute(null);
+    }
 }
