@@ -68,17 +68,24 @@ public partial class CleanerViewModel : ObservableObject
         catch { return 0; }
     }
 
+    // TODO: Separate clean-ups into elevated and non-elevated states. We can clean User temp just fine but not Windows temp without elevation.
     private void CleanDirectory(string folderPath)
     {
         if (!Directory.Exists(folderPath)) return;
-        foreach (var file in Directory.GetFiles(folderPath))
+        try
         {
-            try { File.Delete(file); } catch { }
-        }
-        foreach (var dir in Directory.GetDirectories(folderPath))
+            foreach (var file in Directory.GetFiles(folderPath))
+            {
+                try { File.Delete(file); } catch { }
+            }
+        } catch { }
+        try
         {
-            try { Directory.Delete(dir, true); } catch { }
-        }
+            foreach (var dir in Directory.GetDirectories(folderPath))
+            {
+                try { Directory.Delete(dir, true); } catch { }
+            }
+        } catch { }
     }
 
     [RelayCommand]
