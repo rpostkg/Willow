@@ -23,9 +23,6 @@ public partial class CleanerViewModel : ObservableObject
     private string windowsTempSize = "Розрахунок...";
 
     [ObservableProperty]
-    private string winSxSSize = "Невідомо";
-
-    [ObservableProperty]
     private string status = "Готово до очищення.";
 
     public CleanerViewModel()
@@ -38,24 +35,31 @@ public partial class CleanerViewModel : ObservableObject
     {
         await Task.Run(() =>
         {
-            Debug.Print("Async calculation task running");
-
             string userTempPath = Path.GetTempPath();
             long userSize = GetDirectorySize(userTempPath);
             long winSize = GetDirectorySize(@"C:\Windows\Temp");
             long size = userSize + winSize;
 
-            string result = $"{size / 1024 / 1024} MB";
-            string userResult = $"{userSize / 1024 / 1024} MB";
-            string windowsResult = $"{winSize / 1024 / 1024} MB";
-
             _dispatcher?.TryEnqueue(() =>
             {
-                TempSize = result;
-                UserTempSize = userResult;
-                WindowsTempSize = windowsResult;
+                UserTempSize = FormatSize(userSize);
+                WindowsTempSize = FormatSize(winSize);
+                TempSize = FormatSize(size);
             });
         });
+    }
+
+    private string FormatSize(long bytes)
+    {
+        string[] units = { "B", "KB", "MB", "GB", "TB" };
+        double size = bytes;
+        int unitIndex = 0;
+        while (size >= 1024 && unitIndex < units.Length - 1)
+        {
+            size /= 1024;
+            unitIndex++;
+        }
+        return $"{size:F2} {units[unitIndex]}";
     }
 
     private long GetDirectorySize(string folderPath)
@@ -68,7 +72,6 @@ public partial class CleanerViewModel : ObservableObject
         catch { return 0; }
     }
 
-    // TODO: Separate clean-ups into elevated and non-elevated states. We can clean User temp just fine but not Windows temp without elevation.
     private void CleanDirectory(string folderPath)
     {
         if (!Directory.Exists(folderPath)) return;

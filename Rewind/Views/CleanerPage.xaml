@@ -31,15 +31,5 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-            <TextBlock Text="Копії WinSxS:" VerticalAlignment="Center" />
-            <TextBlock Text="{x:Bind ViewModel.WinSxSSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
-            <Button Command="{x:Bind ViewModel.CleanWinSxSCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA18;"/>
-                    <TextBlock Text=" Очистити WinSxS"/> <!-- That space is intentional -->
-                </StackPanel>
-            </Button>
-        </StackPanel>
     </StackPanel>
 </Page>
