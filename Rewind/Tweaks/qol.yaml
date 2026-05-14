@@ -1,8 +1,8 @@
 tweaks:
   - id: consumer_features
-    name: Disable Consumer Features
+    name: Вимкнути споживчі функції
     category: QoL
-    description: Windows will not automatically install any games, third-party apps, or application links from the Windows Store.
+    description: Windows не буде автоматично встановлювати ігри, сторонні програми або посилання на програми з Windows Store.
     actions:
       - type: Registry
         hive: LocalMachine
@@ -14,11 +14,10 @@ tweaks:
       - type: Script
         script: Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" -Name "DisableWindowsConsumerFeatures" -Force
 
-tweaks:
   - id: disable_widgets
-    name: Disable widgets
+    name: Вимкнути віджети
     category: QoL
-    description: Disables widgets entirely.
+    description: Повністю вимикає віджети Windows 11.
     minversion: 22000
     actions:
       - type: Script
@@ -32,11 +31,10 @@ tweaks:
           Add-AppxPackage -Register "C:\Program Files\WindowsApps\Microsoft.WidgetsPlatformRuntime*\AppxManifest.xml" -DisableDevelopmentMode -ErrorAction SilentlyContinue
           Add-AppxPackage -Register "C:\Program Files\WindowsApps\MicrosoftWindows.Client.WebExperience*\AppxManifest.xml" -DisableDevelopmentMode -ErrorAction SilentlyContinue
 
-
   - id: disable_hibernation
-    name: Disable Hibernation
+    name: Вимкнути гібернацію
     category: QoL
-    description: Disables hibernation. Saves disk space, not recommended to turn off on laptops.
+    description: Вимикає гібернацію. Економить місце на диску, не рекомендується вимикати на ноутбуках.
     actions:
       - type: Script
         script: powercfg.exe /hibernate off

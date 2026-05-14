@@ -14,19 +14,19 @@ public partial class CleanerViewModel : ObservableObject
     private readonly DispatcherQueue _dispatcher;
 
     [ObservableProperty]
-    private string tempSize = "Calculating...";
+    private string tempSize = "Розрахунок...";
 
     [ObservableProperty]
-    private string userTempSize = "Calculating...";
+    private string userTempSize = "Розрахунок...";
 
     [ObservableProperty]
-    private string windowsTempSize = "Calculating...";
+    private string windowsTempSize = "Розрахунок...";
 
     [ObservableProperty]
-    private string winSxSSize = "Unknown";
+    private string winSxSSize = "Невідомо";
 
     [ObservableProperty]
-    private string status = "Ready to clean.";
+    private string status = "Готово до очищення.";
 
     public CleanerViewModel()
     {
@@ -91,20 +91,20 @@ public partial class CleanerViewModel : ObservableObject
     [RelayCommand]
     private async Task CleanAsync()
     {
-        Status = "Cleaning temporary files...";
+        Status = "Очищення тимчасових файлів...";
         await Task.Run(() =>
         {
             CleanDirectory(Path.GetTempPath());
             CleanDirectory(@"C:\Windows\Temp");
         });
         await CalculateSizesAsync();
-        Status = "Cleanup complete.";
+        Status = "Очищення завершено.";
     }
 
     [RelayCommand]
     private async Task CleanWinSxSAsync()
     {
-        Status = "Cleaning WinSxS (Requires Elevation)...";
+        Status = "Очищення WinSxS (Потрібні права адміністратора)...";
         try
         {
             var processInfo = new ProcessStartInfo
@@ -119,11 +119,11 @@ public partial class CleanerViewModel : ObservableObject
             {
                 await process.WaitForExitAsync();
             }
-            Status = "WinSxS Cleanup complete.";
+            Status = "Очищення WinSxS завершено.";
         }
         catch (Exception ex)
         {
-            Status = $"Failed: {ex.Message}";
+            Status = $"Помилка: {ex.Message}";
         }
     }
 }

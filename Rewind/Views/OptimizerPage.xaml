@@ -15,13 +15,13 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Optimizer" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,20"/>
+        <TextBlock Grid.Row="0" Text="Твіки" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,20"/>
 
         <InfoBar Grid.Row="1"
                  IsOpen="{x:Bind ViewModel.IsInfoBarOpen, Mode=TwoWay}"
                  Severity="Warning"
-                 Title="System restore point notice"
-                 Message="While the revert system takes into account your current registry keys and has default fallbacks, the chance of in-depth tweaks breaking the OS is never truly zero. A system restore point will be created automatically before any tweaks are applied. This notice will only be shown once. Closing this notice will let you apply tweaks."
+                 Title="Зверніть увагу: Точка відновлення системи"
+                 Message="Хоча система відкату враховує ваші поточні ключі реєстру та має стандартні варіанти відновлення, шанс того, що глибокі налаштування можуть пошкодити ОС, ніколи не дорівнює нулю. Точка відновлення системи буде створена автоматично перед застосуванням будь-яких налаштувань. Це повідомлення буде показано лише один раз. Закриття цього повідомлення дозволить вам застосовувати налаштування."
                  Margin="0,0,0,20"
                  CloseButtonClick="InfoBar_CloseButtonClick" />
         
@@ -45,8 +45,8 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="12" Margin="0,20,0,0" HorizontalAlignment="Right">
-            <Button Content="Revert Selected" Click="RevertButton_Click" IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />
-            <Button Content="Review Selected" Style="{StaticResource AccentButtonStyle}" Click="ReviewButton_Click" IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />
+            <Button Content="Відкотити вибране" Click="RevertButton_Click" IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />
+            <Button Content="Переглянути вибране" Style="{StaticResource AccentButtonStyle}" Click="ReviewButton_Click" IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />
         </StackPanel>
     </Grid>
 </Page>

@@ -7,37 +7,37 @@
     mc:Ignorable="d">
 
     <StackPanel Padding="24" Spacing="20">
-        <TextBlock Text="Cleaner" Style="{StaticResource TitleTextBlockStyle}" />
+        <TextBlock Text="Очищення" Style="{StaticResource TitleTextBlockStyle}" />
         
         <TextBlock Text="{x:Bind ViewModel.Status, Mode=OneWay}" Foreground="Gray" />
 
         <StackPanel Spacing="8">
-            <TextBlock Text="Temporary Files:" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <TextBlock Text="Тимчасові файли:" Style="{StaticResource SubtitleTextBlockStyle}" />
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="User Temp:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="Тимчасові файли користувача:" VerticalAlignment="Center" Foreground="Gray"/>
                 <TextBlock Text="{x:Bind ViewModel.UserTempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="Windows Temp:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="Тимчасові файли Windows:" VerticalAlignment="Center" Foreground="Gray"/>
                 <TextBlock Text="{x:Bind ViewModel.WindowsTempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="Combined:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="Разом:" VerticalAlignment="Center" Foreground="Gray"/>
                 <TextBlock Text="{x:Bind ViewModel.TempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
-                <Button Content="Clean Temp" Command="{x:Bind ViewModel.CleanCommand}" />
+                <Button Content="Очистити тимчасові файли" Command="{x:Bind ViewModel.CleanCommand}" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-            <TextBlock Text="WinSxS Backup:" VerticalAlignment="Center" />
+            <TextBlock Text="Копії WinSxS:" VerticalAlignment="Center" />
             <TextBlock Text="{x:Bind ViewModel.WinSxSSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
             <Button Command="{x:Bind ViewModel.CleanWinSxSCommand}">
                 <StackPanel Orientation="Horizontal">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA18;"/>
-                    <TextBlock Text=" Clean up WinSxS"/> <!-- That space is intentional -->
+                    <TextBlock Text=" Очистити WinSxS"/> <!-- That space is intentional -->
                 </StackPanel>
             </Button>
         </StackPanel>

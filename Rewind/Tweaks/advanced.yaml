@@ -1,8 +1,8 @@
 tweaks:
   - id: classic_context_menu
-    name: Classic Context Menu
-    category: Advanced
-    description: Restores the quick right-click context menu in File Explorer.
+    name: Класичне контекстне меню
+    category: Просунуті твіки
+    description: Відновлює класичне контекстне меню правої кнопки миші у Провіднику (стиль Windows 10).
     actions:
       - type: Script
         script: |
@@ -15,9 +15,9 @@ tweaks:
           Stop-Process -Name "explorer" -Force
 
   - id: disable_bg_apps
-    name: Disable Background Apps
-    category: Advanced
-    description: Prevents Microsoft Store apps from running in the background.
+    name: Вимкнути фонові програми
+    category: Просунуті твіки
+    description: Запобігає роботі програм Microsoft Store у фоновому режимі.
     actions:
       - type: Registry
         hive: CurrentUser
@@ -34,9 +34,9 @@ tweaks:
         valueType: DWord
 
   - id: disable_teredo
-    name: Disable Teredo
-    category: Advanced
-    description: Disables Teredo IPv6 tunneling to reduce potential latency.
+    name: Вимкнути Teredo
+    category: Просунуті твіки
+    description: Вимикає тунелювання Teredo IPv6 для зменшення потенційної затримки мережі.
     actions:
       - type: Script
         script: netsh interface teredo set state disabled
@@ -57,9 +57,9 @@ tweaks:
         valueType: DWord
 
   - id: block_razer_autoinstall
-    name: Block Razer Auto-Install
-    category: Advanced
-    description: Prevents Razer Synapse from auto-installing when plugging in Razer hardware.
+    name: Блокувати Razer Synapse
+    category: Просунуті твіки
+    description: Запобігає автоматичному встановленню ПЗ Razer Synapse при підключенні пристроїв Razer.
     actions:
       - type: Registry
         hive: LocalMachine
@@ -77,9 +77,9 @@ tweaks:
         script: icacls "C:\Windows\Installer\Razer" /remove:d Everyone
 
   - id: performance_visual_effects
-    name: Best Performance Visuals
-    category: Advanced
-    description: Sets Windows visual effects to 'Best Performance' (disables animations, shadows, etc).
+    name: Вимкнути візуальні ефекти
+    category: Просунуті твіки
+    description: Налаштовує візуальні ефекти Windows на «Найкращу швидкодію» (вимикає анімації, тіні тощо).
     actions:
       - type: Registry
         hive: CurrentUser

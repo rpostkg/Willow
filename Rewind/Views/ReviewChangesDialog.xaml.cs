@@ -35,7 +35,7 @@ public sealed partial class ReviewChangesDialog : ContentDialog
                     },
                     new TextBlock
                     {
-                        Text = "Confirm & Apply"
+                        Text = "Прийняти зміни"
                     }
                 }
             };

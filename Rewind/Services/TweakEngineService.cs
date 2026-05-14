@@ -39,7 +39,7 @@ public class TweakEngineService
                         TweakId = tweak.Id,
                         Type = action.Type,
                         NewValue = action.Type == ActionType.Registry ? action.Value :
-                                   (action.Type == ActionType.Service ? action.TargetState : "Execute Script"),
+                                   (action.Type == ActionType.Service ? action.TargetState : "Виконати скрипт"),
                         Hive = action.Hive,
                         Path = action.Path,
                         Key = action.Key,
@@ -68,22 +68,22 @@ public class TweakEngineService
                                 if (key != null)
                                 {
                                     var val = key.GetValue(action.Key);
-                                    item.OldValue = val != null ? val.ToString() : "New Key";
+                                    item.OldValue = val != null ? val.ToString() : "Новий ключ";
                                 }
                                 else
                                 {
-                                    item.OldValue = "New Key";
+                                    item.OldValue = "Новий ключ";
                                 }
                             }
                         }
                         catch
                         {
-                            item.OldValue = "Unknown/Error";
+                            item.OldValue = "Невідомо/Помилка";
                         }
                     }
                     else if (action.Type == ActionType.Service)
                     {
-                        item.Target = $"Service: {action.Name}";
+                        item.Target = $"Сервіс: {action.Name}";
 
                         if (hasBackup)
                         {
@@ -103,14 +103,14 @@ public class TweakEngineService
                         }
                         catch
                         {
-                            item.OldValue = "Not Found";
+                            item.OldValue = "Не знайдено";
                         }
                     }
                     else if (action.Type == ActionType.Script)
                     {
-                        item.Target = "Powershell Script";
-                        item.OldValue = "N/A";
-                        item.NewValue = isRevert ? "Execute Undo Script" : "Execute Script";
+                        item.Target = "Скрипт Powershell";
+                        item.OldValue = "Н/Д";
+                        item.NewValue = isRevert ? "Виконати скрипт скасування" : "Виконати скрипт";
                     }
 
                     changes.Add(item);
@@ -201,11 +201,11 @@ public class TweakEngineService
                         string root = backup.Hive == "CurrentUser" ? "HKCU:" : "HKLM:";
                         string fullPath = $"{root}\\{backup.Path}";
 
-                        if (backup.OldValue == "New Key")
+                        if (backup.OldValue == "Новий ключ")
                         {
                             sb.AppendLine($"Remove-ItemProperty -Path '{fullPath}' -Name '{backup.Key}' -Force -ErrorAction SilentlyContinue");
                         }
-                        else if (backup.OldValue != "Unknown/Error")
+                        else if (backup.OldValue != "Невідомо/Помилка")
                         {
                             sb.AppendLine($"if (!(Test-Path '{fullPath}')) {{ New-Item -Path '{fullPath}' -Force | Out-Null }}");
                             sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{backup.Key}' -Value {backup.OldValue} -Type {backup.ValueType} -Force");
@@ -213,9 +213,9 @@ public class TweakEngineService
                     }
                     else if (backup.Type == ActionType.Service)
                     {
-                        if (backup.OldValue != "Not Found")
+                        if (backup.OldValue != "Не знайдено")
                         {
-                            sb.AppendLine($"Set-Service -Name '{backup.Target.Replace("Service: ", "")}' -StartupType {backup.OldValue}");
+                            sb.AppendLine($"Set-Service -Name '{backup.Target.Replace("Сервіс: ", "")}' -StartupType {backup.OldValue}");
                         }
                     }
                 }

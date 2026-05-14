@@ -6,9 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Rewind.Models"
     mc:Ignorable="d"
-    Title="Review Changes"
-    PrimaryButtonText="Confirm &amp; Apply"
-    CloseButtonText="Cancel"
+    Title="Перегляд змін"
+    PrimaryButtonText="Підтвердити та застосувати"
+    CloseButtonText="Скасувати"
     DefaultButton="Primary">
 
     <ScrollViewer MaxHeight="400">

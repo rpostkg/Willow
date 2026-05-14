@@ -1,8 +1,8 @@
 tweaks:
   - id: telemetry_master
-    name: Disable System Telemetry
-    category: Privacy
-    description: Disables Microsoft Telemetry, Advertising ID, and Online Speech recognition.
+    name: Вимкнути телеметрію
+    category: Приватність
+    description: Вимикає телеметрію Microsoft, рекламний ID та онлайн-розпізнавання мовлення.
     actions:
       - type: Registry
         hive: CurrentUser

@@ -7,22 +7,22 @@
     mc:Ignorable="d">
 
     <StackPanel Padding="24" Spacing="20">
-        <TextBlock Text="Dashboard" Style="{StaticResource TitleTextBlockStyle}" />
+        <TextBlock Text="Панель керування" Style="{StaticResource TitleTextBlockStyle}" />
         
         <StackPanel Spacing="10">
-            <TextBlock Text="CPU Usage (%)" />
+            <TextBlock Text="Використання ЦП (%)" />
             <ProgressBar Value="{x:Bind ViewModel.CpuUsage, Mode=OneWay}" Maximum="100" />
             <TextBlock Text="{x:Bind ViewModel.CpuUsage, Mode=OneWay}" />
         </StackPanel>
 
         <StackPanel Spacing="10">
-            <TextBlock Text="RAM Usage (%)" />
+            <TextBlock Text="Використання ОЗП (%)" />
             <ProgressBar Value="{x:Bind ViewModel.RamUsage, Mode=OneWay}" Maximum="100" />
             <TextBlock Text="{x:Bind ViewModel.RamUsage, Mode=OneWay}" />
         </StackPanel>
 
         <StackPanel Spacing="10">
-            <TextBlock Text="Disk Usage (%)" />
+            <TextBlock Text="Використання диска (%)" />
             <ProgressBar Value="{x:Bind ViewModel.DiskUsage, Mode=OneWay}" Maximum="100" />
             <TextBlock Text="{x:Bind ViewModel.DiskUsage, Mode=OneWay}" />
         </StackPanel>
