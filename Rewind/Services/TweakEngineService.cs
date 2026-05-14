@@ -56,7 +56,8 @@ public class TweakEngineService
                             var matchingBackup = backups.Find(b => b.Target == item.Target);
                             if (matchingBackup != null)
                             {
-                                item.NewValue = matchingBackup.OldValue;
+                                // If the backed up state was "new key", it means we should delete it on revert.
+                                item.NewValue = matchingBackup.OldValue == "Новий ключ" ? "Видалення ключа" : matchingBackup.OldValue;
                             }
                         }
 
@@ -108,9 +109,9 @@ public class TweakEngineService
                     }
                     else if (action.Type == ActionType.Script)
                     {
-                        item.Target = "Скрипт Powershell";
+                        item.Target = $"Скрипт Powershell ({tweak.Name})";
                         item.OldValue = "Н/Д";
-                        item.NewValue = isRevert ? "Виконати скрипт скасування" : "Виконати скрипт";
+                        item.NewValue = isRevert ? "Виконання скрипту скасування дії" : "Виконання скрипту";
                     }
 
                     changes.Add(item);
@@ -165,14 +166,13 @@ public class TweakEngineService
 
         if (!prefs.DisableBackups)
         {
-            sb.AppendLine("# Ensure restore points can be created frequently");
+            sb.AppendLine("# Ensure restore points can be created frequently (set-and-forget)");
             sb.AppendLine("Set-ItemProperty -Path \"HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore\" -Name \"SystemRestorePointCreationFrequency\" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue");
             sb.AppendLine();
-            sb.AppendLine("# Enable restore if needed");
-            sb.AppendLine("if (-not (Get-ComputerRestorePoint)) { Enable-ComputerRestore -Drive $Env:SystemDrive }");
-            sb.AppendLine();
-            sb.AppendLine("# Create the point");
-            sb.AppendLine("Checkpoint-Computer -Description \"System Restore Point created by Rewind\" -RestorePointType MODIFY_SETTINGS -ErrorAction SilentlyContinue");
+            
+            sb.AppendLine("# Launch restore point creation in the background so it doesn't block tweaks");
+            sb.AppendLine("# This avoids the 'first-time run' issue where Checkpoint-Computer blocks or fails due to registry latency");
+            sb.AppendLine("Start-Process powershell.exe -ArgumentList \"-NoProfile -Command `\"Checkpoint-Computer -Description 'System Restore Point created by Rewind' -RestorePointType MODIFY_SETTINGS -ErrorAction SilentlyContinue`\"\" -WindowStyle Hidden");
             sb.AppendLine();
         }
 
@@ -234,7 +234,26 @@ public class TweakEngineService
             }
         }
 
-        return ExecutePowerShell(sb.ToString());
+        bool success = ExecutePowerShell(sb.ToString());
+        
+        if (success)
+        {
+            bool prefsChanged = false;
+            foreach (var tweak in tweaks)
+            {
+                if (prefs.OldRegistryData.Remove(tweak.Id))
+                {
+                    prefsChanged = true;
+                }
+            }
+
+            if (prefsChanged)
+            {
+                _prefsService.SavePreferences(prefs);
+            }
+        }
+
+        return success;
     }
 
     private void AppendActions(StringBuilder sb, List<TweakAction> actions)
@@ -245,8 +264,12 @@ public class TweakEngineService
             {
                 string root = action.Hive == "CurrentUser" ? "HKCU:" : "HKLM:";
                 string fullPath = $"{root}\\{action.Path}";
+                string val = action.Value;
+                // If it's not a pre-formatted byte array, wrap in quotes to handle spaces/strings
+                if (!val.StartsWith("([byte[]]")) val = $"'{val}'";
+
                 sb.AppendLine($"if (!(Test-Path '{fullPath}')) {{ New-Item -Path '{fullPath}' -Force | Out-Null }}");
-                sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{action.Key}' -Value {action.Value} -Type {action.ValueType} -Force");
+                sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{action.Key}' -Value {val} -Type {action.ValueType} -Force");
             }
             else if (action.Type == ActionType.Service)
             {
