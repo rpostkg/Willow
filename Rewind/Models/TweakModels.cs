@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using YamlDotNet.Serialization;
 
 namespace Rewind.Models;
 
@@ -14,7 +15,9 @@ public partial class Tweak : ObservableObject
     public string Name { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    [YamlMember(Alias = "minversion")]
     public int MinVersion { get; set; } = 0;
+    [YamlMember(Alias = "maxversion")]
     public int MaxVersion { get; set; } = int.MaxValue;
 
     private bool _isEnabled = false;
