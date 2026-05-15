@@ -2,7 +2,7 @@ tweaks:
   - id: consumer_features
     name: Вимкнути споживчі функції
     category: QoL
-    description: Windows не буде автоматично встановлювати ігри, сторонні програми або посилання на програми з Windows Store.
+    description: Windows не буде автоматично встановлювати ігри, сторонні програми або посилання на програми з MS Store.
     actions:
       - type: Registry
         hive: LocalMachine

@@ -34,7 +34,7 @@ public sealed partial class OptimizerPage : Page
         if (!selected.Any()) return;
 
         var report = await ViewModel.GenerateReportAsync(selected, true);
-        var dialog = new ReviewChangesDialog(report) { XamlRoot = this.Content.XamlRoot, Title = "Review Revert Changes" };
+        var dialog = new ReviewChangesDialog(report) { XamlRoot = this.Content.XamlRoot, Title = "Перегляд скасованих змін" };
         
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
