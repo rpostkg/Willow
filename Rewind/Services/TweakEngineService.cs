@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Rewind.Services;
@@ -28,8 +27,8 @@ public class TweakEngineService
                 if (actions == null) continue;
 
                 // Check if we have backup data for this tweak (from userpreferences.yaml)
-                List<BackedUpState> backups = null;
-                bool hasBackup = isRevert && prefs.OldRegistryData.TryGetValue(tweak.Id, out backups);
+                List<BackedUpState>? backups = null;
+                bool hasBackup = isRevert && prefs.OldRegistryData.TryGetValue(tweak.Id, out backups) && backups != null;
 
                 for (int i = 0; i < actions.Count; i++)
                 {
@@ -51,7 +50,7 @@ public class TweakEngineService
                         item.Target = $"{action.Hive}\\{action.Path}\\{action.Key}";
 
                         // If we have a backup for this specific target, override the NewValue shown in the UI
-                        if (hasBackup)
+                        if (hasBackup && backups != null)
                         {
                             var matchingBackup = backups.Find(b => b.Target == item.Target);
                             if (matchingBackup != null)
@@ -61,32 +60,13 @@ public class TweakEngineService
                             }
                         }
 
-                        RegistryKey root = action.Hive == "CurrentUser" ? Registry.CurrentUser : Registry.LocalMachine;
-                        try
-                        {
-                            using (var key = root.OpenSubKey(action.Path))
-                            {
-                                if (key != null)
-                                {
-                                    var val = key.GetValue(action.Key);
-                                    item.OldValue = val != null ? val.ToString() : "Новий ключ";
-                                }
-                                else
-                                {
-                                    item.OldValue = "Новий ключ";
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            item.OldValue = "Невідомо/Помилка";
-                        }
+                        item.OldValue = RegistryService.ReadValue(action.Hive, action.Path, action.Key);
                     }
                     else if (action.Type == ActionType.Service)
                     {
                         item.Target = $"Сервіс: {action.Name}";
 
-                        if (hasBackup)
+                        if (hasBackup && backups != null)
                         {
                             var matchingBackup = backups.Find(b => b.Target == item.Target);
                             if (matchingBackup != null)
@@ -95,17 +75,7 @@ public class TweakEngineService
                             }
                         }
 
-                        try
-                        {
-                            using (var sc = new ServiceController(action.Name))
-                            {
-                                item.OldValue = sc.StartType.ToString();
-                            }
-                        }
-                        catch
-                        {
-                            item.OldValue = "Не знайдено";
-                        }
+                        item.OldValue = WindowsServiceManager.GetStartupType(action.Name);
                     }
                     else if (action.Type == ActionType.Script)
                     {
@@ -162,33 +132,41 @@ public class TweakEngineService
             _prefsService.SavePreferences(prefs);
         }
 
-        var sb = new StringBuilder();
-
         if (!prefs.DisableBackups)
         {
-            sb.AppendLine("# Ensure restore points can be created frequently (set-and-forget)");
-            sb.AppendLine("Set-ItemProperty -Path \"HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore\" -Name \"SystemRestorePointCreationFrequency\" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue");
-            sb.AppendLine();
-            
-            sb.AppendLine("# Launch restore point creation in the background so it doesn't block tweaks");
-            sb.AppendLine("# This avoids the 'first-time run' issue where Checkpoint-Computer blocks or fails due to registry latency");
-            sb.AppendLine("Start-Process powershell.exe -ArgumentList \"-NoProfile -Command `\"Checkpoint-Computer -Description 'System Restore Point created by Rewind' -RestorePointType MODIFY_SETTINGS -ErrorAction SilentlyContinue`\"\" -WindowStyle Hidden");
-            sb.AppendLine();
+            CreateRestorePoint();
         }
+
+        bool allSuccess = true;
 
         foreach (var tweak in tweaks)
         {
             if (tweak.Actions == null) continue;
-            AppendActions(sb, tweak.Actions);
+            
+            foreach (var action in tweak.Actions)
+            {
+                if (action.Type == ActionType.Registry)
+                {
+                    allSuccess &= RegistryService.WriteValue(action.Hive, action.Path, action.Key, action.Value, action.ValueType);
+                }
+                else if (action.Type == ActionType.Service)
+                {
+                    allSuccess &= WindowsServiceManager.SetStartupType(action.Name, action.TargetState);
+                }
+                else if (action.Type == ActionType.Script)
+                {
+                    allSuccess &= ShellService.RunInlinePowerShell(action.Script);
+                }
+            }
         }
 
-        return ExecutePowerShell(sb.ToString());
+        return allSuccess;
     }
 
     public bool RevertTweaks(List<Tweak> tweaks)
     {
         var prefs = _prefsService.LoadPreferences();
-        var sb = new StringBuilder();
+        bool allSuccess = true;
 
         foreach (var tweak in tweaks)
         {
@@ -198,24 +176,21 @@ public class TweakEngineService
                 {
                     if (backup.Type == ActionType.Registry)
                     {
-                        string root = backup.Hive == "CurrentUser" ? "HKCU:" : "HKLM:";
-                        string fullPath = $"{root}\\{backup.Path}";
-
                         if (backup.OldValue == "Новий ключ")
                         {
-                            sb.AppendLine($"Remove-ItemProperty -Path '{fullPath}' -Name '{backup.Key}' -Force -ErrorAction SilentlyContinue");
+                            allSuccess &= RegistryService.DeleteValue(backup.Hive, backup.Path, backup.Key);
                         }
                         else if (backup.OldValue != "Невідомо/Помилка")
                         {
-                            sb.AppendLine($"if (!(Test-Path '{fullPath}')) {{ New-Item -Path '{fullPath}' -Force | Out-Null }}");
-                            sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{backup.Key}' -Value {backup.OldValue} -Type {backup.ValueType} -Force");
+                            allSuccess &= RegistryService.WriteValue(backup.Hive, backup.Path, backup.Key, backup.OldValue, backup.ValueType);
                         }
                     }
                     else if (backup.Type == ActionType.Service)
                     {
                         if (backup.OldValue != "Не знайдено")
                         {
-                            sb.AppendLine($"Set-Service -Name '{backup.Target.Replace("Сервіс: ", "")}' -StartupType {backup.OldValue}");
+                            string srvName = backup.Target.Replace("Сервіс: ", "");
+                            allSuccess &= WindowsServiceManager.SetStartupType(srvName, backup.OldValue);
                         }
                     }
                 }
@@ -224,19 +199,37 @@ public class TweakEngineService
                 {
                     foreach (var action in tweak.RevertActions)
                     {
-                        if (action.Type == ActionType.Script) sb.AppendLine(action.Script);
+                        if (action.Type == ActionType.Script) 
+                        {
+                            allSuccess &= ShellService.RunInlinePowerShell(action.Script);
+                        }
                     }
                 }
             }
             else
             {
-                if (tweak.RevertActions != null) AppendActions(sb, tweak.RevertActions);
+                if (tweak.RevertActions != null)
+                {
+                    foreach (var action in tweak.RevertActions)
+                    {
+                        if (action.Type == ActionType.Registry)
+                        {
+                            allSuccess &= RegistryService.WriteValue(action.Hive, action.Path, action.Key, action.Value, action.ValueType);
+                        }
+                        else if (action.Type == ActionType.Service)
+                        {
+                            allSuccess &= WindowsServiceManager.SetStartupType(action.Name, action.TargetState);
+                        }
+                        else if (action.Type == ActionType.Script)
+                        {
+                            allSuccess &= ShellService.RunInlinePowerShell(action.Script);
+                        }
+                    }
+                }
             }
         }
 
-        bool success = ExecutePowerShell(sb.ToString());
-        
-        if (success)
+        if (allSuccess)
         {
             bool prefsChanged = false;
             foreach (var tweak in tweaks)
@@ -253,72 +246,15 @@ public class TweakEngineService
             }
         }
 
-        return success;
+        return allSuccess;
     }
 
-    private void AppendActions(StringBuilder sb, List<TweakAction> actions)
+    private void CreateRestorePoint()
     {
-        foreach (var action in actions)
-        {
-            if (action.Type == ActionType.Registry)
-            {
-                string root = action.Hive == "CurrentUser" ? "HKCU:" : "HKLM:";
-                string fullPath = $"{root}\\{action.Path}";
-                string val = action.Value;
-                // If it's not a pre-formatted byte array, wrap in quotes to handle spaces/strings
-                if (!val.StartsWith("([byte[]]")) val = $"'{val}'";
-
-                sb.AppendLine($"if (!(Test-Path '{fullPath}')) {{ New-Item -Path '{fullPath}' -Force | Out-Null }}");
-                sb.AppendLine($"Set-ItemProperty -Path '{fullPath}' -Name '{action.Key}' -Value {val} -Type {action.ValueType} -Force");
-            }
-            else if (action.Type == ActionType.Service)
-            {
-                string startupType = action.TargetState == "Disabled" ? "Disabled" :
-                                     (action.TargetState == "Automatic" ? "Automatic" : "Manual");
-                sb.AppendLine($"Set-Service -Name '{action.Name}' -StartupType {startupType}");
-                if (action.TargetState == "Disabled")
-                {
-                    sb.AppendLine($"Stop-Service -Name '{action.Name}' -Force -ErrorAction SilentlyContinue");
-                }
-                else if (action.TargetState == "Automatic")
-                {
-                    sb.AppendLine($"Start-Service -Name '{action.Name}' -ErrorAction SilentlyContinue");
-                }
-            }
-            else if (action.Type == ActionType.Script)
-            {
-                sb.AppendLine(action.Script);
-            }
-        }
-    }
-
-    private bool ExecutePowerShell(string scriptContent)
-    {
-        if (string.IsNullOrWhiteSpace(scriptContent)) return true;
-
-        string scriptPath = Path.Combine(Path.GetTempPath(), "RewindTweak.ps1");
-        File.WriteAllText(scriptPath, scriptContent);
-
-        try
-        {
-            var processInfo = new ProcessStartInfo
-            {
-                FileName = "powershell.exe",
-                Arguments = $"-ExecutionPolicy Bypass -WindowStyle Hidden -File \"{scriptPath}\"",
-                UseShellExecute = true,
-                Verb = "runas"
-            };
-            var process = Process.Start(processInfo);
-            process?.WaitForExit();
-            return process?.ExitCode == 0;
-        }
-        catch
-        {
-            return false;
-        }
-        finally
-        {
-            try { File.Delete(scriptPath); } catch { }
-        }
+        string script = @"
+            Set-ItemProperty -Path ""HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"" -Name ""SystemRestorePointCreationFrequency"" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+            Start-Process powershell.exe -ArgumentList ""-NoProfile -Command `""Checkpoint-Computer -Description 'System Restore Point created by Rewind' -RestorePointType MODIFY_SETTINGS -ErrorAction SilentlyContinue`"""" -WindowStyle Hidden
+        ";
+        ShellService.RunInlinePowerShell(script);
     }
 }
