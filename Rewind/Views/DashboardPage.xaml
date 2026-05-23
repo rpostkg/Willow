@@ -6,25 +6,80 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Padding="24" Spacing="20">
-        <TextBlock Text="Панель керування" Style="{StaticResource TitleTextBlockStyle}" />
-        
-        <StackPanel Spacing="10">
-            <TextBlock Text="Використання ЦП (%)" />
-            <ProgressBar Value="{x:Bind ViewModel.CpuUsage, Mode=OneWay}" Maximum="100" />
-            <TextBlock Text="{x:Bind ViewModel.CpuUsage, Mode=OneWay}" />
-        </StackPanel>
+    <ScrollViewer>
+        <StackPanel Padding="32" Spacing="24">
 
-        <StackPanel Spacing="10">
-            <TextBlock Text="Використання ОЗП (%)" />
-            <ProgressBar Value="{x:Bind ViewModel.RamUsage, Mode=OneWay}" Maximum="100" />
-            <TextBlock Text="{x:Bind ViewModel.RamUsage, Mode=OneWay}" />
-        </StackPanel>
+            <TextBlock Text="Панель керування" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock Text="Системні ресурси" Style="{StaticResource SubtitleTextBlockStyle}" Opacity="0.6" />
 
-        <StackPanel Spacing="10">
-            <TextBlock Text="Використання диска (%)" />
-            <ProgressBar Value="{x:Bind ViewModel.DiskUsage, Mode=OneWay}" Maximum="100" />
-            <TextBlock Text="{x:Bind ViewModel.DiskUsage, Mode=OneWay}" />
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- CPU -->
+                <Border Grid.Column="0"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1" CornerRadius="12" Padding="28,24">
+                    <StackPanel HorizontalAlignment="Center" Spacing="12">
+                        <ProgressRing Width="80" Height="80"
+                                      Value="{x:Bind ViewModel.CpuUsage, Mode=OneWay}"
+                                      IsIndeterminate="False"
+                                      Maximum="100"
+                                      HorizontalAlignment="Center" />
+                        <TextBlock Text="ЦП"
+                                   Style="{StaticResource BodyStrongTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.CpuUsageText, Mode=OneWay}"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <!-- RAM -->
+                <Border Grid.Column="1"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1" CornerRadius="12" Padding="28,24">
+                    <StackPanel HorizontalAlignment="Center" Spacing="12">
+                        <ProgressRing Width="80" Height="80"
+                                      Value="{x:Bind ViewModel.RamUsage, Mode=OneWay}"
+                                      IsIndeterminate="False"
+                                      Maximum="100"
+                                      HorizontalAlignment="Center" />
+                        <TextBlock Text="ОЗП"
+                                   Style="{StaticResource BodyStrongTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.RamUsageText, Mode=OneWay}"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Disk C: -->
+                <Border Grid.Column="2"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1" CornerRadius="12" Padding="28,24">
+                    <StackPanel HorizontalAlignment="Center" Spacing="12">
+                        <ProgressRing Width="80" Height="80"
+                                      Value="{x:Bind ViewModel.DiskUsage, Mode=OneWay}"
+                                      IsIndeterminate="False"
+                                      Maximum="100"
+                                      HorizontalAlignment="Center" />
+                        <TextBlock Text="Диск C:"
+                                   Style="{StaticResource BodyStrongTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.DiskUsageText, Mode=OneWay}"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Page>
