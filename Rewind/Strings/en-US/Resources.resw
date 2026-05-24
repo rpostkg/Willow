@@ -32,6 +32,12 @@
   <data name="StartupPage_SchedulerBadge" xml:space="preserve">
     <value>Task Scheduler</value>
   </data>
+  <data name="StartupPage_FilterAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="StartupPage_SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search by name or path...</value>
+  </data>
   <data name="Nav_Dashboard.Content" xml:space="preserve">
     <value>Dashboard</value>
   </data>

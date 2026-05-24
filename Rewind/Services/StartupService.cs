@@ -127,8 +127,8 @@ public class StartupService
 
         try
         {
-            // Search all subdirectories to catch tasks like \Microsoft\Windows Terminal\...
-            foreach (var file in Directory.GetFiles(tasksDir, "*", SearchOption.AllDirectories))
+            // Root folder only — mirrors what Task Manager's Startup tab shows
+            foreach (var file in Directory.GetFiles(tasksDir))
             {
                 try
                 {
