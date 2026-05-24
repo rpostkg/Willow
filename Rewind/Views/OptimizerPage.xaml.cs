@@ -14,6 +14,13 @@ public sealed partial class OptimizerPage : Page
         this.InitializeComponent();
     }
 
+    // Push typed text into ViewModel.NameQuery for live name filtering
+    private void TweakSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            ViewModel.NameQuery = sender.Text;
+    }
+
     private async void ReviewButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         var selected = ViewModel.Tweaks.Where(t => t.IsEnabled).ToList();
@@ -21,11 +28,9 @@ public sealed partial class OptimizerPage : Page
 
         var report = await ViewModel.GenerateReportAsync(selected, false);
         var dialog = new ReviewChangesDialog(report) { XamlRoot = this.Content.XamlRoot };
-        
+
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
-        {
             await ViewModel.ExecuteTweaksAsync(selected, report, false);
-        }
     }
 
     private async void RevertButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -34,12 +39,14 @@ public sealed partial class OptimizerPage : Page
         if (!selected.Any()) return;
 
         var report = await ViewModel.GenerateReportAsync(selected, true);
-        var dialog = new ReviewChangesDialog(report) { XamlRoot = this.Content.XamlRoot, Title = "Перегляд скасованих змін" };
-        
-        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+        var dialog = new ReviewChangesDialog(report)
         {
+            XamlRoot = this.Content.XamlRoot,
+            Title = "Review Reverted Changes"
+        };
+
+        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
             await ViewModel.ExecuteTweaksAsync(selected, report, true);
-        }
     }
 
     private void InfoBar_CloseButtonClick(InfoBar sender, object args)
