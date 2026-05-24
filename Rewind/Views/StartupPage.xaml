@@ -30,9 +30,10 @@
                                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                 Padding="16,12"
                                 CornerRadius="8">
-                            <Grid ColumnSpacing="16">
+                            <Grid ColumnSpacing="12">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
@@ -63,7 +64,17 @@
                                     </Border>
                                 </StackPanel>
 
-                                <ToggleSwitch Grid.Column="1"
+                                <Button Grid.Column="1"
+                                        Click="OpenLocationButton_Click"
+                                        Tag="{x:Bind}"
+                                        Style="{StaticResource SubtleButtonStyle}"
+                                        VerticalAlignment="Center"
+                                        Padding="8,6"
+                                        ToolTipService.ToolTip="Open file location">
+                                    <FontIcon Glyph="&#xE838;" FontSize="14"/>
+                                </Button>
+
+                                <ToggleSwitch Grid.Column="2"
                                              IsOn="{x:Bind IsEnabled, Mode=TwoWay}"
                                              IsEnabled="{x:Bind CanToggle}"
                                              OnContent=""

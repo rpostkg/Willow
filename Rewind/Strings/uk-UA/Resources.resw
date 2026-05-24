@@ -26,6 +26,12 @@
   <data name="StartupPage_HklmBadge" xml:space="preserve">
     <value>Всі користувачі</value>
   </data>
+  <data name="StartupPage_FolderBadge" xml:space="preserve">
+    <value>Тека автозапуску</value>
+  </data>
+  <data name="StartupPage_SchedulerBadge" xml:space="preserve">
+    <value>Планувальник завдань</value>
+  </data>
   <data name="Nav_Dashboard.Content" xml:space="preserve">
     <value>Панель керування</value>
   </data>

@@ -26,6 +26,12 @@
   <data name="StartupPage_HklmBadge" xml:space="preserve">
     <value>All users</value>
   </data>
+  <data name="StartupPage_FolderBadge" xml:space="preserve">
+    <value>Startup folder</value>
+  </data>
+  <data name="StartupPage_SchedulerBadge" xml:space="preserve">
+    <value>Task Scheduler</value>
+  </data>
   <data name="Nav_Dashboard.Content" xml:space="preserve">
     <value>Dashboard</value>
   </data>
