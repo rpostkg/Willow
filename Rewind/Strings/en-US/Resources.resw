@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation -->
+  <data name="Nav_Dashboard.Content" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Nav_Cleaner.Content" xml:space="preserve">
+    <value>Cleaner</value>
+  </data>
+  <data name="Nav_Optimizer.Content" xml:space="preserve">
+    <value>Tweaks</value>
+  </data>
+  <data name="Nav_Settings.Content" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+
+  <!-- Dashboard page -->
+  <data name="DashboardPage_Title.Text" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="DashboardPage_ResourcesHeader.Text" xml:space="preserve">
+    <value>System Resources</value>
+  </data>
+  <data name="DashboardPage_CpuLabel.Text" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="DashboardPage_RamLabel.Text" xml:space="preserve">
+    <value>RAM</value>
+  </data>
+  <data name="DashboardPage_DiskLabel.Text" xml:space="preserve">
+    <value>Disk C:</value>
+  </data>
+
+  <!-- Cleaner page -->
+  <data name="CleanerPage_Title.Text" xml:space="preserve">
+    <value>Cleaner</value>
+  </data>
+  <data name="CleanerPage_TempFilesHeader.Text" xml:space="preserve">
+    <value>Temporary Files:</value>
+  </data>
+  <data name="CleanerPage_UserTempLabel.Text" xml:space="preserve">
+    <value>User Temporary Files:</value>
+  </data>
+  <data name="CleanerPage_WinTempLabel.Text" xml:space="preserve">
+    <value>Windows Temporary Files:</value>
+  </data>
+  <data name="CleanerPage_TotalLabel.Text" xml:space="preserve">
+    <value>Total:</value>
+  </data>
+  <data name="CleanerPage_CleanButton.Content" xml:space="preserve">
+    <value>Clean Temporary Files</value>
+  </data>
+
+  <!-- Cleaner code strings -->
+  <data name="Cleaner_StatusCalculating" xml:space="preserve">
+    <value>Calculating...</value>
+  </data>
+  <data name="Cleaner_StatusReady" xml:space="preserve">
+    <value>Ready to clean.</value>
+  </data>
+  <data name="Cleaner_StatusCleaning" xml:space="preserve">
+    <value>Cleaning temporary files...</value>
+  </data>
+  <data name="Cleaner_StatusDone" xml:space="preserve">
+    <value>Cleaning complete.</value>
+  </data>
+  <data name="Cleaner_StatusWinSxSCleaning" xml:space="preserve">
+    <value>Cleaning WinSxS (Administrator rights required)...</value>
+  </data>
+  <data name="Cleaner_StatusWinSxSDone" xml:space="preserve">
+    <value>WinSxS cleaning complete.</value>
+  </data>
+  <data name="Cleaner_ErrorFormat" xml:space="preserve">
+    <value>Error: {0}</value>
+  </data>
+
+  <!-- Optimizer page -->
+  <data name="OptimizerPage_Title.Text" xml:space="preserve">
+    <value>Tweaks</value>
+  </data>
+  <data name="OptimizerPage_InfoBar.Title" xml:space="preserve">
+    <value>Note: System Restore Point</value>
+  </data>
+  <data name="OptimizerPage_InfoBar.Message" xml:space="preserve">
+    <value>Although the rollback system accounts for your current registry keys and provides standard recovery options, the chance of deep tweaks damaging your OS is never zero. A system restore point will be created automatically before any tweaks are applied. This message will only appear once. Closing it will allow you to apply tweaks.</value>
+  </data>
+  <data name="OptimizerPage_SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search by name...</value>
+  </data>
+  <data name="OptimizerPage_RevertButton.Content" xml:space="preserve">
+    <value>Revert Selected</value>
+  </data>
+  <data name="OptimizerPage_ReviewButton.Content" xml:space="preserve">
+    <value>Review Selected</value>
+  </data>
+
+  <!-- Optimizer code strings -->
+  <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
+    <value>Review Reverted Changes</value>
+  </data>
+  <data name="Optimizer_AcceptChangesButton" xml:space="preserve">
+    <value>Accept Changes</value>
+  </data>
+
+  <!-- ReviewChangesDialog -->
+  <data name="ReviewChangesDialog.Title" xml:space="preserve">
+    <value>Review Changes</value>
+  </data>
+  <data name="ReviewChangesDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Confirm and Apply</value>
+  </data>
+  <data name="ReviewChangesDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+
+  <!-- Settings page -->
+  <data name="SettingsPage_Title.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsPage_TweaksHeader.Text" xml:space="preserve">
+    <value>Tweaks</value>
+  </data>
+  <data name="SettingsPage_RestorePointToggle.Header" xml:space="preserve">
+    <value>Automatic system restore point creation</value>
+  </data>
+  <data name="SettingsPage_RestorePointToggle.OnContent" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="SettingsPage_RestorePointToggle.OffContent" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="SettingsPage_LanguageHeader.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+</root>

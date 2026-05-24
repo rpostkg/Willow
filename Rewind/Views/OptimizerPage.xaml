@@ -22,17 +22,16 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0"
-                   Text="Твіки"
+        <TextBlock x:Uid="OptimizerPage_Title"
+                   Grid.Row="0"
                    Style="{StaticResource TitleTextBlockStyle}"
                    Margin="0,0,0,20"/>
 
         <!-- Warning InfoBar -->
-        <InfoBar Grid.Row="1"
+        <InfoBar x:Uid="OptimizerPage_InfoBar"
+                 Grid.Row="1"
                  IsOpen="{x:Bind ViewModel.IsInfoBarOpen, Mode=TwoWay}"
                  Severity="Warning"
-                 Title="Зверніть увагу: Точка відновлення системи"
-                 Message="Хоча система відкату враховує ваші поточні ключі реєстру та має стандартні варіанти відновлення, шанс того, що глибокі налаштування можуть пошкодити ОС, ніколи не дорівнює нулю. Точка відновлення системи буде створена автоматично перед застосуванням будь-яких налаштувань. Це повідомлення буде показано лише один раз. Закриття цього повідомлення дозволить вам застосовувати налаштування."
                  Margin="0,0,0,16"
                  CloseButtonClick="InfoBar_CloseButtonClick" />
 
@@ -45,9 +44,9 @@
                 <!-- Category picker fixed width -->
             </Grid.ColumnDefinitions>
 
-            <AutoSuggestBox Grid.Column="0"
+            <AutoSuggestBox x:Uid="OptimizerPage_SearchBox"
+                            Grid.Column="0"
                             x:Name="TweakSearchBox"
-                            PlaceholderText="Search by name..."
                             QueryIcon="Find"
                             TextChanged="TweakSearchBox_TextChanged"
                             VerticalAlignment="Center"/>
@@ -98,10 +97,10 @@
                     Spacing="12"
                     Margin="0,16,0,0"
                     HorizontalAlignment="Right">
-            <Button Content="Відкотити вибране"
+            <Button x:Uid="OptimizerPage_RevertButton"
                     Click="RevertButton_Click"
                     IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />
-            <Button Content="Переглянути вибране"
+            <Button x:Uid="OptimizerPage_ReviewButton"
                     Style="{StaticResource AccentButtonStyle}"
                     Click="ReviewButton_Click"
                     IsEnabled="{x:Bind ViewModel.CanReviewOrRevert, Mode=OneWay}" />

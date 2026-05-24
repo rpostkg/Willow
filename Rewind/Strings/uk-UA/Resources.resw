@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation -->
+  <data name="Nav_Dashboard.Content" xml:space="preserve">
+    <value>Панель керування</value>
+  </data>
+  <data name="Nav_Cleaner.Content" xml:space="preserve">
+    <value>Очищення</value>
+  </data>
+  <data name="Nav_Optimizer.Content" xml:space="preserve">
+    <value>Твіки</value>
+  </data>
+  <data name="Nav_Settings.Content" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+
+  <!-- Dashboard page -->
+  <data name="DashboardPage_Title.Text" xml:space="preserve">
+    <value>Панель керування</value>
+  </data>
+  <data name="DashboardPage_ResourcesHeader.Text" xml:space="preserve">
+    <value>Системні ресурси</value>
+  </data>
+  <data name="DashboardPage_CpuLabel.Text" xml:space="preserve">
+    <value>ЦП</value>
+  </data>
+  <data name="DashboardPage_RamLabel.Text" xml:space="preserve">
+    <value>ОЗП</value>
+  </data>
+  <data name="DashboardPage_DiskLabel.Text" xml:space="preserve">
+    <value>Диск C:</value>
+  </data>
+
+  <!-- Cleaner page -->
+  <data name="CleanerPage_Title.Text" xml:space="preserve">
+    <value>Очищення</value>
+  </data>
+  <data name="CleanerPage_TempFilesHeader.Text" xml:space="preserve">
+    <value>Тимчасові файли:</value>
+  </data>
+  <data name="CleanerPage_UserTempLabel.Text" xml:space="preserve">
+    <value>Тимчасові файли користувача:</value>
+  </data>
+  <data name="CleanerPage_WinTempLabel.Text" xml:space="preserve">
+    <value>Тимчасові файли Windows:</value>
+  </data>
+  <data name="CleanerPage_TotalLabel.Text" xml:space="preserve">
+    <value>Разом:</value>
+  </data>
+  <data name="CleanerPage_CleanButton.Content" xml:space="preserve">
+    <value>Очистити тимчасові файли</value>
+  </data>
+
+  <!-- Cleaner code strings -->
+  <data name="Cleaner_StatusCalculating" xml:space="preserve">
+    <value>Розрахунок...</value>
+  </data>
+  <data name="Cleaner_StatusReady" xml:space="preserve">
+    <value>Готово до очищення.</value>
+  </data>
+  <data name="Cleaner_StatusCleaning" xml:space="preserve">
+    <value>Очищення тимчасових файлів...</value>
+  </data>
+  <data name="Cleaner_StatusDone" xml:space="preserve">
+    <value>Очищення завершено.</value>
+  </data>
+  <data name="Cleaner_StatusWinSxSCleaning" xml:space="preserve">
+    <value>Очищення WinSxS (Потрібні права адміністратора)...</value>
+  </data>
+  <data name="Cleaner_StatusWinSxSDone" xml:space="preserve">
+    <value>Очищення WinSxS завершено.</value>
+  </data>
+  <data name="Cleaner_ErrorFormat" xml:space="preserve">
+    <value>Помилка: {0}</value>
+  </data>
+
+  <!-- Optimizer page -->
+  <data name="OptimizerPage_Title.Text" xml:space="preserve">
+    <value>Твіки</value>
+  </data>
+  <data name="OptimizerPage_InfoBar.Title" xml:space="preserve">
+    <value>Зверніть увагу: Точка відновлення системи</value>
+  </data>
+  <data name="OptimizerPage_InfoBar.Message" xml:space="preserve">
+    <value>Хоча система відкату враховує ваші поточні ключі реєстру та має стандартні варіанти відновлення, шанс того, що глибокі налаштування можуть пошкодити ОС, ніколи не дорівнює нулю. Точка відновлення системи буде створена автоматично перед застосуванням будь-яких налаштувань. Це повідомлення буде показано лише один раз. Закриття цього повідомлення дозволить вам застосовувати налаштування.</value>
+  </data>
+  <data name="OptimizerPage_SearchBox.PlaceholderText" xml:space="preserve">
+    <value>Пошук за назвою...</value>
+  </data>
+  <data name="OptimizerPage_RevertButton.Content" xml:space="preserve">
+    <value>Відкотити вибране</value>
+  </data>
+  <data name="OptimizerPage_ReviewButton.Content" xml:space="preserve">
+    <value>Переглянути вибране</value>
+  </data>
+
+  <!-- Optimizer code strings -->
+  <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
+    <value>Перегляд відкату змін</value>
+  </data>
+  <data name="Optimizer_AcceptChangesButton" xml:space="preserve">
+    <value>Прийняти зміни</value>
+  </data>
+
+  <!-- ReviewChangesDialog -->
+  <data name="ReviewChangesDialog.Title" xml:space="preserve">
+    <value>Перегляд змін</value>
+  </data>
+  <data name="ReviewChangesDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Підтвердити та застосувати</value>
+  </data>
+  <data name="ReviewChangesDialog.CloseButtonText" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+
+  <!-- Settings page -->
+  <data name="SettingsPage_Title.Text" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="SettingsPage_TweaksHeader.Text" xml:space="preserve">
+    <value>Твіки</value>
+  </data>
+  <data name="SettingsPage_RestorePointToggle.Header" xml:space="preserve">
+    <value>Автоматичне створення точки відновлення системи</value>
+  </data>
+  <data name="SettingsPage_RestorePointToggle.OnContent" xml:space="preserve">
+    <value>Увімкнено</value>
+  </data>
+  <data name="SettingsPage_RestorePointToggle.OffContent" xml:space="preserve">
+    <value>Вимкнено</value>
+  </data>
+  <data name="SettingsPage_LanguageHeader.Text" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+</root>

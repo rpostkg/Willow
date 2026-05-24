@@ -9,8 +9,8 @@
     <ScrollViewer>
         <StackPanel Padding="32" Spacing="24">
 
-            <TextBlock Text="Панель керування" Style="{StaticResource TitleTextBlockStyle}" />
-            <TextBlock Text="Системні ресурси" Style="{StaticResource SubtitleTextBlockStyle}" Opacity="0.6" />
+            <TextBlock x:Uid="DashboardPage_Title" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock x:Uid="DashboardPage_ResourcesHeader" Style="{StaticResource SubtitleTextBlockStyle}" Opacity="0.6" />
 
             <Grid ColumnSpacing="16">
                 <Grid.ColumnDefinitions>
@@ -30,7 +30,7 @@
                                       IsIndeterminate="False"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
-                        <TextBlock Text="ЦП"
+                        <TextBlock x:Uid="DashboardPage_CpuLabel"
                                    Style="{StaticResource BodyStrongTextBlockStyle}"
                                    HorizontalAlignment="Center" />
                         <TextBlock Text="{x:Bind ViewModel.CpuUsageText, Mode=OneWay}"
@@ -50,7 +50,7 @@
                                       IsIndeterminate="False"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
-                        <TextBlock Text="ОЗП"
+                        <TextBlock x:Uid="DashboardPage_RamLabel"
                                    Style="{StaticResource BodyStrongTextBlockStyle}"
                                    HorizontalAlignment="Center" />
                         <TextBlock Text="{x:Bind ViewModel.RamUsageText, Mode=OneWay}"
@@ -70,7 +70,7 @@
                                       IsIndeterminate="False"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
-                        <TextBlock Text="Диск C:"
+                        <TextBlock x:Uid="DashboardPage_DiskLabel"
                                    Style="{StaticResource BodyStrongTextBlockStyle}"
                                    HorizontalAlignment="Center" />
                         <TextBlock Text="{x:Bind ViewModel.DiskUsageText, Mode=OneWay}"

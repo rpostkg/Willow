@@ -6,14 +6,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Padding="24">
-        <StackPanel Spacing="20">
-            <TextBlock Text="Налаштування" Style="{StaticResource TitleTextBlockStyle}" />
+    <ScrollViewer>
+        <StackPanel Padding="24" Spacing="24" MaxWidth="600" HorizontalAlignment="Left">
+            <TextBlock x:Uid="SettingsPage_Title" Style="{StaticResource TitleTextBlockStyle}" />
 
-            <StackPanel Spacing="8" MaxWidth="600" HorizontalAlignment="Left" />
-            <TextBlock Text="Твіки" Style="{StaticResource SubheaderTextBlockStyle}" />
-            <ToggleSwitch Header="Автоматичне створення точки відновлення системи" IsOn="{x:Bind ViewModel.EnableBackups, Mode=TwoWay}" OnContent="Увімкнено" OffContent="Вимкнено" />
+            <StackPanel Spacing="8">
+                <TextBlock x:Uid="SettingsPage_TweaksHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <ToggleSwitch x:Uid="SettingsPage_RestorePointToggle"
+                              IsOn="{x:Bind ViewModel.EnableBackups, Mode=TwoWay}" />
+            </StackPanel>
 
+            <StackPanel Spacing="8">
+                <TextBlock x:Uid="SettingsPage_LanguageHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <ComboBox ItemsSource="{x:Bind ViewModel.AvailableLanguages}"
+                          SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" />
+            </StackPanel>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Page>

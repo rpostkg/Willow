@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Dispatching;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -12,22 +13,27 @@ namespace Rewind.ViewModels;
 public partial class CleanerViewModel : ObservableObject
 {
     private readonly DispatcherQueue _dispatcher;
+    private readonly ResourceLoader _res = new ResourceLoader();
 
     [ObservableProperty]
-    private string tempSize = "Розрахунок...";
+    private string tempSize;
 
     [ObservableProperty]
-    private string userTempSize = "Розрахунок...";
+    private string userTempSize;
 
     [ObservableProperty]
-    private string windowsTempSize = "Розрахунок...";
+    private string windowsTempSize;
 
     [ObservableProperty]
-    private string status = "Готово до очищення.";
+    private string status;
 
     public CleanerViewModel()
     {
         _dispatcher = DispatcherQueue.GetForCurrentThread();
+        tempSize = _res.GetString("Cleaner_StatusCalculating");
+        userTempSize = _res.GetString("Cleaner_StatusCalculating");
+        windowsTempSize = _res.GetString("Cleaner_StatusCalculating");
+        status = _res.GetString("Cleaner_StatusReady");
         _ = CalculateSizesAsync();
     }
 
@@ -94,20 +100,20 @@ public partial class CleanerViewModel : ObservableObject
     [RelayCommand]
     private async Task CleanAsync()
     {
-        Status = "Очищення тимчасових файлів...";
+        Status = _res.GetString("Cleaner_StatusCleaning");
         await Task.Run(() =>
         {
             CleanDirectory(Path.GetTempPath());
             CleanDirectory(@"C:\Windows\Temp");
         });
         await CalculateSizesAsync();
-        Status = "Очищення завершено.";
+        Status = _res.GetString("Cleaner_StatusDone");
     }
 
     [RelayCommand]
     private async Task CleanWinSxSAsync()
     {
-        Status = "Очищення WinSxS (Потрібні права адміністратора)...";
+        Status = _res.GetString("Cleaner_StatusWinSxSCleaning");
         try
         {
             var processInfo = new ProcessStartInfo
@@ -122,11 +128,11 @@ public partial class CleanerViewModel : ObservableObject
             {
                 await process.WaitForExitAsync();
             }
-            Status = "Очищення WinSxS завершено.";
+            Status = _res.GetString("Cleaner_StatusWinSxSDone");
         }
         catch (Exception ex)
         {
-            Status = $"Помилка: {ex.Message}";
+            Status = string.Format(_res.GetString("Cleaner_ErrorFormat"), ex.Message);
         }
     }
 }

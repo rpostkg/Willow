@@ -1,4 +1,5 @@
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Windows.ApplicationModel.Resources;
 using Rewind.ViewModels;
 using System;
 using System.Linq;
@@ -9,12 +10,13 @@ public sealed partial class OptimizerPage : Page
 {
     public OptimizerViewModel ViewModel { get; } = new();
 
+    private readonly ResourceLoader _res = new ResourceLoader();
+
     public OptimizerPage()
     {
         this.InitializeComponent();
     }
 
-    // Push typed text into ViewModel.NameQuery for live name filtering
     private void TweakSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
         if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
@@ -42,7 +44,7 @@ public sealed partial class OptimizerPage : Page
         var dialog = new ReviewChangesDialog(report)
         {
             XamlRoot = this.Content.XamlRoot,
-            Title = "Review Reverted Changes"
+            Title = _res.GetString("Optimizer_RevertDialogTitle")
         };
 
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)

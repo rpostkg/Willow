@@ -13,6 +13,7 @@
     <WindowsPackageType>None</WindowsPackageType>
     <EnableMsixTooling>false</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <NeutralLanguage>uk-UA</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -46,6 +47,10 @@
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
   </ItemGroup>
   
+  <ItemGroup>
+    <PRIResource Include="Strings\**\*.resw" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Update="Tweaks\**\*.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

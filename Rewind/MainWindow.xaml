@@ -16,12 +16,12 @@
     <Grid>
         <NavigationView x:Name="NavView" SelectionChanged="NavView_SelectionChanged" IsBackButtonVisible="Collapsed" IsSettingsVisible="False">
             <NavigationView.MenuItems>
-                <NavigationViewItem Tag="Dashboard" Content="Панель керування" Icon="Home" />
-                <NavigationViewItem Tag="Cleaner" Content="Очищення" Icon="Delete" />
-                <NavigationViewItem Tag="Optimizer" Content="Твіки" Icon="Repair" />
+                <NavigationViewItem x:Uid="Nav_Dashboard" Tag="Dashboard" Icon="Home" />
+                <NavigationViewItem x:Uid="Nav_Cleaner" Tag="Cleaner" Icon="Delete" />
+                <NavigationViewItem x:Uid="Nav_Optimizer" Tag="Optimizer" Icon="Repair" />
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem Tag="Settings" Content="Налаштування"  Icon="Setting" />
+                <NavigationViewItem x:Uid="Nav_Settings" Tag="Settings" Icon="Setting" />
             </NavigationView.FooterMenuItems>
             <Frame x:Name="ContentFrame" />
         </NavigationView>

@@ -7,27 +7,27 @@
     mc:Ignorable="d">
 
     <StackPanel Padding="24" Spacing="20">
-        <TextBlock Text="Очищення" Style="{StaticResource TitleTextBlockStyle}" />
-        
+        <TextBlock x:Uid="CleanerPage_Title" Style="{StaticResource TitleTextBlockStyle}" />
+
         <TextBlock Text="{x:Bind ViewModel.Status, Mode=OneWay}" Foreground="Gray" />
 
         <StackPanel Spacing="8">
-            <TextBlock Text="Тимчасові файли:" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <TextBlock x:Uid="CleanerPage_TempFilesHeader" Style="{StaticResource SubtitleTextBlockStyle}" />
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="Тимчасові файли користувача:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock x:Uid="CleanerPage_UserTempLabel" VerticalAlignment="Center" Foreground="Gray"/>
                 <TextBlock Text="{x:Bind ViewModel.UserTempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="Тимчасові файли Windows:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock x:Uid="CleanerPage_WinTempLabel" VerticalAlignment="Center" Foreground="Gray"/>
                 <TextBlock Text="{x:Bind ViewModel.WindowsTempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="Разом:" VerticalAlignment="Center" Foreground="Gray"/>
+                <TextBlock x:Uid="CleanerPage_TotalLabel" VerticalAlignment="Center" Foreground="Gray"/>
                 <TextBlock Text="{x:Bind ViewModel.TempSize, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" />
-                <Button Content="Очистити тимчасові файли" Command="{x:Bind ViewModel.CleanCommand}" />
+                <Button x:Uid="CleanerPage_CleanButton" Command="{x:Bind ViewModel.CleanCommand}" />
             </StackPanel>
         </StackPanel>
 
