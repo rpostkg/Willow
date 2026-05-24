@@ -14,6 +14,18 @@
   </resheader>
 
   <!-- Navigation -->
+  <data name="Nav_Startup.Content" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="StartupPage_Title.Text" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="StartupPage_HkcuBadge" xml:space="preserve">
+    <value>Current user</value>
+  </data>
+  <data name="StartupPage_HklmBadge" xml:space="preserve">
+    <value>All users</value>
+  </data>
   <data name="Nav_Dashboard.Content" xml:space="preserve">
     <value>Dashboard</value>
   </data>
