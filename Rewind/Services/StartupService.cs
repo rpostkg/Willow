@@ -14,7 +14,6 @@ public class StartupService
 {
     private const string RunPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
     private const string ApprovedRunPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run";
-    private const string ApprovedFolderPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder";
 
     private static readonly XNamespace TaskNs = "http://schemas.microsoft.com/windows/2004/02/mit/task";
 
@@ -57,7 +56,7 @@ public class StartupService
             using var run = rootKey.OpenSubKey(RunPath, false);
             if (run == null) return items;
 
-            // Approval for ALL startup items lives in HKCU — same as Task Manager
+            // Approval for registry Run items lives in HKCU (same as Task Manager)
             using var approved = Registry.CurrentUser.OpenSubKey(ApprovedRunPath, false);
 
             foreach (var name in run.GetValueNames())
@@ -83,6 +82,10 @@ public class StartupService
     }
 
     // ── Startup folders ───────────────────────────────────────────────────────
+    // Enable/disable is done by renaming .lnk ↔ .lnk.disabled in-place.
+    // This mirrors Autoruns and works without admin for the user's personal folder.
+    // For the common folder (ProgramData) the rename requires admin — File.Move will
+    // throw UnauthorizedAccessException, which the ViewModel catches and reverts.
 
     private List<StartupItem> ReadStartupFolder(string folderPath, bool requiresAdmin, bool resolveShortcuts)
     {
@@ -90,36 +93,15 @@ public class StartupService
         if (!Directory.Exists(folderPath)) return items;
         try
         {
-            // Approval for startup folder items is always stored in HKCU
-            using var approved = Registry.CurrentUser.OpenSubKey(ApprovedFolderPath, false);
-
+            // Enabled items
             foreach (var lnk in Directory.GetFiles(folderPath, "*.lnk"))
+                items.Add(BuildFolderItem(lnk, lnkPath: lnk, isEnabled: true, requiresAdmin, resolveShortcuts));
+
+            // Disabled items (renamed by us to .lnk.disabled)
+            foreach (var disabled in Directory.GetFiles(folderPath, "*.lnk.disabled"))
             {
-                var fileName = Path.GetFileName(lnk);
-                var displayName = Path.GetFileNameWithoutExtension(lnk);
-                var command = lnk;
-
-                if (resolveShortcuts)
-                {
-                    var (resolvedName, resolvedPath) = ResolveLnk(lnk);
-                    if (!string.IsNullOrEmpty(resolvedPath))
-                    {
-                        displayName = resolvedName;
-                        command = resolvedPath;
-                    }
-                }
-
-                items.Add(new StartupItem
-                {
-                    Name = displayName,
-                    Command = command,
-                    HiveLabel = _folderLabel,
-                    RequiresAdmin = requiresAdmin,
-                    Source = StartupSource.StartupFolder,
-                    Hive = requiresAdmin ? "HKLM" : "HKCU",
-                    ShortcutName = fileName,
-                    IsEnabled = IsApprovedEnabled(approved, fileName),
-                });
+                var basePath = disabled[..^".disabled".Length];
+                items.Add(BuildFolderItem(disabled, lnkPath: basePath, isEnabled: false, requiresAdmin, resolveShortcuts: false));
             }
         }
         catch (Exception ex)
@@ -127,6 +109,36 @@ public class StartupService
             Debug.WriteLine($"[StartupService] Startup folder read failed: {ex.Message}");
         }
         return items;
+    }
+
+    private StartupItem BuildFolderItem(string actualFile, string lnkPath, bool isEnabled,
+                                        bool requiresAdmin, bool resolveShortcuts)
+    {
+        var displayName = Path.GetFileNameWithoutExtension(lnkPath);
+        var command = lnkPath;
+
+        if (resolveShortcuts && isEnabled)
+        {
+            var (resolvedName, resolvedPath) = ResolveLnk(actualFile);
+            if (!string.IsNullOrEmpty(resolvedPath))
+            {
+                displayName = resolvedName;
+                command = resolvedPath;
+            }
+        }
+
+        return new StartupItem
+        {
+            Name = displayName,
+            Command = command,
+            HiveLabel = _folderLabel,
+            RequiresAdmin = requiresAdmin,
+            Source = StartupSource.StartupFolder,
+            Hive = requiresAdmin ? "HKLM" : "HKCU",
+            ShortcutName = Path.GetFileName(lnkPath),
+            LnkPath = lnkPath,
+            IsEnabled = isEnabled,
+        };
     }
 
     // ── Task Scheduler (root-folder logon tasks via XML) ─────────────────────
@@ -166,8 +178,6 @@ public class StartupService
                             .Element(TaskNs + "RunLevel")?.Value,
                         "HighestAvailable", StringComparison.OrdinalIgnoreCase);
 
-                    var taskPath = file.Substring(tasksDir.Length);
-
                     items.Add(new StartupItem
                     {
                         Name = Path.GetFileName(file),
@@ -176,11 +186,11 @@ public class StartupService
                         RequiresAdmin = requiresAdmin,
                         Source = StartupSource.TaskScheduler,
                         Hive = "TaskScheduler",
-                        TaskPath = taskPath,
+                        TaskPath = file.Substring(tasksDir.Length),
                         IsEnabled = enabled,
                     });
                 }
-                catch { /* skip inaccessible or malformed task files */ }
+                catch { }
             }
         }
         catch (Exception ex)
@@ -197,32 +207,50 @@ public class StartupService
         switch (item.Source)
         {
             case StartupSource.Registry:
-                SetApproved(Registry.CurrentUser, ApprovedRunPath, item.Name, enabled);
+                SetRegistryApproved(item.Name, enabled);
                 break;
+
             case StartupSource.StartupFolder:
-                if (item.ShortcutName == null) return;
-                SetApproved(Registry.CurrentUser, ApprovedFolderPath, item.ShortcutName, enabled);
+                SetFolderEnabled(item, enabled);
                 break;
+
             case StartupSource.TaskScheduler:
                 SetTaskEnabled(item, enabled);
                 break;
         }
     }
 
-    private static void SetApproved(RegistryKey rootKey, string path, string name, bool enabled)
+    private static void SetRegistryApproved(string name, bool enabled)
     {
         if (enabled)
         {
-            using var key = rootKey.OpenSubKey(path, true);
+            using var key = Registry.CurrentUser.OpenSubKey(ApprovedRunPath, true);
             key?.DeleteValue(name, false);
         }
         else
         {
-            using var key = rootKey.CreateSubKey(path, true)
-                ?? throw new InvalidOperationException($"Could not open or create registry key: {path}");
+            using var key = Registry.CurrentUser.CreateSubKey(ApprovedRunPath, true)
+                ?? throw new InvalidOperationException($"Cannot create registry key: {ApprovedRunPath}");
             var disabled = new byte[12];
             disabled[0] = 0x03;
             key.SetValue(name, disabled, RegistryValueKind.Binary);
+        }
+    }
+
+    private static void SetFolderEnabled(StartupItem item, bool enabled)
+    {
+        if (item.LnkPath == null) return;
+
+        if (enabled)
+        {
+            var disabledPath = item.LnkPath + ".disabled";
+            if (File.Exists(disabledPath))
+                File.Move(disabledPath, item.LnkPath);
+        }
+        else
+        {
+            if (File.Exists(item.LnkPath))
+                File.Move(item.LnkPath, item.LnkPath + ".disabled");
         }
     }
 

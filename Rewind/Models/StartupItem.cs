@@ -17,6 +17,7 @@ public partial class StartupItem : ObservableObject
     public StartupSource Source { get; init; }
     public string Hive { get; init; } = string.Empty;      // "HKCU" / "HKLM" for Registry
     public string? ShortcutName { get; init; }              // filename for StartupFolder (e.g. "Tailscale.lnk")
+    public string? LnkPath { get; init; }                  // canonical .lnk path (without .disabled suffix)
     public string? TaskPath { get; init; }                  // full path for TaskScheduler
 
     [ObservableProperty]

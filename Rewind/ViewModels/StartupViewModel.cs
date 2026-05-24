@@ -128,8 +128,11 @@ public partial class StartupViewModel : ObservableObject
     {
         if (string.IsNullOrEmpty(command)) return string.Empty;
 
-        // Full command is itself a file (startup folder .lnk, or bare exe with no args)
+        // Full command is itself a file (startup folder .lnk, exe with no args)
         if (File.Exists(command)) return command;
+
+        // Disabled startup folder item — actual file is at command.disabled
+        if (File.Exists(command + ".disabled")) return command + ".disabled";
 
         // Quoted: "C:\path\to\app.exe" --args
         if (command.StartsWith('"'))
