@@ -14,6 +14,9 @@
   </resheader>
 
   <!-- Navigation -->
+  <data name="Nav_DiskHealth.Content" xml:space="preserve">
+    <value>Здоров'я диска</value>
+  </data>
   <data name="Nav_Startup.Content" xml:space="preserve">
     <value>Автозавантаження</value>
   </data>
@@ -148,6 +151,38 @@
   </data>
   <data name="ReviewChangesDialog.CloseButtonText" xml:space="preserve">
     <value>Скасувати</value>
+  </data>
+
+  <!-- Disk Health page -->
+  <data name="DiskHealthPage_Title.Text" xml:space="preserve">
+    <value>Здоров'я диска</value>
+  </data>
+  <data name="DiskHealthPage_RefreshButton.Content" xml:space="preserve">
+    <value>Оновити</value>
+  </data>
+  <data name="DiskHealthPage_HealthGood" xml:space="preserve">
+    <value>Добрий</value>
+  </data>
+  <data name="DiskHealthPage_HealthCaution" xml:space="preserve">
+    <value>Увага</value>
+  </data>
+  <data name="DiskHealthPage_HealthBad" xml:space="preserve">
+    <value>Несправний</value>
+  </data>
+  <data name="DiskHealthPage_HealthUnknown" xml:space="preserve">
+    <value>Невідомо</value>
+  </data>
+  <data name="DiskHealthPage_TempLabel.Text" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="DiskHealthPage_PowerHoursLabel.Text" xml:space="preserve">
+    <value>Годин роботи</value>
+  </data>
+  <data name="DiskHealthPage_ReallocLabel.Text" xml:space="preserve">
+    <value>Переалоковані сектори</value>
+  </data>
+  <data name="DiskHealthPage_PowerCyclesLabel.Text" xml:space="preserve">
+    <value>Циклів увімкнення</value>
   </data>
 
   <!-- Settings page -->

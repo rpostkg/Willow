@@ -14,6 +14,9 @@
   </resheader>
 
   <!-- Navigation -->
+  <data name="Nav_DiskHealth.Content" xml:space="preserve">
+    <value>Disk Health</value>
+  </data>
   <data name="Nav_Startup.Content" xml:space="preserve">
     <value>Startup</value>
   </data>
@@ -148,6 +151,38 @@
   </data>
   <data name="ReviewChangesDialog.CloseButtonText" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+
+  <!-- Disk Health page -->
+  <data name="DiskHealthPage_Title.Text" xml:space="preserve">
+    <value>Disk Health</value>
+  </data>
+  <data name="DiskHealthPage_RefreshButton.Content" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="DiskHealthPage_HealthGood" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="DiskHealthPage_HealthCaution" xml:space="preserve">
+    <value>Caution</value>
+  </data>
+  <data name="DiskHealthPage_HealthBad" xml:space="preserve">
+    <value>Failing</value>
+  </data>
+  <data name="DiskHealthPage_HealthUnknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="DiskHealthPage_TempLabel.Text" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="DiskHealthPage_PowerHoursLabel.Text" xml:space="preserve">
+    <value>Power On Hours</value>
+  </data>
+  <data name="DiskHealthPage_ReallocLabel.Text" xml:space="preserve">
+    <value>Reallocated Sectors</value>
+  </data>
+  <data name="DiskHealthPage_PowerCyclesLabel.Text" xml:space="preserve">
+    <value>Power Cycles</value>
   </data>
 
   <!-- Settings page -->

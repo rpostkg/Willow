@@ -29,6 +29,9 @@ namespace Rewind
                     case "Startup":
                         ContentFrame.Navigate(typeof(StartupPage));
                         break;
+                    case "DiskHealth":
+                        ContentFrame.Navigate(typeof(DiskHealthPage));
+                        break;
                     case "Optimizer":
                         ContentFrame.Navigate(typeof(OptimizerPage));
                         break;
