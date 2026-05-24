@@ -65,7 +65,8 @@ public partial class StartupViewModel : ObservableObject
             item.PropertyChanged -= OnItemChanged;
         _allItems.Clear();
 
-        foreach (var item in _service.GetStartupItems())
+        var resolveShortcuts = new PreferencesService().LoadPreferences().ResolveShortcuts;
+        foreach (var item in _service.GetStartupItems(resolveShortcuts))
         {
             item.PropertyChanged += OnItemChanged;
             _allItems.Add(item);

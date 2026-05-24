@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace Rewind.Services;
@@ -31,17 +32,17 @@ public class StartupService
         _schedulerLabel = res.GetString("StartupPage_SchedulerBadge");
     }
 
-    public List<StartupItem> GetStartupItems()
+    public List<StartupItem> GetStartupItems(bool resolveShortcuts = false)
     {
         var items = new List<StartupItem>();
         items.AddRange(ReadRegistryHive(Registry.CurrentUser, "HKCU", _hkcuLabel));
         items.AddRange(ReadRegistryHive(Registry.LocalMachine, "HKLM", _hklmLabel));
         items.AddRange(ReadStartupFolder(
             Environment.GetFolderPath(Environment.SpecialFolder.Startup),
-            requiresAdmin: false));
+            requiresAdmin: false, resolveShortcuts));
         items.AddRange(ReadStartupFolder(
             Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup),
-            requiresAdmin: true));
+            requiresAdmin: true, resolveShortcuts));
         items.AddRange(ReadTaskScheduler());
         return items;
     }
@@ -56,7 +57,7 @@ public class StartupService
             using var run = rootKey.OpenSubKey(RunPath, false);
             if (run == null) return items;
 
-            // Approval state for ALL startup items lives in HKCU (same as Task Manager)
+            // Approval for ALL startup items lives in HKCU — same as Task Manager
             using var approved = Registry.CurrentUser.OpenSubKey(ApprovedRunPath, false);
 
             foreach (var name in run.GetValueNames())
@@ -83,22 +84,35 @@ public class StartupService
 
     // ── Startup folders ───────────────────────────────────────────────────────
 
-    private List<StartupItem> ReadStartupFolder(string folderPath, bool requiresAdmin)
+    private List<StartupItem> ReadStartupFolder(string folderPath, bool requiresAdmin, bool resolveShortcuts)
     {
         var items = new List<StartupItem>();
         if (!Directory.Exists(folderPath)) return items;
         try
         {
-            // Approval for startup folder items is always in HKCU (both user and common folders)
+            // Approval for startup folder items is always stored in HKCU
             using var approved = Registry.CurrentUser.OpenSubKey(ApprovedFolderPath, false);
 
             foreach (var lnk in Directory.GetFiles(folderPath, "*.lnk"))
             {
                 var fileName = Path.GetFileName(lnk);
+                var displayName = Path.GetFileNameWithoutExtension(lnk);
+                var command = lnk;
+
+                if (resolveShortcuts)
+                {
+                    var (resolvedName, resolvedPath) = ResolveLnk(lnk);
+                    if (!string.IsNullOrEmpty(resolvedPath))
+                    {
+                        displayName = resolvedName;
+                        command = resolvedPath;
+                    }
+                }
+
                 items.Add(new StartupItem
                 {
-                    Name = Path.GetFileNameWithoutExtension(lnk),
-                    Command = lnk,
+                    Name = displayName,
+                    Command = command,
                     HiveLabel = _folderLabel,
                     RequiresAdmin = requiresAdmin,
                     Source = StartupSource.StartupFolder,
@@ -115,7 +129,7 @@ public class StartupService
         return items;
     }
 
-    // ── Task Scheduler (all folders, logon tasks via XML) ─────────────────────
+    // ── Task Scheduler (root-folder logon tasks via XML) ─────────────────────
 
     private List<StartupItem> ReadTaskScheduler()
     {
@@ -142,7 +156,6 @@ public class StartupService
                     foreach (var el in doc.Descendants(TaskNs + "Command"))
                     { command = el.Value; break; }
 
-                    // <Settings><Enabled> governs the whole task
                     bool enabled = !string.Equals(
                         doc.Root?.Element(TaskNs + "Settings")?.Element(TaskNs + "Enabled")?.Value,
                         "false", StringComparison.OrdinalIgnoreCase);
@@ -153,7 +166,6 @@ public class StartupService
                             .Element(TaskNs + "RunLevel")?.Value,
                         "HighestAvailable", StringComparison.OrdinalIgnoreCase);
 
-                    // TaskPath relative to tasksDir, with leading backslash — used for schtasks /tn
                     var taskPath = file.Substring(tasksDir.Length);
 
                     items.Add(new StartupItem
@@ -185,7 +197,6 @@ public class StartupService
         switch (item.Source)
         {
             case StartupSource.Registry:
-                // Write approval to HKCU regardless of source hive — same as Task Manager
                 SetApproved(Registry.CurrentUser, ApprovedRunPath, item.Name, enabled);
                 break;
             case StartupSource.StartupFolder:
@@ -207,10 +218,11 @@ public class StartupService
         }
         else
         {
-            using var key = rootKey.CreateSubKey(path, true);
+            using var key = rootKey.CreateSubKey(path, true)
+                ?? throw new InvalidOperationException($"Could not open or create registry key: {path}");
             var disabled = new byte[12];
             disabled[0] = 0x03;
-            key?.SetValue(name, disabled, RegistryValueKind.Binary);
+            key.SetValue(name, disabled, RegistryValueKind.Binary);
         }
     }
 
@@ -240,5 +252,31 @@ public class StartupService
         if (raw is byte[] bytes && bytes.Length >= 1)
             return bytes[0] != 0x03;
         return true;
+    }
+
+    private static (string name, string path) ResolveLnk(string lnkFilePath)
+    {
+        try
+        {
+            var shellType = Type.GetTypeFromProgID("WScript.Shell");
+            if (shellType == null) return (Path.GetFileNameWithoutExtension(lnkFilePath), lnkFilePath);
+
+            var shell = Activator.CreateInstance(shellType);
+            var shortcut = shellType.InvokeMember("CreateShortcut",
+                BindingFlags.InvokeMethod, null, shell, [lnkFilePath]);
+            if (shortcut == null) return (Path.GetFileNameWithoutExtension(lnkFilePath), lnkFilePath);
+
+            var target = shortcut.GetType().InvokeMember("TargetPath",
+                BindingFlags.GetProperty, null, shortcut, null) as string ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(target))
+                return (Path.GetFileNameWithoutExtension(lnkFilePath), lnkFilePath);
+
+            return (Path.GetFileNameWithoutExtension(target), target);
+        }
+        catch
+        {
+            return (Path.GetFileNameWithoutExtension(lnkFilePath), lnkFilePath);
+        }
     }
 }

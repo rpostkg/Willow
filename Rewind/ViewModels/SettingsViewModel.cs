@@ -22,6 +22,9 @@ public partial class SettingsViewModel : ObservableObject
     private bool enableBackups;
 
     [ObservableProperty]
+    private bool resolveShortcuts;
+
+    [ObservableProperty]
     private LanguageOption? selectedLanguage;
 
     public List<LanguageOption> AvailableLanguages { get; } = new()
@@ -34,6 +37,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         var prefs = _prefsService.LoadPreferences();
         enableBackups = !prefs.DisableBackups;
+        resolveShortcuts = prefs.ResolveShortcuts;
         selectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == prefs.Language)
                            ?? AvailableLanguages[0];
     }
@@ -42,6 +46,13 @@ public partial class SettingsViewModel : ObservableObject
     {
         var prefs = _prefsService.LoadPreferences();
         prefs.DisableBackups = !value;
+        _prefsService.SavePreferences(prefs);
+    }
+
+    partial void OnResolveShortcutsChanged(bool value)
+    {
+        var prefs = _prefsService.LoadPreferences();
+        prefs.ResolveShortcuts = value;
         _prefsService.SavePreferences(prefs);
     }
 

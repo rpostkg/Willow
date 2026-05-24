@@ -7,6 +7,7 @@ public class UserPreferences
     public bool DisableBackups { get; set; } = false;
     public bool InformedOfBackups { get; set; } = false;
     public string Language { get; set; } = "uk-UA";
+    public bool ResolveShortcuts { get; set; } = false;
     public Dictionary<string, List<BackedUpState>> OldRegistryData { get; set; } = new();
 }
 

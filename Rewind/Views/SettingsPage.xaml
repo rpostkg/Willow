@@ -21,6 +21,12 @@
                 <ComboBox ItemsSource="{x:Bind ViewModel.AvailableLanguages}"
                           SelectedItem="{x:Bind ViewModel.SelectedLanguage, Mode=TwoWay}" />
             </StackPanel>
+
+            <StackPanel Spacing="8">
+                <TextBlock x:Uid="SettingsPage_StartupHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <ToggleSwitch x:Uid="SettingsPage_ResolveShortcutsToggle"
+                              IsOn="{x:Bind ViewModel.ResolveShortcuts, Mode=TwoWay}" />
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Page>

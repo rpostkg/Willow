@@ -169,4 +169,16 @@
   <data name="SettingsPage_LanguageHeader.Text" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="SettingsPage_StartupHeader.Text" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="SettingsPage_ResolveShortcutsToggle.Header" xml:space="preserve">
+    <value>Resolve shortcut targets</value>
+  </data>
+  <data name="SettingsPage_ResolveShortcutsToggle.OnContent" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="SettingsPage_ResolveShortcutsToggle.OffContent" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
 </root>
