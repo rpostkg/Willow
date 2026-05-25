@@ -91,6 +91,98 @@
     <value>Clean Temporary Files</value>
   </data>
 
+  <!-- Cleaner category strings -->
+  <data name="Cleaner_CatUserTemp" xml:space="preserve">
+    <value>User Temp Files</value>
+  </data>
+  <data name="Cleaner_CatUserTempDesc" xml:space="preserve">
+    <value>Files in %TEMP%</value>
+  </data>
+  <data name="Cleaner_CatWinTemp" xml:space="preserve">
+    <value>Windows Temp</value>
+  </data>
+  <data name="Cleaner_CatWinTempDesc" xml:space="preserve">
+    <value>Files in C:\Windows\Temp</value>
+  </data>
+  <data name="Cleaner_CatWinUpdate" xml:space="preserve">
+    <value>Windows Update Cache</value>
+  </data>
+  <data name="Cleaner_CatWinUpdateDesc" xml:space="preserve">
+    <value>Downloaded update packages pending installation</value>
+  </data>
+  <data name="Cleaner_CatPrefetch" xml:space="preserve">
+    <value>Prefetch</value>
+  </data>
+  <data name="Cleaner_CatPrefetchDesc" xml:space="preserve">
+    <value>Windows app launch cache</value>
+  </data>
+  <data name="Cleaner_CatDeliveryOpt" xml:space="preserve">
+    <value>Delivery Optimization Cache</value>
+  </data>
+  <data name="Cleaner_CatDeliveryOptDesc" xml:space="preserve">
+    <value>Windows Update peer-to-peer cache</value>
+  </data>
+  <data name="Cleaner_CatMemDumps" xml:space="preserve">
+    <value>Memory Dumps</value>
+  </data>
+  <data name="Cleaner_CatMemDumpsDesc" xml:space="preserve">
+    <value>Crash dump files</value>
+  </data>
+  <data name="Cleaner_CatWer" xml:space="preserve">
+    <value>Windows Error Reports</value>
+  </data>
+  <data name="Cleaner_CatWerDesc" xml:space="preserve">
+    <value>Stored crash and error reports</value>
+  </data>
+  <data name="Cleaner_CatEdge" xml:space="preserve">
+    <value>Microsoft Edge Cache</value>
+  </data>
+  <data name="Cleaner_CatEdgeDesc" xml:space="preserve">
+    <value>Edge browser cache</value>
+  </data>
+  <data name="Cleaner_CatChrome" xml:space="preserve">
+    <value>Google Chrome Cache</value>
+  </data>
+  <data name="Cleaner_CatChromeDesc" xml:space="preserve">
+    <value>Chrome browser cache</value>
+  </data>
+  <data name="Cleaner_CatFirefox" xml:space="preserve">
+    <value>Mozilla Firefox Cache</value>
+  </data>
+  <data name="Cleaner_CatFirefoxDesc" xml:space="preserve">
+    <value>Firefox browser cache</value>
+  </data>
+  <data name="Cleaner_CatRecycleBin" xml:space="preserve">
+    <value>Recycle Bin</value>
+  </data>
+  <data name="Cleaner_CatRecycleBinDesc" xml:space="preserve">
+    <value>Files awaiting permanent deletion</value>
+  </data>
+  <data name="Cleaner_CatCustom" xml:space="preserve">
+    <value>Custom Folder</value>
+  </data>
+  <data name="Cleaner_TotalSelectedFormat" xml:space="preserve">
+    <value>{0} selected</value>
+  </data>
+  <data name="CleanerPage_ScanButton.Content" xml:space="preserve">
+    <value>Scan</value>
+  </data>
+  <data name="CleanerPage_CleanSelectedButton.Content" xml:space="preserve">
+    <value>Clean Selected</value>
+  </data>
+  <data name="CleanerPage_SelectAllButton.Content" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="CleanerPage_SelectNoneButton.Content" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="SettingsPage_CustomCleanerHeader.Text" xml:space="preserve">
+    <value>Custom Cleaner Paths</value>
+  </data>
+  <data name="SettingsPage_AddCleanerPath.Content" xml:space="preserve">
+    <value>Add folder...</value>
+  </data>
+
   <!-- Cleaner code strings -->
   <data name="Cleaner_StatusCalculating" xml:space="preserve">
     <value>Calculating...</value>

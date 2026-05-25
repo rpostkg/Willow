@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Rewind.Services;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.UI.Xaml;
@@ -33,6 +34,8 @@ public partial class SettingsViewModel : ObservableObject
         new() { Code = "en-US", DisplayName = "English" },
     };
 
+    public ObservableCollection<string> CustomCleanerPaths { get; } = new();
+
     public SettingsViewModel()
     {
         var prefs = _prefsService.LoadPreferences();
@@ -40,6 +43,28 @@ public partial class SettingsViewModel : ObservableObject
         resolveShortcuts = prefs.ResolveShortcuts;
         selectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == prefs.Language)
                            ?? AvailableLanguages[0];
+        foreach (var path in prefs.CustomCleanerPaths)
+            CustomCleanerPaths.Add(path);
+    }
+
+    public void AddCustomPath(string path)
+    {
+        if (!CustomCleanerPaths.Contains(path))
+            CustomCleanerPaths.Add(path);
+        SaveCustomPaths();
+    }
+
+    public void RemoveCustomPath(string path)
+    {
+        CustomCleanerPaths.Remove(path);
+        SaveCustomPaths();
+    }
+
+    private void SaveCustomPaths()
+    {
+        var prefs = _prefsService.LoadPreferences();
+        prefs.CustomCleanerPaths = CustomCleanerPaths.ToList();
+        _prefsService.SavePreferences(prefs);
     }
 
     partial void OnEnableBackupsChanged(bool value)

@@ -23,11 +23,46 @@
             </StackPanel>
 
             <StackPanel Spacing="8">
+                <TextBlock x:Uid="SettingsPage_CustomCleanerHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <ItemsRepeater ItemsSource="{x:Bind ViewModel.CustomCleanerPaths, Mode=OneWay}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Spacing="4"/>
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Grid ColumnSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           Text="{x:Bind}"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis"
+                                           FontSize="13"/>
+                                <Button Grid.Column="1"
+                                        Tag="{x:Bind}"
+                                        Click="RemovePathButton_Click"
+                                        Style="{StaticResource SubtleButtonStyle}"
+                                        Padding="6,4"
+                                        VerticalAlignment="Center">
+                                    <FontIcon Glyph="&#xE711;" FontSize="12"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+                <Button x:Uid="SettingsPage_AddCleanerPath"
+                        Click="AddFolderButton_Click"
+                        Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <StackPanel Spacing="8">
                 <TextBlock x:Uid="SettingsPage_TweaksHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
                 <ToggleSwitch x:Uid="SettingsPage_RestorePointToggle"
                               IsOn="{x:Bind ViewModel.EnableBackups, Mode=TwoWay}" />
             </StackPanel>
-            
+
         </StackPanel>
     </ScrollViewer>
 </Page>

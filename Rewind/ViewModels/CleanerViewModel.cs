@@ -1,10 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Dispatching;
 using Microsoft.Windows.ApplicationModel.Resources;
-using System;
-using System.Diagnostics;
-using System.IO;
+using Rewind.Models;
+using Rewind.Services;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,127 +11,76 @@ namespace Rewind.ViewModels;
 
 public partial class CleanerViewModel : ObservableObject
 {
-    private readonly DispatcherQueue _dispatcher;
-    private readonly ResourceLoader _res = new ResourceLoader();
+    private readonly CleanerService _service = new();
+    private readonly ResourceLoader _res = new();
 
-    [ObservableProperty]
-    private string tempSize;
+    public ObservableCollection<CleanerCategory> Categories { get; } = new();
 
-    [ObservableProperty]
-    private string userTempSize;
-
-    [ObservableProperty]
-    private string windowsTempSize;
-
-    [ObservableProperty]
-    private string status;
+    [ObservableProperty] private bool isScanning;
+    [ObservableProperty] private string totalSelectedText = string.Empty;
+    [ObservableProperty] private string status = string.Empty;
 
     public CleanerViewModel()
     {
-        _dispatcher = DispatcherQueue.GetForCurrentThread();
-        tempSize = _res.GetString("Cleaner_StatusCalculating");
-        userTempSize = _res.GetString("Cleaner_StatusCalculating");
-        windowsTempSize = _res.GetString("Cleaner_StatusCalculating");
-        status = _res.GetString("Cleaner_StatusReady");
-        _ = CalculateSizesAsync();
+        LoadCategories();
+        _ = ScanAll();
     }
 
-    private async Task CalculateSizesAsync()
+    private void LoadCategories()
     {
-        await Task.Run(() =>
+        var customPaths = new PreferencesService().LoadPreferences().CustomCleanerPaths;
+        foreach (var cat in _service.GetCategories(customPaths))
         {
-            string userTempPath = Path.GetTempPath();
-            long userSize = GetDirectorySize(userTempPath);
-            long winSize = GetDirectorySize(@"C:\Windows\Temp");
-            long size = userSize + winSize;
-
-            _dispatcher?.TryEnqueue(() =>
+            cat.PropertyChanged += (_, e) =>
             {
-                UserTempSize = FormatSize(userSize);
-                WindowsTempSize = FormatSize(winSize);
-                TempSize = FormatSize(size);
-            });
-        });
-    }
-
-    private string FormatSize(long bytes)
-    {
-        string[] units = { "B", "KB", "MB", "GB", "TB" };
-        double size = bytes;
-        int unitIndex = 0;
-        while (size >= 1024 && unitIndex < units.Length - 1)
-        {
-            size /= 1024;
-            unitIndex++;
+                if (e.PropertyName is nameof(CleanerCategory.IsSelected) or nameof(CleanerCategory.SizeBytes))
+                    UpdateTotal();
+            };
+            Categories.Add(cat);
         }
-        return $"{size:F2} {units[unitIndex]}";
-    }
-
-    private long GetDirectorySize(string folderPath)
-    {
-        try
-        {
-            if (!Directory.Exists(folderPath)) return 0;
-            return Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories).Sum(t => (new FileInfo(t).Length));
-        }
-        catch { return 0; }
-    }
-
-    private void CleanDirectory(string folderPath)
-    {
-        if (!Directory.Exists(folderPath)) return;
-        try
-        {
-            foreach (var file in Directory.GetFiles(folderPath))
-            {
-                try { File.Delete(file); } catch { }
-            }
-        } catch { }
-        try
-        {
-            foreach (var dir in Directory.GetDirectories(folderPath))
-            {
-                try { Directory.Delete(dir, true); } catch { }
-            }
-        } catch { }
+        UpdateTotal();
     }
 
     [RelayCommand]
-    private async Task CleanAsync()
+    private async Task ScanAll()
     {
+        IsScanning = true;
+        Status = _res.GetString("Cleaner_StatusCalculating");
+        await Task.WhenAll(Categories.Select(async c => c.SizeBytes = await _service.ScanAsync(c)));
+        IsScanning = false;
+        Status = _res.GetString("Cleaner_StatusReady");
+        UpdateTotal();
+    }
+
+    [RelayCommand]
+    private async Task CleanSelected()
+    {
+        var targets = Categories.Where(c => c.IsSelected).ToList();
+        if (targets.Count == 0) return;
         Status = _res.GetString("Cleaner_StatusCleaning");
-        await Task.Run(() =>
-        {
-            CleanDirectory(Path.GetTempPath());
-            CleanDirectory(@"C:\Windows\Temp");
-        });
-        await CalculateSizesAsync();
+        await Task.Run(() => { foreach (var cat in targets) _service.CleanCategory(cat); });
+        await ScanAll();
         Status = _res.GetString("Cleaner_StatusDone");
     }
 
     [RelayCommand]
-    private async Task CleanWinSxSAsync()
+    private void SelectAll() { foreach (var c in Categories) c.IsSelected = true; }
+
+    [RelayCommand]
+    private void SelectNone() { foreach (var c in Categories) c.IsSelected = false; }
+
+    private void UpdateTotal()
     {
-        Status = _res.GetString("Cleaner_StatusWinSxSCleaning");
-        try
-        {
-            var processInfo = new ProcessStartInfo
-            {
-                FileName = "dism.exe",
-                Arguments = "/online /Cleanup-Image /StartComponentCleanup",
-                UseShellExecute = true,
-                Verb = "runas"
-            };
-            var process = Process.Start(processInfo);
-            if (process != null)
-            {
-                await process.WaitForExitAsync();
-            }
-            Status = _res.GetString("Cleaner_StatusWinSxSDone");
-        }
-        catch (Exception ex)
-        {
-            Status = string.Format(_res.GetString("Cleaner_ErrorFormat"), ex.Message);
-        }
+        long total = Categories.Where(c => c.IsSelected).Sum(c => c.SizeBytes);
+        TotalSelectedText = string.Format(_res.GetString("Cleaner_TotalSelectedFormat"), FormatSize(total));
+    }
+
+    private static string FormatSize(long bytes)
+    {
+        string[] units = ["B", "KB", "MB", "GB", "TB"];
+        double size = bytes;
+        int i = 0;
+        while (size >= 1024 && i < units.Length - 1) { size /= 1024; i++; }
+        return $"{size:F2} {units[i]}";
     }
 }
