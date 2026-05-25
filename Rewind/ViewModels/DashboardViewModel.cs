@@ -1,6 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Dispatching;
+using Rewind.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Management;
 using System.Threading.Tasks;
 
@@ -13,19 +16,18 @@ public partial class DashboardViewModel : ObservableObject
     private static double _lastCpu = 0;
     private static double _lastRam = 0;
     private static double _lastDisk = 0;
+    private static double _lastDiskTotalGb = 0;
+    private static string _freeableText = string.Empty;
+    private static bool _freeableScanDone = false;
     private static bool _isPolling = false;
     private static DashboardViewModel? _currentActive;
 
-    [ObservableProperty]
-    private double cpuUsage;
+    [ObservableProperty] private double cpuUsage;
+    [ObservableProperty] private double ramUsage;
+    [ObservableProperty] private double diskUsage;
+    [ObservableProperty] private string diskTotalText = string.Empty;
+    [ObservableProperty] private string freeableText = string.Empty;
 
-    [ObservableProperty]
-    private double ramUsage;
-
-    [ObservableProperty]
-    private double diskUsage;
-
-    // Formatted text shown beneath each ProgressRing
     public string CpuUsageText  => $"{CpuUsage:F0}%";
     public string RamUsageText  => $"{RamUsage:F0}%";
     public string DiskUsageText => $"{DiskUsage:F0}%";
@@ -38,33 +40,39 @@ public partial class DashboardViewModel : ObservableObject
     {
         _dispatcher = DispatcherQueue.GetForCurrentThread();
 
-        // Show last-known values immediately so rings don't flash 0% on re-navigation
-        CpuUsage  = _lastCpu;
-        RamUsage  = _lastRam;
-        DiskUsage = _lastDisk;
+        CpuUsage      = _lastCpu;
+        RamUsage      = _lastRam;
+        DiskUsage     = _lastDisk;
+        DiskTotalText = FormatDiskTotal(_lastDiskTotalGb);
+        FreeableText  = _freeableText;
 
         _currentActive = this;
 
         if (!_isPolling)
         {
-            // First time: start the background polling loop (it fetches immediately then every 2 s)
             StartUpdating();
         }
         else
         {
-            // Already polling — trigger a one-off fresh fetch so the user sees
-            // current values the moment they navigate to this tab
             _ = Task.Run(() =>
             {
-                var (cpu, ram, disk) = GetMetrics();
-                _lastCpu = cpu; _lastRam = ram; _lastDisk = disk;
+                var (cpu, ram, disk, diskTotalGb) = GetMetrics();
+                _lastCpu = cpu; _lastRam = ram; _lastDisk = disk; _lastDiskTotalGb = diskTotalGb;
                 _dispatcher?.TryEnqueue(() =>
                 {
-                    CpuUsage  = cpu;
-                    RamUsage  = ram;
-                    DiskUsage = disk;
+                    CpuUsage      = cpu;
+                    RamUsage      = ram;
+                    DiskUsage     = disk;
+                    DiskTotalText = FormatDiskTotal(diskTotalGb);
                 });
             });
+        }
+
+        if (!_freeableScanDone)
+        {
+            var cleanerService = new CleanerService();
+            var customPaths    = new PreferencesService().LoadPreferences().CustomCleanerPaths;
+            _ = ScanFreeableAsync(cleanerService, customPaths);
         }
     }
 
@@ -73,28 +81,31 @@ public partial class DashboardViewModel : ObservableObject
         _isPolling = true;
         while (_isPolling)
         {
-            var (cpu, ram, disk) = await Task.Run(() => GetMetrics());
+            var (cpu, ram, disk, diskTotalGb) = await Task.Run(() => GetMetrics());
 
-            _lastCpu  = cpu;
-            _lastRam  = ram;
-            _lastDisk = disk;
+            _lastCpu         = cpu;
+            _lastRam         = ram;
+            _lastDisk        = disk;
+            _lastDiskTotalGb = diskTotalGb;
 
             _currentActive?._dispatcher?.TryEnqueue(() =>
             {
-                _currentActive.CpuUsage  = cpu;
-                _currentActive.RamUsage  = ram;
-                _currentActive.DiskUsage = disk;
+                _currentActive.CpuUsage      = cpu;
+                _currentActive.RamUsage      = ram;
+                _currentActive.DiskUsage     = disk;
+                _currentActive.DiskTotalText = FormatDiskTotal(diskTotalGb);
             });
 
             await Task.Delay(2000);
         }
     }
 
-    private (double cpu, double ram, double disk) GetMetrics()
+    private (double cpu, double ram, double disk, double diskTotalGb) GetMetrics()
     {
-        double cpu  = _lastCpu;
-        double ram  = _lastRam;
-        double disk = _lastDisk;
+        double cpu         = _lastCpu;
+        double ram         = _lastRam;
+        double disk        = _lastDisk;
+        double diskTotalGb = _lastDiskTotalGb;
 
         try
         {
@@ -117,11 +128,39 @@ public partial class DashboardViewModel : ObservableObject
                 {
                     double free  = Convert.ToDouble(o["FreeSpace"]);
                     double total = Convert.ToDouble(o["Size"]);
-                    disk = Math.Round(((total - free) / total) * 100, 1);
+                    disk        = Math.Round(((total - free) / total) * 100, 1);
+                    diskTotalGb = total / (1024.0 * 1024 * 1024);
                 }
         }
         catch { /* silently use last-known values on WMI failure */ }
 
-        return (cpu, ram, disk);
+        return (cpu, ram, disk, diskTotalGb);
     }
+
+    private static async Task ScanFreeableAsync(CleanerService service, List<string> customPaths)
+    {
+        try
+        {
+            var cats  = service.GetCategories(customPaths);
+            var sizes = await Task.WhenAll(cats.Select(c => service.ScanAsync(c)));
+            long total = sizes.Sum();
+            _freeableText     = FormatFreeableBytes(total);
+            _freeableScanDone = true;
+            _currentActive?._dispatcher?.TryEnqueue(() =>
+            {
+                if (_currentActive != null)
+                    _currentActive.FreeableText = _freeableText;
+            });
+        }
+        catch { }
+    }
+
+    private static string FormatFreeableBytes(long bytes)
+    {
+        if (bytes >= 1L << 30) return $"~{bytes / (1024.0 * 1024 * 1024):F1} GB freeable";
+        if (bytes >= 1L << 20) return $"~{bytes / (1024.0 * 1024):F0} MB freeable";
+        return $"~{bytes / 1024:F0} KB freeable";
+    }
+
+    private static string FormatDiskTotal(double gb) => gb > 0 ? $"{gb:F0} GB" : string.Empty;
 }

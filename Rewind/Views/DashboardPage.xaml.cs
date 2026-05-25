@@ -1,3 +1,4 @@
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Rewind.ViewModels;
 
@@ -10,5 +11,11 @@ public sealed partial class DashboardPage : Page
     public DashboardPage()
     {
         this.InitializeComponent();
+    }
+
+    private void CleanUpButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (App.MainWindow is MainWindow mw)
+            mw.NavigateTo("Cleaner");
     }
 }

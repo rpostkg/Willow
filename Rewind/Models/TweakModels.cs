@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.UI.Xaml;
 using YamlDotNet.Serialization;
 
 namespace Rewind.Models;
@@ -26,6 +27,12 @@ public partial class Tweak : ObservableObject
         get => _isEnabled;
         set => SetProperty(ref _isEnabled, value);
     }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AppliedBadgeVisibility))]
+    private bool isApplied;
+
+    public Visibility AppliedBadgeVisibility => IsApplied ? Visibility.Visible : Visibility.Collapsed;
 
     public List<TweakAction> Actions { get; set; } = new();
     public List<TweakAction> RevertActions { get; set; } = new();

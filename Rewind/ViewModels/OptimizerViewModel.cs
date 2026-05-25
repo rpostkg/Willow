@@ -72,9 +72,11 @@ public partial class OptimizerViewModel : ObservableObject
 
     private void LoadTweaks()
     {
+        var prefs = new PreferencesService().LoadPreferences();
         var loadedTweaks = _loaderService.LoadTweaks();
         foreach (var tweak in loadedTweaks)
         {
+            tweak.IsApplied = prefs.OldRegistryData.ContainsKey(tweak.Id);
             tweak.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(Tweak.IsEnabled))
@@ -134,5 +136,7 @@ public partial class OptimizerViewModel : ObservableObject
             if (isRevert) _engineService.RevertTweaks(tweaks);
             else          _engineService.ApplyTweaks(tweaks, report);
         });
+        foreach (var tweak in tweaks)
+            tweak.IsApplied = !isRevert;
     }
 }

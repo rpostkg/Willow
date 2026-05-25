@@ -76,6 +76,16 @@
                         <TextBlock Text="{x:Bind ViewModel.DiskUsageText, Mode=OneWay}"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
                                    HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.DiskTotalText, Mode=OneWay}"
+                                   FontSize="12" Opacity="0.6"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.FreeableText, Mode=OneWay}"
+                                   FontSize="12" Opacity="0.6"
+                                   HorizontalAlignment="Center" />
+                        <Button x:Uid="DashboardPage_CleanUpButton"
+                                HorizontalAlignment="Center"
+                                Margin="0,4,0,0"
+                                Click="CleanUpButton_Click" />
                     </StackPanel>
                 </Border>
             </Grid>

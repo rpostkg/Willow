@@ -318,6 +318,12 @@
   <data name="OptimizerPage_ReviewButton.Content" xml:space="preserve">
     <value>Review Selected</value>
   </data>
+  <data name="OptimizerPage_AppliedBadge.Text" xml:space="preserve">
+    <value>Applied</value>
+  </data>
+  <data name="DashboardPage_CleanUpButton.Content" xml:space="preserve">
+    <value>Clean Up</value>
+  </data>
   <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
     <value>Review Reverted Changes</value>
   </data>

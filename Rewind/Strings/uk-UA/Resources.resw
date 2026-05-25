@@ -318,6 +318,12 @@
   <data name="OptimizerPage_ReviewButton.Content" xml:space="preserve">
     <value>Переглянути вибране</value>
   </data>
+  <data name="OptimizerPage_AppliedBadge.Text" xml:space="preserve">
+    <value>Застосовано</value>
+  </data>
+  <data name="DashboardPage_CleanUpButton.Content" xml:space="preserve">
+    <value>Очистити</value>
+  </data>
   <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
     <value>Перегляд відкату змін</value>
   </data>

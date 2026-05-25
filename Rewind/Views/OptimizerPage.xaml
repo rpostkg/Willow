@@ -62,7 +62,7 @@
         <ScrollViewer Grid.Row="3">
             <ItemsRepeater ItemsSource="{x:Bind ViewModel.FilteredTweaks, Mode=OneWay}">
                 <ItemsRepeater.Layout>
-                    <UniformGridLayout MinItemWidth="300" MinRowSpacing="12" MinColumnSpacing="12" />
+                    <StackLayout Spacing="12" />
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="models:Tweak">
@@ -84,6 +84,13 @@
                                 <TextBlock Text="{x:Bind Description}"
                                            TextWrapping="Wrap"
                                            Margin="0,8,0,0"/>
+                                <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                        CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
+                                        HorizontalAlignment="Left"
+                                        Visibility="{x:Bind AppliedBadgeVisibility, Mode=OneWay}">
+                                    <TextBlock x:Uid="OptimizerPage_AppliedBadge"
+                                               FontSize="11" Foreground="White"/>
+                                </Border>
                             </StackPanel>
                         </Border>
                     </DataTemplate>

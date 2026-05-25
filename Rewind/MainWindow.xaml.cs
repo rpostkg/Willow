@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Rewind.ViewModels;
 using Rewind.Views;
 using System.Linq;
 
@@ -10,7 +11,15 @@ namespace Rewind
         public MainWindow()
         {
             this.InitializeComponent();
+            _ = new DashboardViewModel();
             NavView.SelectedItem = NavView.MenuItems.OfType<NavigationViewItem>().FirstOrDefault();
+        }
+
+        public void NavigateTo(string tag)
+        {
+            var item = NavView.MenuItems.OfType<NavigationViewItem>()
+                .FirstOrDefault(i => i.Tag?.ToString() == tag);
+            if (item != null) NavView.SelectedItem = item;
         }
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
