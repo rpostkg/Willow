@@ -1,0 +1,5 @@
+tweaks:
+  - id: telemetry_master
+    name: Disable Telemetry
+    category: Privacy
+    description: Disables Microsoft telemetry, advertising ID, and online speech recognition.

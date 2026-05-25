@@ -1,0 +1,15 @@
+tweaks:
+  - id: consumer_features
+    name: Disable Consumer Features
+    category: QoL
+    description: Windows will not automatically install games, third-party apps, or app shortcuts from the Microsoft Store.
+
+  - id: disable_widgets
+    name: Disable Widgets
+    category: QoL
+    description: Completely disables Windows 11 widgets.
+
+  - id: disable_hibernation
+    name: Disable Hibernation
+    category: QoL
+    description: Disables hibernation. Frees up disk space; not recommended on laptops.
