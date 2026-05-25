@@ -83,7 +83,7 @@ public class DiskHealthService
             foreach (ManagementObject data in dataSearcher.Get())
             {
                 if (data["VendorSpecific"] is byte[] vs)
-                    ParseAttributes(info, vs);
+                    ParseAttributes(info, vs, _healthCaution, _healthBad);
                 break;
             }
         }
@@ -93,7 +93,7 @@ public class DiskHealthService
         }
     }
 
-    private void ParseAttributes(DiskDriveInfo info, byte[] vs)
+    internal static void ParseAttributes(DiskDriveInfo info, byte[] vs, string cautionText, string badText)
     {
         if (vs.Length < 362) return;
 
@@ -114,7 +114,7 @@ public class DiskHealthService
                     if (info.ReallocatedSectors > 0 && info.Health == HealthStatus.Good)
                     {
                         info.Health     = HealthStatus.Caution;
-                        info.HealthText = _healthCaution;
+                        info.HealthText = cautionText;
                     }
                     break;
                 case 9:
@@ -130,7 +130,7 @@ public class DiskHealthService
         }
     }
 
-    private static string DeriveMediaType(string wmiMediaType, string model)
+    internal static string DeriveMediaType(string wmiMediaType, string model)
     {
         if (model.Contains("NVMe", StringComparison.OrdinalIgnoreCase))     return "NVMe";
         if (model.Contains("SSD", StringComparison.OrdinalIgnoreCase) ||

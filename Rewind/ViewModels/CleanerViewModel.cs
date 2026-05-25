@@ -75,7 +75,7 @@ public partial class CleanerViewModel : ObservableObject
         TotalSelectedText = string.Format(_res.GetString("Cleaner_TotalSelectedFormat"), FormatSize(total));
     }
 
-    private static string FormatSize(long bytes)
+    internal static string FormatSize(long bytes)
     {
         string[] units = ["B", "KB", "MB", "GB", "TB"];
         double size = bytes;

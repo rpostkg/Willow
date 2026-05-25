@@ -36,7 +36,7 @@ public class TweakLoaderService
                 {
                     foreach (var tweak in tweakFile.Tweaks)
                     {
-                        if (currentBuild >= tweak.MinVersion && currentBuild <= tweak.MaxVersion)
+                        if (PassesVersionFilter(tweak, currentBuild))
                             tweaks.Add(tweak);
                     }
                 }
@@ -51,6 +51,9 @@ public class TweakLoaderService
         return tweaks;
     }
 
+    internal static bool PassesVersionFilter(Tweak tweak, int buildNumber) =>
+        buildNumber >= tweak.MinVersion && buildNumber <= tweak.MaxVersion;
+
     private void ApplyLocale(List<Tweak> tweaks, string tweaksFolder, string locale)
     {
         var localeFolder = Path.Combine(tweaksFolder, "Locale", locale);
@@ -61,26 +64,30 @@ public class TweakLoaderService
             .IgnoreUnmatchedProperties()
             .Build();
 
-        var byId = tweaks.ToDictionary(t => t.Id);
-
         foreach (var file in Directory.GetFiles(localeFolder, "*.yaml"))
         {
             try
             {
                 var localeFile = deserializer.Deserialize<TweakLocaleFile>(File.ReadAllText(file));
-                foreach (var entry in localeFile?.Tweaks ?? [])
-                {
-                    if (!byId.TryGetValue(entry.Id, out var tweak)) continue;
-                    if (entry.Name is not null) tweak.Name = entry.Name;
-                    if (entry.Category is not null) tweak.Category = entry.Category;
-                    if (entry.Description is not null) tweak.Description = entry.Description;
-                }
+                ApplyLocaleEntries(tweaks, localeFile?.Tweaks ?? []);
             }
             catch { }
         }
     }
 
-    private class TweakLocaleEntry
+    internal static void ApplyLocaleEntries(List<Tweak> tweaks, IEnumerable<TweakLocaleEntry> entries)
+    {
+        var byId = tweaks.ToDictionary(t => t.Id);
+        foreach (var entry in entries)
+        {
+            if (!byId.TryGetValue(entry.Id, out var tweak)) continue;
+            if (entry.Name is not null) tweak.Name = entry.Name;
+            if (entry.Category is not null) tweak.Category = entry.Category;
+            if (entry.Description is not null) tweak.Description = entry.Description;
+        }
+    }
+
+    internal class TweakLocaleEntry
     {
         public string Id { get; set; } = "";
         public string? Name { get; set; }

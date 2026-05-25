@@ -8,11 +8,24 @@ namespace Rewind.Services;
 
 public static class RegistryService
 {
-    private static RegistryKey GetRootKey(string hive)
+    internal static RegistryKey GetRootKey(string hive)
     {
-        return hive.Equals("CurrentUser", StringComparison.OrdinalIgnoreCase) || hive.Equals("HKCU", StringComparison.OrdinalIgnoreCase) 
-            ? Registry.CurrentUser 
+        return hive.Equals("CurrentUser", StringComparison.OrdinalIgnoreCase) || hive.Equals("HKCU", StringComparison.OrdinalIgnoreCase)
+            ? Registry.CurrentUser
             : Registry.LocalMachine;
+    }
+
+    internal static byte[]? ParseBinaryValue(string input)
+    {
+        if (!input.StartsWith("([byte[]]")) return null;
+        string cleaned = input.Replace("([byte[]](", "").Replace("))", "");
+        string[] parts = cleaned.Split(',');
+        byte[] bytes = new byte[parts.Length];
+        for (int i = 0; i < parts.Length; i++)
+        {
+            if (byte.TryParse(parts[i].Trim(), out byte b)) bytes[i] = b;
+        }
+        return bytes;
     }
 
     public static string ReadValue(string hive, string path, string keyName)
@@ -71,18 +84,8 @@ public static class RegistryService
             }
             else if (kind == RegistryValueKind.Binary)
             {
-                // Basic binary parsing, assuming comma-separated bytes if starting with [byte[]] or similar array representation
-                if (value.StartsWith("([byte[]]"))
-                {
-                    string cleaned = value.Replace("([byte[]](", "").Replace("))", "");
-                    string[] parts = cleaned.Split(',');
-                    byte[] bytes = new byte[parts.Length];
-                    for(int i = 0; i < parts.Length; i++)
-                    {
-                        if (byte.TryParse(parts[i].Trim(), out byte b)) bytes[i] = b;
-                    }
-                    convertedValue = bytes;
-                }
+                var parsed = ParseBinaryValue(value);
+                if (parsed != null) convertedValue = parsed;
             }
 
             subKey.SetValue(keyName, convertedValue, kind);
