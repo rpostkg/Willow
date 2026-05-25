@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Windows.ApplicationModel.Resources;
 using Rewind.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,13 @@ using Microsoft.UI.Xaml;
 namespace Rewind.ViewModels;
 
 public class LanguageOption
+{
+    public string Code { get; init; } = "";
+    public string DisplayName { get; init; } = "";
+    public override string ToString() => DisplayName;
+}
+
+public class ThemeOption
 {
     public string Code { get; init; } = "";
     public string DisplayName { get; init; } = "";
@@ -28,21 +36,36 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private LanguageOption? selectedLanguage;
 
+    [ObservableProperty]
+    private ThemeOption? selectedTheme;
+
     public List<LanguageOption> AvailableLanguages { get; } = new()
     {
         new() { Code = "uk-UA", DisplayName = "Українська" },
         new() { Code = "en-US", DisplayName = "English" },
     };
 
+    public List<ThemeOption> AvailableThemes { get; }
+
     public ObservableCollection<string> CustomCleanerPaths { get; } = new();
 
     public SettingsViewModel()
     {
+        var res = new ResourceLoader();
+        AvailableThemes = new()
+        {
+            new() { Code = "Default", DisplayName = res.GetString("SettingsPage_ThemeAuto") },
+            new() { Code = "Light",   DisplayName = res.GetString("SettingsPage_ThemeLight") },
+            new() { Code = "Dark",    DisplayName = res.GetString("SettingsPage_ThemeDark") },
+        };
+
         var prefs = _prefsService.LoadPreferences();
         enableBackups = !prefs.DisableBackups;
         resolveShortcuts = prefs.ResolveShortcuts;
         selectedLanguage = AvailableLanguages.FirstOrDefault(l => l.Code == prefs.Language)
                            ?? AvailableLanguages[0];
+        selectedTheme = AvailableThemes.FirstOrDefault(t => t.Code == prefs.Theme)
+                        ?? AvailableThemes[0];
         foreach (var path in prefs.CustomCleanerPaths)
             CustomCleanerPaths.Add(path);
     }
@@ -95,5 +118,15 @@ public partial class SettingsViewModel : ObservableObject
             Process.Start(exe);
             Application.Current.Exit();
         }
+    }
+
+    partial void OnSelectedThemeChanged(ThemeOption? value)
+    {
+        if (value is null) return;
+        var prefs = _prefsService.LoadPreferences();
+        if (prefs.Theme == value.Code) return;
+        prefs.Theme = value.Code;
+        _prefsService.SavePreferences(prefs);
+        App.ApplyTheme(value.Code);
     }
 }

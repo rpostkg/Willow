@@ -22,6 +22,22 @@ namespace Rewind
         {
             MainWindow = new MainWindow();
             MainWindow.Activate();
+
+            var prefs = new PreferencesService().LoadPreferences();
+            ApplyTheme(prefs.Theme);
+        }
+
+        public static void ApplyTheme(string theme)
+        {
+            if (MainWindow?.Content is FrameworkElement root)
+            {
+                root.RequestedTheme = theme switch
+                {
+                    "Light" => ElementTheme.Light,
+                    "Dark"  => ElementTheme.Dark,
+                    _       => ElementTheme.Default
+                };
+            }
         }
     }
 }

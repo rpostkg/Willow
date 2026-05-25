@@ -7,6 +7,7 @@ public class UserPreferences
     public bool DisableBackups { get; set; } = false;
     public bool InformedOfBackups { get; set; } = false;
     public string Language { get; set; } = "uk-UA";
+    public string Theme { get; set; } = "Default";
     public bool ResolveShortcuts { get; set; } = false;
     public List<string> CustomCleanerPaths { get; set; } = new();
     public Dictionary<string, List<BackedUpState>> OldRegistryData { get; set; } = new();

@@ -124,7 +124,7 @@
     <value>Автозавантаження</value>
   </data>
   <data name="StartupPage_Title.Text" xml:space="preserve">
-    <value>Автозавантаження</value>
+    <value>Автозапуск</value>
   </data>
   <data name="StartupPage_HkcuBadge" xml:space="preserve">
     <value>Поточний користувач</value>
@@ -145,7 +145,7 @@
     <value>Пошук за назвою або шляхом...</value>
   </data>
   <data name="Nav_Dashboard.Content" xml:space="preserve">
-    <value>Панель керування</value>
+    <value>Інфо-панель</value>
   </data>
   <data name="Nav_Cleaner.Content" xml:space="preserve">
     <value>Очищення</value>
@@ -268,10 +268,10 @@
     <value>Очистити вибране</value>
   </data>
   <data name="CleanerPage_SelectAllButton.Content" xml:space="preserve">
-    <value>Всі</value>
+    <value>Виділити все</value>
   </data>
   <data name="CleanerPage_SelectNoneButton.Content" xml:space="preserve">
-    <value>Жодного</value>
+    <value>Скасувати вибір</value>
   </data>
   <data name="SettingsPage_CustomCleanerHeader.Text" xml:space="preserve">
     <value>Власні шляхи очищення</value>
@@ -334,7 +334,7 @@
     <value>Виконання скрипту</value>
   </data>
   <data name="Engine_RunRevertScript" xml:space="preserve">
-    <value>Виконання скрипту скасування дії</value>
+    <value>Виконання скрипту скасування твіку</value>
   </data>
   <data name="Engine_DeleteKey" xml:space="preserve">
     <value>Видалення ключа</value>
@@ -412,7 +412,7 @@
     <value>Мова</value>
   </data>
   <data name="SettingsPage_StartupHeader.Text" xml:space="preserve">
-    <value>Автозавантаження</value>
+    <value>Автозапуск</value>
   </data>
   <data name="SettingsPage_ResolveShortcutsToggle.Header" xml:space="preserve">
     <value>Показувати цілі ярликів (.lnk-файли)</value>
@@ -423,11 +423,23 @@
   <data name="SettingsPage_ResolveShortcutsToggle.OffContent" xml:space="preserve">
     <value>Вимкнено</value>
   </data>
+  <data name="SettingsPage_ThemeHeader.Text" xml:space="preserve">
+    <value>Вигляд</value>
+  </data>
+  <data name="SettingsPage_ThemeAuto" xml:space="preserve">
+    <value>Авто</value>
+  </data>
+  <data name="SettingsPage_ThemeLight" xml:space="preserve">
+    <value>Світла</value>
+  </data>
+  <data name="SettingsPage_ThemeDark" xml:space="preserve">
+    <value>Темна</value>
+  </data>
   <data name="CleanerPage_AdminIcon.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Потребує прав адміністратора</value>
+    <value>Належить адміністратору/системі</value>
   </data>
   <data name="StartupPage_AdminIcon.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Потребує прав адміністратора</value>
+    <value>Належить адміністратору/системі</value>
   </data>
   <data name="StartupPage_OpenLocationButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Відкрити розташування файлу</value>

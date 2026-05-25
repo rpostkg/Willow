@@ -17,6 +17,12 @@
             </StackPanel>
 
             <StackPanel Spacing="8">
+                <TextBlock x:Uid="SettingsPage_ThemeHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <ComboBox ItemsSource="{x:Bind ViewModel.AvailableThemes}"
+                          SelectedItem="{x:Bind ViewModel.SelectedTheme, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
                 <TextBlock x:Uid="SettingsPage_StartupHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
                 <ToggleSwitch x:Uid="SettingsPage_ResolveShortcutsToggle"
                               IsOn="{x:Bind ViewModel.ResolveShortcuts, Mode=TwoWay}" />
