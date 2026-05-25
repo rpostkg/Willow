@@ -27,7 +27,7 @@
                     <StackPanel HorizontalAlignment="Center" Spacing="12">
                         <ProgressRing Width="80" Height="80"
                                       Value="{x:Bind ViewModel.CpuUsage, Mode=OneWay}"
-                                      IsIndeterminate="False"
+                                      IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
                         <TextBlock x:Uid="DashboardPage_CpuLabel"
@@ -47,7 +47,7 @@
                     <StackPanel HorizontalAlignment="Center" Spacing="12">
                         <ProgressRing Width="80" Height="80"
                                       Value="{x:Bind ViewModel.RamUsage, Mode=OneWay}"
-                                      IsIndeterminate="False"
+                                      IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
                         <TextBlock x:Uid="DashboardPage_RamLabel"
@@ -67,7 +67,7 @@
                     <StackPanel HorizontalAlignment="Center" Spacing="12">
                         <ProgressRing Width="80" Height="80"
                                       Value="{x:Bind ViewModel.DiskUsage, Mode=OneWay}"
-                                      IsIndeterminate="False"
+                                      IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
                         <TextBlock x:Uid="DashboardPage_DiskLabel"
@@ -76,7 +76,7 @@
                         <TextBlock Text="{x:Bind ViewModel.DiskUsageText, Mode=OneWay}"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
                                    HorizontalAlignment="Center" />
-                        <TextBlock Text="{x:Bind ViewModel.DiskTotalText, Mode=OneWay}"
+                        <TextBlock Text="{x:Bind ViewModel.DiskSizeText, Mode=OneWay}"
                                    FontSize="12" Opacity="0.6"
                                    HorizontalAlignment="Center" />
                         <TextBlock Text="{x:Bind ViewModel.FreeableText, Mode=OneWay}"
