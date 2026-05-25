@@ -16,6 +16,9 @@ public partial class DashboardViewModel : ObservableObject
     private static double _lastCpu = 0;
     private static double _lastRam = 0;
     private static double _lastDisk = 0;
+    private static double _lastCpuSpeedMhz = 0;
+    private static double _lastRamUsedGb = 0;
+    private static double _lastRamTotalGb = 0;
     private static double _lastDiskTotalGb = 0;
     private static double _lastDiskUsedGb = 0;
     private static string _freeableText = string.Empty;
@@ -25,7 +28,9 @@ public partial class DashboardViewModel : ObservableObject
     private static DashboardViewModel? _currentActive;
 
     [ObservableProperty] private double cpuUsage;
+    [ObservableProperty] private string cpuSpeedText = string.Empty;
     [ObservableProperty] private double ramUsage;
+    [ObservableProperty] private string ramSizeText = string.Empty;
     [ObservableProperty] private double diskUsage;
     [ObservableProperty] private string diskSizeText = string.Empty;
     [ObservableProperty] private string freeableText = string.Empty;
@@ -49,7 +54,9 @@ public partial class DashboardViewModel : ObservableObject
         _dispatcher = DispatcherQueue.GetForCurrentThread();
 
         CpuUsage     = _lastCpu;
+        CpuSpeedText = FormatCpuSpeed(_lastCpuSpeedMhz);
         RamUsage     = _lastRam;
+        RamSizeText  = FormatRamSize(_lastRamUsedGb, _lastRamTotalGb);
         DiskUsage    = _lastDisk;
         DiskSizeText = FormatDiskSize(_lastDiskUsedGb, _lastDiskTotalGb);
         FreeableText = _freeableText;
@@ -65,16 +72,19 @@ public partial class DashboardViewModel : ObservableObject
         {
             _ = Task.Run(() =>
             {
-                var (cpu, ram, disk, totalGb, usedGb) = GetMetrics();
-                _lastCpu = cpu; _lastRam = ram; _lastDisk = disk;
-                _lastDiskTotalGb = totalGb; _lastDiskUsedGb = usedGb;
+                var (cpu, cpuMhz, ram, ramUsed, ramTotal, disk, diskTotal, diskUsed) = GetMetrics();
+                _lastCpu = cpu; _lastCpuSpeedMhz = cpuMhz;
+                _lastRam = ram; _lastRamUsedGb = ramUsed; _lastRamTotalGb = ramTotal;
+                _lastDisk = disk; _lastDiskTotalGb = diskTotal; _lastDiskUsedGb = diskUsed;
                 _hasValues = true;
                 _dispatcher?.TryEnqueue(() =>
                 {
                     CpuUsage     = cpu;
+                    CpuSpeedText = FormatCpuSpeed(cpuMhz);
                     RamUsage     = ram;
+                    RamSizeText  = FormatRamSize(ramUsed, ramTotal);
                     DiskUsage    = disk;
-                    DiskSizeText = FormatDiskSize(usedGb, totalGb);
+                    DiskSizeText = FormatDiskSize(diskUsed, diskTotal);
                     IsLoaded     = true;
                 });
             });
@@ -93,21 +103,26 @@ public partial class DashboardViewModel : ObservableObject
         _isPolling = true;
         while (_isPolling)
         {
-            var (cpu, ram, disk, totalGb, usedGb) = await Task.Run(() => GetMetrics());
+            var (cpu, cpuMhz, ram, ramUsed, ramTotal, disk, diskTotal, diskUsed) = await Task.Run(() => GetMetrics());
 
-            _lastCpu         = cpu;
-            _lastRam         = ram;
-            _lastDisk        = disk;
-            _lastDiskTotalGb = totalGb;
-            _lastDiskUsedGb  = usedGb;
-            _hasValues       = true;
+            _lastCpu          = cpu;
+            _lastCpuSpeedMhz  = cpuMhz;
+            _lastRam          = ram;
+            _lastRamUsedGb    = ramUsed;
+            _lastRamTotalGb   = ramTotal;
+            _lastDisk         = disk;
+            _lastDiskTotalGb  = diskTotal;
+            _lastDiskUsedGb   = diskUsed;
+            _hasValues        = true;
 
             _currentActive?._dispatcher?.TryEnqueue(() =>
             {
                 _currentActive.CpuUsage     = cpu;
+                _currentActive.CpuSpeedText = FormatCpuSpeed(cpuMhz);
                 _currentActive.RamUsage     = ram;
+                _currentActive.RamSizeText  = FormatRamSize(ramUsed, ramTotal);
                 _currentActive.DiskUsage    = disk;
-                _currentActive.DiskSizeText = FormatDiskSize(usedGb, totalGb);
+                _currentActive.DiskSizeText = FormatDiskSize(diskUsed, diskTotal);
                 _currentActive.IsLoaded     = true;
             });
 
@@ -115,19 +130,25 @@ public partial class DashboardViewModel : ObservableObject
         }
     }
 
-    private (double cpu, double ram, double disk, double totalGb, double usedGb) GetMetrics()
+    private (double cpu, double cpuMhz, double ram, double ramUsedGb, double ramTotalGb, double disk, double diskTotalGb, double diskUsedGb) GetMetrics()
     {
-        double cpu     = _lastCpu;
-        double ram     = _lastRam;
-        double disk    = _lastDisk;
-        double totalGb = _lastDiskTotalGb;
-        double usedGb  = _lastDiskUsedGb;
+        double cpu        = _lastCpu;
+        double cpuMhz     = _lastCpuSpeedMhz;
+        double ram        = _lastRam;
+        double ramUsedGb  = _lastRamUsedGb;
+        double ramTotalGb = _lastRamTotalGb;
+        double disk       = _lastDisk;
+        double diskTotalGb = _lastDiskTotalGb;
+        double diskUsedGb  = _lastDiskUsedGb;
 
         try
         {
-            using (var s = new ManagementObjectSearcher("select LoadPercentage from Win32_Processor"))
+            using (var s = new ManagementObjectSearcher("select LoadPercentage, CurrentClockSpeed from Win32_Processor"))
                 foreach (var o in s.Get())
-                    cpu = Convert.ToDouble(o["LoadPercentage"]);
+                {
+                    cpu    = Convert.ToDouble(o["LoadPercentage"]);
+                    cpuMhz = Convert.ToDouble(o["CurrentClockSpeed"]);
+                }
 
             using (var s = new ManagementObjectSearcher(
                 "select FreePhysicalMemory, TotalVisibleMemorySize from Win32_OperatingSystem"))
@@ -135,7 +156,9 @@ public partial class DashboardViewModel : ObservableObject
                 {
                     double free  = Convert.ToDouble(o["FreePhysicalMemory"]);
                     double total = Convert.ToDouble(o["TotalVisibleMemorySize"]);
-                    ram = Math.Round(((total - free) / total) * 100, 1);
+                    ram       = Math.Round(((total - free) / total) * 100, 1);
+                    ramUsedGb  = (total - free) / (1024.0 * 1024);
+                    ramTotalGb = total / (1024.0 * 1024);
                 }
 
             using (var s = new ManagementObjectSearcher(
@@ -144,14 +167,14 @@ public partial class DashboardViewModel : ObservableObject
                 {
                     double free  = Convert.ToDouble(o["FreeSpace"]);
                     double total = Convert.ToDouble(o["Size"]);
-                    disk    = Math.Round(((total - free) / total) * 100, 1);
-                    totalGb = total / (1024.0 * 1024 * 1024);
-                    usedGb  = (total - free) / (1024.0 * 1024 * 1024);
+                    disk       = Math.Round(((total - free) / total) * 100, 1);
+                    diskTotalGb = total / (1024.0 * 1024 * 1024);
+                    diskUsedGb  = (total - free) / (1024.0 * 1024 * 1024);
                 }
         }
         catch { /* silently use last-known values on WMI failure */ }
 
-        return (cpu, ram, disk, totalGb, usedGb);
+        return (cpu, cpuMhz, ram, ramUsedGb, ramTotalGb, disk, diskTotalGb, diskUsedGb);
     }
 
     private static async Task ScanFreeableAsync(CleanerService service, List<string> customPaths)
@@ -178,6 +201,12 @@ public partial class DashboardViewModel : ObservableObject
         if (bytes >= 1L << 20) return $"~{bytes / (1024.0 * 1024):F0} MB freeable";
         return $"~{bytes / 1024:F0} KB freeable";
     }
+
+    private static string FormatCpuSpeed(double mhz) =>
+        mhz > 0 ? $"{mhz / 1000.0:F1} GHz" : string.Empty;
+
+    private static string FormatRamSize(double usedGb, double totalGb) =>
+        totalGb > 0 ? $"{usedGb:F1} GB / {totalGb:F0} GB" : string.Empty;
 
     private static string FormatDiskSize(double usedGb, double totalGb) =>
         totalGb > 0 ? $"{usedGb:F0} GB / {totalGb:F0} GB" : string.Empty;

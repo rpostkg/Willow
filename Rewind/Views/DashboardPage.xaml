@@ -36,6 +36,9 @@
                         <TextBlock Text="{x:Bind ViewModel.CpuUsageText, Mode=OneWay}"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
                                    HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.CpuSpeedText, Mode=OneWay}"
+                                   FontSize="12" Opacity="0.6"
+                                   HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
 
@@ -55,6 +58,9 @@
                                    HorizontalAlignment="Center" />
                         <TextBlock Text="{x:Bind ViewModel.RamUsageText, Mode=OneWay}"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{x:Bind ViewModel.RamSizeText, Mode=OneWay}"
+                                   FontSize="12" Opacity="0.6"
                                    HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
