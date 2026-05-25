@@ -1,0 +1,220 @@
+tweaks:
+  - id: dark_theme
+    name: Темна тема
+    category: Налаштування
+    description: Вмикає темну тему для системи та застосунків Windows.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize
+        key: AppsUseLightTheme
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize
+        key: SystemUsesLightTheme
+        value: 0
+        valueType: DWord
+      - type: Script
+        script: Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+    revertActions:
+      - type: Script
+        script: Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+
+  - id: long_paths
+    name: Довгі шляхи файлів
+    category: Налаштування
+    description: Знімає обмеження у 260 символів для шляхів до файлів і тек.
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\CurrentControlSet\Control\FileSystem
+        key: LongPathsEnabled
+        value: 1
+        valueType: DWord
+
+  - id: show_file_extensions
+    name: Показувати розширення файлів
+    category: Налаштування
+    description: Відображає розширення файлів у Провіднику Windows.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        key: HideFileExt
+        value: 0
+        valueType: DWord
+      - type: Script
+        script: Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+    revertActions:
+      - type: Script
+        script: Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+
+  - id: show_hidden_files
+    name: Показувати приховані файли
+    category: Налаштування
+    description: Відображає приховані файли та теки у Провіднику Windows.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        key: Hidden
+        value: 1
+        valueType: DWord
+      - type: Script
+        script: Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+    revertActions:
+      - type: Script
+        script: Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+
+  - id: game_mode
+    name: Ігровий режим
+    category: Налаштування
+    description: Вмикає ігровий режим Windows для підвищення продуктивності в іграх.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\GameBar
+        key: AllowAutoGameMode
+        value: 1
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\GameBar
+        key: AutoGameModeEnabled
+        value: 1
+        valueType: DWord
+
+  - id: disable_mouse_accel
+    name: Вимкнути прискорення миші
+    category: Налаштування
+    description: Вимикає функцію підвищення точності вказівника для рівномірного лінійного переміщення.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Mouse
+        key: MouseSpeed
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Mouse
+        key: MouseThreshold1
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Mouse
+        key: MouseThreshold2
+        value: 0
+        valueType: DWord
+    revertActions:
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Mouse
+        key: MouseSpeed
+        value: 1
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Mouse
+        key: MouseThreshold1
+        value: 6
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Mouse
+        key: MouseThreshold2
+        value: 10
+        valueType: DWord
+
+  - id: disable_bing_search
+    name: Вимкнути Bing у пошуку
+    category: Налаштування
+    description: Прибирає результати веб-пошуку Bing з меню «Пуск» та рядка пошуку.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\Search
+        key: BingSearchEnabled
+        value: 0
+        valueType: DWord
+
+  - id: verbose_bsod
+    name: Детальний синій екран
+    category: Налаштування
+    description: Відображає технічну інформацію замість смайлика на екрані синього екрану смерті.
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\CurrentControlSet\Control\CrashControl
+        key: DisplayParameters
+        value: 1
+        valueType: DWord
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\CurrentControlSet\Control\CrashControl
+        key: DisableEmoticon
+        value: 1
+        valueType: DWord
+
+  - id: disable_sticky_keys
+    name: Вимкнути Sticky Keys
+    category: Налаштування
+    description: Вимикає спливаюче вікно Sticky Keys при п'ятиразовому натисканні Shift.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Accessibility\StickyKeys
+        key: Flags
+        value: 58
+        valueType: DWord
+    revertActions:
+      - type: Registry
+        hive: CurrentUser
+        path: Control Panel\Accessibility\StickyKeys
+        key: Flags
+        value: 506
+        valueType: DWord
+
+  - id: battery_percentage
+    name: Відсоток заряду в треї
+    category: Налаштування
+    description: Відображає відсоток заряду батареї поряд із значком живлення в системному треї.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        key: IsBatteryPercentageEnabled
+        value: 1
+        valueType: DWord
+
+  - id: numlock_on_startup
+    name: Num Lock при запуску
+    category: Налаштування
+    description: Автоматично вмикає клавішу Num Lock при завантаженні Windows.
+    actions:
+      - type: Script
+        script: |
+          if (!(Test-Path "HKU:")) { New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USERS -ErrorAction SilentlyContinue }
+          Set-ItemProperty -Path "HKU:\.Default\Control Panel\Keyboard" -Name "InitialKeyboardIndicators" -Value "2" -ErrorAction SilentlyContinue
+          Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "InitialKeyboardIndicators" -Value "2"
+    revertActions:
+      - type: Script
+        script: |
+          if (!(Test-Path "HKU:")) { New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USERS -ErrorAction SilentlyContinue }
+          Set-ItemProperty -Path "HKU:\.Default\Control Panel\Keyboard" -Name "InitialKeyboardIndicators" -Value "0" -ErrorAction SilentlyContinue
+          Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "InitialKeyboardIndicators" -Value "0"
+
+  - id: logon_acrylic_blur
+    name: Прибрати розмиття екрана входу
+    category: Налаштування
+    description: Прибирає ефект розмиття фону на екрані входу в систему Windows.
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: SOFTWARE\Policies\Microsoft\Windows\System
+        key: DisableAcrylicBackgroundOnLogon
+        value: 1
+        valueType: DWord

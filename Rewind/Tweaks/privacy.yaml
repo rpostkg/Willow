@@ -2,7 +2,7 @@ tweaks:
   - id: telemetry_master
     name: Вимкнути телеметрію
     category: Приватність
-    description: Вимикає телеметрію Microsoft, рекламний ID та онлайн-розпізнавання мовлення.
+    description: Вимикає телеметрію Microsoft, рекламний ID, персоналізацію вводу, розпізнавання мовлення та зворотній зв'язок.
     actions:
       - type: Registry
         hive: CurrentUser
@@ -17,9 +17,57 @@ tweaks:
         value: 0
         valueType: DWord
       - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy
+        key: HasAccepted
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Input\TIPC
+        key: Enabled
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\InputPersonalization
+        key: RestrictImplicitInkCollection
+        value: 1
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\InputPersonalization
+        key: RestrictImplicitTextCollection
+        value: 1
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\InputPersonalization\TrainedDataStore
+        key: HarvestContacts
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Personalization\Settings
+        key: AcceptedPrivacyPolicy
+        value: 0
+        valueType: DWord
+      - type: Registry
         hive: LocalMachine
         path: SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection
         key: AllowTelemetry
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        key: Start_TrackProgs
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Siuf\Rules
+        key: NumberOfSIUFInPeriod
         value: 0
         valueType: DWord
       - type: Service
@@ -39,3 +87,69 @@ tweaks:
         targetState: Automatic
       - type: Script
         script: Set-MpPreference -SubmitSamplesConsent 1
+
+  - id: activity_history
+    name: Вимкнути журнал активності
+    category: Приватність
+    description: Вимикає стрічку активності Windows, публікацію та синхронізацію дій користувача з хмарою.
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: SOFTWARE\Policies\Microsoft\Windows\System
+        key: EnableActivityFeed
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: LocalMachine
+        path: SOFTWARE\Policies\Microsoft\Windows\System
+        key: PublishUserActivities
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: LocalMachine
+        path: SOFTWARE\Policies\Microsoft\Windows\System
+        key: UploadUserActivities
+        value: 0
+        valueType: DWord
+
+  - id: location_tracking
+    name: Вимкнути відстеження місцезнаходження
+    category: Приватність
+    description: Вимикає служби геолокації та забороняє програмам доступ до даних про місцезнаходження.
+    actions:
+      - type: Service
+        name: lfsvc
+        targetState: Disabled
+      - type: Registry
+        hive: LocalMachine
+        path: SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location
+        key: Value
+        value: Deny
+        valueType: String
+      - type: Registry
+        hive: LocalMachine
+        path: SOFTWARE\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}
+        key: SensorPermissionState
+        value: 0
+        valueType: DWord
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\Maps
+        key: AutoUpdateEnabled
+        value: 0
+        valueType: DWord
+    revertActions:
+      - type: Service
+        name: lfsvc
+        targetState: Manual
+
+  - id: powershell_telemetry
+    name: Вимкнути телеметрію PowerShell
+    category: Приватність
+    description: Відмовляється від збору телеметрії PowerShell 7 через системну змінну середовища.
+    actions:
+      - type: Script
+        script: "[Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', '1', 'Machine')"
+    revertActions:
+      - type: Script
+        script: "[Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', $null, 'Machine')"

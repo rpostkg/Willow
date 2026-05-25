@@ -12,7 +12,7 @@ tweaks:
         valueType: DWord
     revertActions:
       - type: Script
-        script: Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" -Name "DisableWindowsConsumerFeatures" -Force
+        script: Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" -Name "DisableWindowsConsumerFeatures" -Force -ErrorAction SilentlyContinue
 
   - id: disable_widgets
     name: Вимкнути віджети
@@ -51,5 +51,29 @@ tweaks:
         hive: LocalMachine
         path: System\CurrentControlSet\Control\Session Manager\Power
         key: HibernateEnabled
+        value: 1
+        valueType: DWord
+
+  - id: end_task_right_click
+    name: Завершення задачі з панелі задач
+    category: QoL
+    description: Додає пункт «Завершити задачу» у контекстне меню значків на панелі задач.
+    actions:
+      - type: Registry
+        hive: CurrentUser
+        path: Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings
+        key: TaskbarEndTask
+        value: 1
+        valueType: DWord
+
+  - id: wpbt_disable
+    name: Вимкнути WPBT
+    category: QoL
+    description: Забороняє виробникам обладнання запускати програми через таблицю UEFI WPBT при завантаженні.
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\CurrentControlSet\Control\Session Manager
+        key: DisableWpbtExecution
         value: 1
         valueType: DWord

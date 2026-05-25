@@ -3,6 +3,7 @@ tweaks:
     name: Класичне контекстне меню
     category: Просунуті твіки
     description: Відновлює класичне контекстне меню правої кнопки миші у Провіднику (стиль Windows 10).
+    minversion: 22000
     actions:
       - type: Script
         script: |
@@ -97,4 +98,39 @@ tweaks:
         value: 1
         valueType: DWord
       - type: Script
-        script: Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask"
+        script: Remove-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -ErrorAction SilentlyContinue
+
+  - id: utc_time
+    name: Годинник у форматі UTC
+    category: Просунуті твіки
+    description: Налаштовує системний годинник на UTC. Рекомендується при подвійному завантаженні з Linux.
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\CurrentControlSet\Control\TimeZoneInformation
+        key: RealTimeIsUniversal
+        value: 1
+        valueType: QWord
+
+  - id: disable_ipv6
+    name: Вимкнути IPv6
+    category: Просунуті твіки
+    description: Повністю вимикає протокол IPv6 на всіх мережевих адаптерах.
+    actions:
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+        key: DisabledComponents
+        value: 255
+        valueType: DWord
+      - type: Script
+        script: Disable-NetAdapterBinding -Name * -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue
+    revertActions:
+      - type: Registry
+        hive: LocalMachine
+        path: SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+        key: DisabledComponents
+        value: 0
+        valueType: DWord
+      - type: Script
+        script: Enable-NetAdapterBinding -Name * -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue

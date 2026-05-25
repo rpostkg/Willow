@@ -23,3 +23,13 @@ tweaks:
     name: Disable Visual Effects
     category: Advanced Tweaks
     description: Sets Windows visual effects to "Best performance" (disables animations, shadows, etc.).
+
+  - id: utc_time
+    name: Set Clock to UTC
+    category: Advanced Tweaks
+    description: Configures the hardware clock to use UTC. Recommended when dual-booting with Linux.
+
+  - id: disable_ipv6
+    name: Disable IPv6
+    category: Advanced Tweaks
+    description: Completely disables the IPv6 protocol on all network adapters.

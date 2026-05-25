@@ -13,3 +13,13 @@ tweaks:
     name: Disable Hibernation
     category: QoL
     description: Disables hibernation. Frees up disk space; not recommended on laptops.
+
+  - id: end_task_right_click
+    name: End Task from Taskbar
+    category: QoL
+    description: Adds an "End Task" option to the right-click context menu of taskbar icons.
+
+  - id: wpbt_disable
+    name: Disable WPBT
+    category: QoL
+    description: Prevents hardware vendors from auto-launching programs via the UEFI WPBT table at boot.
