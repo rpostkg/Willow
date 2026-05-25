@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using Microsoft.Windows.ApplicationModel.Resources;
 using Rewind.Models;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,14 @@ public class TweakEngineService
         var changes = new List<ChangeItem>();
         var prefs = _prefsService.LoadPreferences();
 
+        // Load display strings on the calling (UI) thread before entering Task.Run
+        var res = new ResourceLoader();
+        string scriptTargetFmt  = res.GetString("Engine_ScriptTargetFormat");
+        string scriptNA         = res.GetString("Engine_ScriptNA");
+        string runScript        = res.GetString("Engine_RunScript");
+        string runRevertScript  = res.GetString("Engine_RunRevertScript");
+        string deleteKey        = res.GetString("Engine_DeleteKey");
+
         await Task.Run(() =>
         {
             foreach (var tweak in tweaks)
@@ -38,7 +47,7 @@ public class TweakEngineService
                         TweakId = tweak.Id,
                         Type = action.Type,
                         NewValue = action.Type == ActionType.Registry ? action.Value :
-                                   (action.Type == ActionType.Service ? action.TargetState : "Виконати скрипт"),
+                                   (action.Type == ActionType.Service ? action.TargetState : runScript),
                         Hive = action.Hive,
                         Path = action.Path,
                         Key = action.Key,
@@ -56,7 +65,7 @@ public class TweakEngineService
                             if (matchingBackup != null)
                             {
                                 // If the backed up state was "new key", it means we should delete it on revert.
-                                item.NewValue = matchingBackup.OldValue == "Новий ключ" ? "Видалення ключа" : matchingBackup.OldValue;
+                                item.NewValue = matchingBackup.OldValue == "Новий ключ" ? deleteKey : matchingBackup.OldValue;
                             }
                         }
 
@@ -79,9 +88,9 @@ public class TweakEngineService
                     }
                     else if (action.Type == ActionType.Script)
                     {
-                        item.Target = $"Скрипт Powershell ({tweak.Name})";
-                        item.OldValue = "Н/Д";
-                        item.NewValue = isRevert ? "Виконання скрипту скасування дії" : "Виконання скрипту";
+                        item.Target   = string.Format(scriptTargetFmt, tweak.Name);
+                        item.OldValue = scriptNA;
+                        item.NewValue = isRevert ? runRevertScript : runScript;
                     }
 
                     changes.Add(item);

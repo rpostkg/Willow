@@ -324,6 +324,21 @@
   <data name="DashboardPage_CleanUpButton.Content" xml:space="preserve">
     <value>Clean Up</value>
   </data>
+  <data name="Engine_ScriptTargetFormat" xml:space="preserve">
+    <value>PowerShell Script ({0})</value>
+  </data>
+  <data name="Engine_ScriptNA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="Engine_RunScript" xml:space="preserve">
+    <value>Run script</value>
+  </data>
+  <data name="Engine_RunRevertScript" xml:space="preserve">
+    <value>Run revert script</value>
+  </data>
+  <data name="Engine_DeleteKey" xml:space="preserve">
+    <value>Delete key</value>
+  </data>
   <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
     <value>Review Reverted Changes</value>
   </data>

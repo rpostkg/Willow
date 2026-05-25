@@ -324,6 +324,21 @@
   <data name="DashboardPage_CleanUpButton.Content" xml:space="preserve">
     <value>Очистити</value>
   </data>
+  <data name="Engine_ScriptTargetFormat" xml:space="preserve">
+    <value>Скрипт PowerShell ({0})</value>
+  </data>
+  <data name="Engine_ScriptNA" xml:space="preserve">
+    <value>Н/Д</value>
+  </data>
+  <data name="Engine_RunScript" xml:space="preserve">
+    <value>Виконання скрипту</value>
+  </data>
+  <data name="Engine_RunRevertScript" xml:space="preserve">
+    <value>Виконання скрипту скасування дії</value>
+  </data>
+  <data name="Engine_DeleteKey" xml:space="preserve">
+    <value>Видалення ключа</value>
+  </data>
   <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
     <value>Перегляд відкату змін</value>
   </data>
