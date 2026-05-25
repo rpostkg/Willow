@@ -27,6 +27,9 @@ public class TweakEngineService
         string runScript        = res.GetString("Engine_RunScript");
         string runRevertScript  = res.GetString("Engine_RunRevertScript");
         string deleteKey        = res.GetString("Engine_DeleteKey");
+        string newKeyDisplay    = res.GetString("Engine_NewKey");
+        string notFoundDisplay  = res.GetString("Engine_NotFound");
+        string svcPrefixDisplay = res.GetString("Engine_ServicePrefix");
 
         await Task.Run(() =>
         {
@@ -35,7 +38,6 @@ public class TweakEngineService
                 var actions = isRevert ? tweak.RevertActions : tweak.Actions;
                 if (actions == null) continue;
 
-                // Check if we have backup data for this tweak (from userpreferences.yaml)
                 List<BackedUpState>? backups = null;
                 bool hasBackup = isRevert && prefs.OldRegistryData.TryGetValue(tweak.Id, out backups) && backups != null;
 
@@ -44,53 +46,53 @@ public class TweakEngineService
                     var action = actions[i];
                     var item = new ChangeItem
                     {
-                        TweakId = tweak.Id,
-                        Type = action.Type,
-                        NewValue = action.Type == ActionType.Registry ? action.Value :
-                                   (action.Type == ActionType.Service ? action.TargetState : runScript),
-                        Hive = action.Hive,
-                        Path = action.Path,
-                        Key = action.Key,
+                        TweakId   = tweak.Id,
+                        Type      = action.Type,
+                        NewValue  = action.Type == ActionType.Registry ? action.Value :
+                                    (action.Type == ActionType.Service ? action.TargetState : runScript),
+                        Hive      = action.Hive,
+                        Path      = action.Path,
+                        Key       = action.Key,
                         ValueType = action.ValueType
                     };
 
                     if (action.Type == ActionType.Registry)
                     {
-                        item.Target = $"{action.Hive}\\{action.Path}\\{action.Key}";
+                        item.Target        = $"{action.Hive}\\{action.Path}\\{action.Key}";
+                        item.DisplayTarget = item.Target;
 
-                        // If we have a backup for this specific target, override the NewValue shown in the UI
                         if (hasBackup && backups != null)
                         {
                             var matchingBackup = backups.Find(b => b.Target == item.Target);
                             if (matchingBackup != null)
-                            {
-                                // If the backed up state was "new key", it means we should delete it on revert.
-                                item.NewValue = matchingBackup.OldValue == "Новий ключ" ? deleteKey : matchingBackup.OldValue;
-                            }
+                                item.NewValue = matchingBackup.OldValue == TweakSentinels.NewKey ? deleteKey : matchingBackup.OldValue;
                         }
 
-                        item.OldValue = RegistryService.ReadValue(action.Hive, action.Path, action.Key);
+                        item.OldValue        = RegistryService.ReadValue(action.Hive, action.Path, action.Key);
+                        item.DisplayOldValue = item.OldValue == TweakSentinels.NewKey ? newKeyDisplay : item.OldValue;
                     }
                     else if (action.Type == ActionType.Service)
                     {
-                        item.Target = $"Сервіс: {action.Name}";
+                        item.Target        = $"{TweakSentinels.ServicePrefix}{action.Name}";
+                        item.DisplayTarget = $"{svcPrefixDisplay}{action.Name}";
 
                         if (hasBackup && backups != null)
                         {
                             var matchingBackup = backups.Find(b => b.Target == item.Target);
                             if (matchingBackup != null)
-                            {
                                 item.NewValue = matchingBackup.OldValue;
-                            }
                         }
 
-                        item.OldValue = WindowsServiceManager.GetStartupType(action.Name);
+                        item.OldValue        = WindowsServiceManager.GetStartupType(action.Name);
+                        item.DisplayOldValue = item.OldValue == TweakSentinels.NotFound ? notFoundDisplay : item.OldValue;
                     }
                     else if (action.Type == ActionType.Script)
                     {
-                        item.Target   = string.Format(scriptTargetFmt, tweak.Name);
-                        item.OldValue = scriptNA;
-                        item.NewValue = isRevert ? runRevertScript : runScript;
+                        item.Target        = string.Format(scriptTargetFmt, tweak.Name);
+                        item.DisplayTarget = item.Target;
+                        item.OldValue        = scriptNA;
+                        item.DisplayOldValue = scriptNA;
+                        item.NewValue        = isRevert ? runRevertScript : runScript;
                     }
 
                     changes.Add(item);
@@ -185,20 +187,20 @@ public class TweakEngineService
                 {
                     if (backup.Type == ActionType.Registry)
                     {
-                        if (backup.OldValue == "Новий ключ")
+                        if (backup.OldValue == TweakSentinels.NewKey)
                         {
                             allSuccess &= RegistryService.DeleteValue(backup.Hive, backup.Path, backup.Key);
                         }
-                        else if (backup.OldValue != "Невідомо/Помилка")
+                        else if (backup.OldValue != TweakSentinels.UnknownError)
                         {
                             allSuccess &= RegistryService.WriteValue(backup.Hive, backup.Path, backup.Key, backup.OldValue, backup.ValueType);
                         }
                     }
                     else if (backup.Type == ActionType.Service)
                     {
-                        if (backup.OldValue != "Не знайдено")
+                        if (backup.OldValue != TweakSentinels.NotFound)
                         {
-                            string srvName = backup.Target.Replace("Сервіс: ", "");
+                            string srvName = backup.Target.Replace(TweakSentinels.ServicePrefix, "");
                             allSuccess &= WindowsServiceManager.SetStartupType(srvName, backup.OldValue);
                         }
                     }

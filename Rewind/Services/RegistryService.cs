@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using Rewind.Models;
 using System;
 using System.Diagnostics;
 using System.Security;
@@ -23,7 +24,7 @@ public static class RegistryService
             if (subKey != null)
             {
                 var val = subKey.GetValue(keyName);
-                if (val != null) return val.ToString() ?? "Новий ключ";
+                if (val != null) return val.ToString() ?? TweakSentinels.NewKey;
             }
         }
         catch (SecurityException ex)
@@ -41,7 +42,7 @@ public static class RegistryService
             Debug.WriteLine($"[RegistryService] Read Failed: {hive}\\{path}\\{keyName} - {ex.Message}");
         }
 
-        return "Новий ключ";
+        return TweakSentinels.NewKey;
     }
 
     public static bool WriteValue(string hive, string path, string keyName, string value, string valueType)

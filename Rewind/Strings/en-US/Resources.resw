@@ -339,6 +339,15 @@
   <data name="Engine_DeleteKey" xml:space="preserve">
     <value>Delete key</value>
   </data>
+  <data name="Engine_NewKey" xml:space="preserve">
+    <value>New key</value>
+  </data>
+  <data name="Engine_NotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="Engine_ServicePrefix" xml:space="preserve">
+    <value>Service: </value>
+  </data>
   <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
     <value>Review Reverted Changes</value>
   </data>

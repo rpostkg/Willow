@@ -1,3 +1,4 @@
+using Rewind.Models;
 using System;
 using System.Diagnostics;
 using System.ServiceProcess;
@@ -25,11 +26,11 @@ public static class WindowsServiceManager
                     _ => "Unknown"
                 };
             }
-            return "Не знайдено";
+            return TweakSentinels.NotFound;
         }
         catch
         {
-            return "Не знайдено";
+            return TweakSentinels.NotFound;
         }
     }
 

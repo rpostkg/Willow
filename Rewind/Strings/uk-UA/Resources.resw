@@ -339,6 +339,15 @@
   <data name="Engine_DeleteKey" xml:space="preserve">
     <value>Видалення ключа</value>
   </data>
+  <data name="Engine_NewKey" xml:space="preserve">
+    <value>Новий ключ</value>
+  </data>
+  <data name="Engine_NotFound" xml:space="preserve">
+    <value>Не знайдено</value>
+  </data>
+  <data name="Engine_ServicePrefix" xml:space="preserve">
+    <value>Сервіс: </value>
+  </data>
   <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
     <value>Перегляд відкату змін</value>
   </data>

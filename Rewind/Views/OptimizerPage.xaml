@@ -69,10 +69,13 @@
                         <Border BorderThickness="1"
                                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                Padding="16"
+                                Padding="8"
+                                MinHeight="200"
                                 CornerRadius="8">
                             <StackPanel>
-                                <CheckBox Content="{x:Bind Name}"
+                                <CheckBox HorizontalAlignment="Left"
+                                          Margin="0,8,0,0"
+                                          Content="{x:Bind Name}"
                                           IsChecked="{x:Bind IsEnabled, Mode=TwoWay}"
                                           Style="{StaticResource PivotTitleContentControlStyle}"
                                           Padding="8,3,0,0"
@@ -91,8 +94,7 @@
                                         CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
                                         HorizontalAlignment="Left"
                                         Visibility="{x:Bind AppliedBadgeVisibility, Mode=OneWay}">
-                                    <TextBlock x:Uid="OptimizerPage_AppliedBadge"
-                                               FontSize="11" Foreground="White"/>
+                                        <TextBlock x:Uid="OptimizerPage_AppliedBadge" FontSize="11" Foreground="White"/>
                                 </Border>
                             </StackPanel>
                         </Border>
