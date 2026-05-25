@@ -1,0 +1,30 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+
+  <PropertyGroup>
+    <OutputName>RewindSetup-x64</OutputName>
+    <Platform>x64</Platform>
+    <!-- Default publish path; override with /p:PublishDir=... on the command line -->
+    <PublishDir Condition="'$(PublishDir)' == ''">
+      ..\Rewind\bin\Release\net8.0-windows10.0.19041.0\win-x64\publish\
+    </PublishDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+  </ItemGroup>
+
+  <!-- Harvest all published files into the ApplicationFiles component group -->
+  <ItemGroup>
+    <HarvestDirectory Include="$(PublishDir)">
+      <ComponentGroupName>ApplicationFiles</ComponentGroupName>
+      <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+      <SuppressRootDirectory>true</SuppressRootDirectory>
+    </HarvestDirectory>
+  </ItemGroup>
+
+  <!-- Make the publish directory a bind path so WiX can resolve Rewind.exe for the icon -->
+  <ItemGroup>
+    <BindPath Include="$(PublishDir)" />
+  </ItemGroup>
+
+</Project>
