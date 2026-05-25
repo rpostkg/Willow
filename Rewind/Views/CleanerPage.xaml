@@ -90,7 +90,7 @@
                                           VerticalAlignment="Center"
                                           Margin="0,0,4,0"/>
 
-                                <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                <StackPanel Padding="-100,0,0,0" Grid.Column="1" Spacing="2" VerticalAlignment="Center">
                                     <TextBlock Text="{x:Bind Name}"
                                                FontWeight="SemiBold"/>
                                     <TextBlock Text="{x:Bind Description}"
