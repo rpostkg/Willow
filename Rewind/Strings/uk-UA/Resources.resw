@@ -1,5 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -7,13 +112,11 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
-  <!-- Navigation -->
   <data name="Nav_DiskHealth.Content" xml:space="preserve">
     <value>Здоров'я диска</value>
   </data>
@@ -30,7 +133,7 @@
     <value>Всі користувачі</value>
   </data>
   <data name="StartupPage_FolderBadge" xml:space="preserve">
-    <value>Тека автозапуску</value>
+    <value>Директорія автозапуску</value>
   </data>
   <data name="StartupPage_SchedulerBadge" xml:space="preserve">
     <value>Планувальник завдань</value>
@@ -53,8 +156,6 @@
   <data name="Nav_Settings.Content" xml:space="preserve">
     <value>Налаштування</value>
   </data>
-
-  <!-- Dashboard page -->
   <data name="DashboardPage_Title.Text" xml:space="preserve">
     <value>Панель керування</value>
   </data>
@@ -70,8 +171,24 @@
   <data name="DashboardPage_DiskLabel.Text" xml:space="preserve">
     <value>Диск C:</value>
   </data>
-
-  <!-- Cleaner category strings -->
+  <data name="CleanerPage_Title.Text" xml:space="preserve">
+    <value>Очищення</value>
+  </data>
+  <data name="CleanerPage_TempFilesHeader.Text" xml:space="preserve">
+    <value>Тимчасові файли:</value>
+  </data>
+  <data name="CleanerPage_UserTempLabel.Text" xml:space="preserve">
+    <value>Тимчасові файли користувача:</value>
+  </data>
+  <data name="CleanerPage_WinTempLabel.Text" xml:space="preserve">
+    <value>Тимчасові файли Windows:</value>
+  </data>
+  <data name="CleanerPage_TotalLabel.Text" xml:space="preserve">
+    <value>Разом:</value>
+  </data>
+  <data name="CleanerPage_CleanButton.Content" xml:space="preserve">
+    <value>Очистити тимчасові файли</value>
+  </data>
   <data name="Cleaner_CatUserTemp" xml:space="preserve">
     <value>Тимчасові файли користувача</value>
   </data>
@@ -139,7 +256,7 @@
     <value>Файли, що очікують видалення</value>
   </data>
   <data name="Cleaner_CatCustom" xml:space="preserve">
-    <value>Власна тека</value>
+    <value>Власна Директорія</value>
   </data>
   <data name="Cleaner_TotalSelectedFormat" xml:space="preserve">
     <value>{0} вибрано</value>
@@ -160,30 +277,8 @@
     <value>Власні шляхи очищення</value>
   </data>
   <data name="SettingsPage_AddCleanerPath.Content" xml:space="preserve">
-    <value>Додати теку...</value>
+    <value>Додати директорію...</value>
   </data>
-
-  <!-- Cleaner page -->
-  <data name="CleanerPage_Title.Text" xml:space="preserve">
-    <value>Очищення</value>
-  </data>
-  <data name="CleanerPage_TempFilesHeader.Text" xml:space="preserve">
-    <value>Тимчасові файли:</value>
-  </data>
-  <data name="CleanerPage_UserTempLabel.Text" xml:space="preserve">
-    <value>Тимчасові файли користувача:</value>
-  </data>
-  <data name="CleanerPage_WinTempLabel.Text" xml:space="preserve">
-    <value>Тимчасові файли Windows:</value>
-  </data>
-  <data name="CleanerPage_TotalLabel.Text" xml:space="preserve">
-    <value>Разом:</value>
-  </data>
-  <data name="CleanerPage_CleanButton.Content" xml:space="preserve">
-    <value>Очистити тимчасові файли</value>
-  </data>
-
-  <!-- Cleaner code strings -->
   <data name="Cleaner_StatusCalculating" xml:space="preserve">
     <value>Розрахунок...</value>
   </data>
@@ -205,8 +300,6 @@
   <data name="Cleaner_ErrorFormat" xml:space="preserve">
     <value>Помилка: {0}</value>
   </data>
-
-  <!-- Optimizer page -->
   <data name="OptimizerPage_Title.Text" xml:space="preserve">
     <value>Твіки</value>
   </data>
@@ -225,16 +318,12 @@
   <data name="OptimizerPage_ReviewButton.Content" xml:space="preserve">
     <value>Переглянути вибране</value>
   </data>
-
-  <!-- Optimizer code strings -->
   <data name="Optimizer_RevertDialogTitle" xml:space="preserve">
     <value>Перегляд відкату змін</value>
   </data>
   <data name="Optimizer_AcceptChangesButton" xml:space="preserve">
     <value>Прийняти зміни</value>
   </data>
-
-  <!-- ReviewChangesDialog -->
   <data name="ReviewChangesDialog.Title" xml:space="preserve">
     <value>Перегляд змін</value>
   </data>
@@ -244,8 +333,6 @@
   <data name="ReviewChangesDialog.CloseButtonText" xml:space="preserve">
     <value>Скасувати</value>
   </data>
-
-  <!-- Disk Health page -->
   <data name="DiskHealthPage_Title.Text" xml:space="preserve">
     <value>Здоров'я диска</value>
   </data>
@@ -276,8 +363,6 @@
   <data name="DiskHealthPage_PowerCyclesLabel.Text" xml:space="preserve">
     <value>Циклів увімкнення</value>
   </data>
-
-  <!-- Settings page -->
   <data name="SettingsPage_Title.Text" xml:space="preserve">
     <value>Налаштування</value>
   </data>
@@ -300,7 +385,7 @@
     <value>Автозавантаження</value>
   </data>
   <data name="SettingsPage_ResolveShortcutsToggle.Header" xml:space="preserve">
-    <value>Показувати цілі ярликів</value>
+    <value>Показувати цілі ярликів (.lnk-файли)</value>
   </data>
   <data name="SettingsPage_ResolveShortcutsToggle.OnContent" xml:space="preserve">
     <value>Увімкнено</value>
