@@ -169,7 +169,7 @@
     <value>RAM</value>
   </data>
   <data name="DashboardPage_DiskLabel.Text" xml:space="preserve">
-    <value>Disk C:</value>
+    <value>System disk (C:)</value>
   </data>
   <data name="CleanerPage_Title.Text" xml:space="preserve">
     <value>Cleaner</value>

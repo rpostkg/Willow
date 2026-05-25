@@ -169,7 +169,7 @@
     <value>ОЗП</value>
   </data>
   <data name="DashboardPage_DiskLabel.Text" xml:space="preserve">
-    <value>Диск C:</value>
+    <value>Системний диск (C:)</value>
   </data>
   <data name="CleanerPage_Title.Text" xml:space="preserve">
     <value>Очищення</value>
