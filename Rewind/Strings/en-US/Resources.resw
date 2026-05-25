@@ -423,4 +423,13 @@
   <data name="SettingsPage_ResolveShortcutsToggle.OffContent" xml:space="preserve">
     <value>Disabled</value>
   </data>
+  <data name="CleanerPage_AdminIcon.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Requires administrator privileges</value>
+  </data>
+  <data name="StartupPage_AdminIcon.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Requires administrator privileges</value>
+  </data>
+  <data name="StartupPage_OpenLocationButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open file location</value>
+  </data>
 </root>

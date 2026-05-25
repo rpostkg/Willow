@@ -100,12 +100,12 @@
                                 </StackPanel>
 
                                 <FontIcon Grid.Column="2"
+                                          x:Uid="CleanerPage_AdminIcon"
                                           Glyph="&#xEA18;"
                                           FontSize="14"
                                           Foreground="{ThemeResource SystemFillColorCautionBrush}"
                                           VerticalAlignment="Center"
-                                          Visibility="{x:Bind AdminIconVisibility}"
-                                          ToolTipService.ToolTip="Requires administrator privileges"/>
+                                          Visibility="{x:Bind AdminIconVisibility}"/>
 
                                 <TextBlock Grid.Column="3"
                                            Text="{x:Bind SizeText, Mode=OneWay}"

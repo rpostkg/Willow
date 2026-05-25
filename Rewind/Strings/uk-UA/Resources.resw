@@ -423,4 +423,13 @@
   <data name="SettingsPage_ResolveShortcutsToggle.OffContent" xml:space="preserve">
     <value>Вимкнено</value>
   </data>
+  <data name="CleanerPage_AdminIcon.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Потребує прав адміністратора</value>
+  </data>
+  <data name="StartupPage_AdminIcon.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Потребує прав адміністратора</value>
+  </data>
+  <data name="StartupPage_OpenLocationButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Відкрити розташування файлу</value>
+  </data>
 </root>
