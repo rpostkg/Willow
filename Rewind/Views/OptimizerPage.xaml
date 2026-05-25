@@ -62,7 +62,7 @@
         <ScrollViewer Grid.Row="3">
             <ItemsRepeater ItemsSource="{x:Bind ViewModel.FilteredTweaks, Mode=OneWay}">
                 <ItemsRepeater.Layout>
-                    <StackLayout Spacing="12" />
+                    <UniformGridLayout MinItemWidth="300" MinRowSpacing="12" MinColumnSpacing="12" />
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="models:Tweak">
@@ -83,7 +83,10 @@
                                            FontSize="12"/>
                                 <TextBlock Text="{x:Bind Description}"
                                            TextWrapping="Wrap"
-                                           Margin="0,8,0,0"/>
+                                           MaxLines="3"
+                                           TextTrimming="CharacterEllipsis"
+                                           Margin="0,8,0,0"
+                                           ToolTipService.ToolTip="{x:Bind Description}"/>
                                 <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
                                         CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
                                         HorizontalAlignment="Left"
