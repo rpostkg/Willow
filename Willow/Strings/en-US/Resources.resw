@@ -504,4 +504,7 @@
   <data name="PrivacyPage_LocationDesc.Text" xml:space="preserve">
     <value>Apps can access your location when this is on</value>
   </data>
+  <data name="PrivacyPage_PolicyInfoBar.Message" xml:space="preserve">
+    <value>Disabling device access here applies a Group Policy setting. Windows Settings will show "Some of these settings are managed by your organization."</value>
+  </data>
 </root>

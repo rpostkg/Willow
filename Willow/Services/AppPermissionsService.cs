@@ -5,29 +5,65 @@ namespace Willow.Services;
 
 public static class AppPermissionsService
 {
-    private const string ConsentStoreBase =
-        @"Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore";
+    // Group Policy keys — these override ConsentStore and the SQLite database in recent Windows 11 builds.
+    // ConsentStore registry entries are no longer authoritative since Windows uses a SQLite database
+    // (C:\ProgramData\Microsoft\Windows\CapabilityAccessManager) as the true state store.
+    private const string AppPrivacyPolicy =
+        @"SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
+    private const string LocationPolicy =
+        @"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
 
-    // Windows Settings "Camera/Microphone/Location access" master toggle is stored in HKLM.
-    // HKCU root Value was written incorrectly by earlier Willow code; Windows Settings never
-    // reads it for the global toggle display, so we read only HKLM to match what Settings shows.
+    private static string? PolicyValueName(string capability) => capability.ToLowerInvariant() switch
+    {
+        "webcam"     => "LetAppsAccessCamera",
+        "microphone" => "LetAppsAccessMicrophone",
+        _            => null
+    };
+
+    // Returns false only when our own Policy key has force-denied the capability.
+    // If no Policy key is set we return true (Windows default = On).
     public static bool GetGlobalToggle(string capability)
     {
         try
         {
-            using var key = Registry.LocalMachine.OpenSubKey($@"{ConsentStoreBase}\{capability}");
-            var val = key?.GetValue("Value") as string;
-            return !string.Equals(val, "Deny", StringComparison.OrdinalIgnoreCase);
+            if (capability.Equals("location", StringComparison.OrdinalIgnoreCase))
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(LocationPolicy);
+                var val = key?.GetValue("DisableLocation");
+                return !(val is int i && i == 1);
+            }
+
+            var policyName = PolicyValueName(capability);
+            if (policyName != null)
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(AppPrivacyPolicy);
+                var val = key?.GetValue(policyName);
+                return !(val is int i && i == 2);
+            }
+
+            return true;
         }
         catch { return true; }
     }
 
-    // Writes to HKLM (the device-level toggle Windows Settings controls) and also keeps
-    // HKCU root in sync, repairing any stale "Deny" written by earlier Willow versions.
+    // Writes a force-deny Policy value (allow=false) or removes it to restore Windows control (allow=true).
     public static void SetGlobalToggle(string capability, bool allow)
     {
-        var str = allow ? "Allow" : "Deny";
-        RegistryService.WriteValue("LocalMachine", $@"{ConsentStoreBase}\{capability}", "Value", str, "String");
-        RegistryService.WriteValue("CurrentUser",  $@"{ConsentStoreBase}\{capability}", "Value", str, "String");
+        if (capability.Equals("location", StringComparison.OrdinalIgnoreCase))
+        {
+            if (allow)
+                RegistryService.DeleteValue("LocalMachine", LocationPolicy, "DisableLocation");
+            else
+                RegistryService.WriteValue("LocalMachine", LocationPolicy, "DisableLocation", "1", "DWord");
+            return;
+        }
+
+        var policyName = PolicyValueName(capability);
+        if (policyName == null) return;
+
+        if (allow)
+            RegistryService.DeleteValue("LocalMachine", AppPrivacyPolicy, policyName);
+        else
+            RegistryService.WriteValue("LocalMachine", AppPrivacyPolicy, policyName, "2", "DWord");
     }
 }

@@ -5,33 +5,64 @@ using Xunit;
 
 namespace Willow.Tests;
 
-// These are integration tests that require admin rights to write HKLM.
-// Run Willow (or tests elevated) for full coverage; non-admin runs skip HKLM writes silently.
+// Integration tests that require admin rights to write HKLM policy keys.
+// Non-admin runs verify read behavior only (policy keys absent → returns true).
 public class AppPermissionsServiceTests
 {
-    private const string ConsentBase =
-        @"Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore";
+    private const string AppPrivacyPolicy =
+        @"SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
+    private const string LocationPolicy =
+        @"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
 
     [Fact]
-    public void GetGlobalToggle_ReadsHklm_NotHkcu()
+    public void GetGlobalToggle_NoPolicyKey_ReturnsTrue()
     {
-        // GetGlobalToggle reads HKLM only.
-        // Writing Deny to HKCU alone must NOT make it return false.
-        Registry.CurrentUser.CreateSubKey($@"{ConsentBase}\webcam").SetValue("Value", "Deny");
-        // HKLM\webcam may be Allow or Deny; result must match HKLM, not HKCU.
-        using var hklm = Registry.LocalMachine.OpenSubKey($@"{ConsentBase}\webcam");
-        var hklmVal = hklm?.GetValue("Value") as string;
-        bool expectedFromHklm = !string.Equals(hklmVal, "Deny", StringComparison.OrdinalIgnoreCase);
-        Assert.Equal(expectedFromHklm, AppPermissionsService.GetGlobalToggle("webcam"));
+        // When no policy key is present, capability defaults to enabled.
+        // This verifies we don't read stale ConsentStore values anymore.
+        using var key = Registry.LocalMachine.OpenSubKey(AppPrivacyPolicy);
+        var val = key?.GetValue("LetAppsAccessCamera");
+        if (val == null)
+        {
+            // No policy key set — must return true.
+            Assert.True(AppPermissionsService.GetGlobalToggle("webcam"));
+        }
+        // If a policy key happens to be set on this machine, skip the assertion.
     }
 
     [Fact]
-    public void SetGlobalToggle_False_ReturnsFalse()
+    public void GetGlobalToggle_IgnoresConsentStore()
     {
-        // Setting to false writes Deny to HKLM (requires admin) and HKCU.
-        // HKCU write always works; HKLM write silently fails in non-admin context.
-        AppPermissionsService.SetGlobalToggle("microphone", false);
-        // In non-admin context HKLM write fails so we can't assert the result here,
-        // but the call must not throw.
+        // Writing Deny to ConsentStore (old approach) must NOT make GetGlobalToggle return false.
+        const string consentBase =
+            @"Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore";
+        Registry.CurrentUser.CreateSubKey($@"{consentBase}\webcam").SetValue("Value", "Deny");
+        try
+        {
+            using var key = Registry.LocalMachine.OpenSubKey(AppPrivacyPolicy);
+            var policyVal = key?.GetValue("LetAppsAccessCamera");
+            bool expectedFromPolicy = !(policyVal is int i && i == 2);
+            Assert.Equal(expectedFromPolicy, AppPermissionsService.GetGlobalToggle("webcam"));
+        }
+        finally
+        {
+            // Clean up the HKCU Deny we wrote.
+            using var cleanup = Registry.CurrentUser.OpenSubKey($@"{consentBase}\webcam", true);
+            cleanup?.DeleteValue("Value", false);
+        }
+    }
+
+    [Fact]
+    public void SetGlobalToggle_False_DoesNotThrow()
+    {
+        // Admin context: writes DisableLocation=1 to HKLM policy key.
+        // Non-admin: HKLM write silently fails — must not throw either way.
+        AppPermissionsService.SetGlobalToggle("location", false);
+    }
+
+    [Fact]
+    public void SetGlobalToggle_True_DoesNotThrow()
+    {
+        // Deleting a policy key that doesn't exist must not throw.
+        AppPermissionsService.SetGlobalToggle("microphone", true);
     }
 }

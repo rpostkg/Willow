@@ -68,6 +68,11 @@
         <!-- Global capability toggles -->
         <StackPanel Grid.Row="3" Spacing="8">
 
+            <InfoBar x:Uid="PrivacyPage_PolicyInfoBar"
+                     IsOpen="True"
+                     IsClosable="False"
+                     Severity="Informational"/>
+
             <!-- Camera -->
             <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"

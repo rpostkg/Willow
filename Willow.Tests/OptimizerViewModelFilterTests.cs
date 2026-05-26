@@ -13,7 +13,7 @@ public class OptimizerViewModelFilterTests
 
     private static OptimizerViewModel MakeVm(params Tweak[] tweaks)
     {
-        var vm = new OptimizerViewModel();
+        var vm = new OptimizerViewModel("All", "Applied");
         vm.Tweaks.Clear(); // remove any real tweaks loaded from YAML files in the output dir
         foreach (var t in tweaks)
             vm.Tweaks.Add(t);

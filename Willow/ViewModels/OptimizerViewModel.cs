@@ -91,6 +91,17 @@ public partial class OptimizerViewModel : ObservableObject
         LoadTweaks();
     }
 
+    // For tests: ResourceLoader requires MSIX package context and fails in the test runner
+    internal OptimizerViewModel(string allLabel, string appliedLabel)
+    {
+        _allLabel = allLabel;
+        _appliedLabel = appliedLabel;
+
+        var prefs = new PreferencesService().LoadPreferences();
+        isInformedOfBackups = prefs.InformedOfBackups;
+        LoadTweaks();
+    }
+
     private void LoadTweaks()
     {
         var prefs = new PreferencesService().LoadPreferences();

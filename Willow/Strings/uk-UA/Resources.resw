@@ -504,4 +504,7 @@
   <data name="PrivacyPage_LocationDesc.Text" xml:space="preserve">
     <value>Застосунки можуть отримувати геолокацію, коли це ввімкнено</value>
   </data>
+  <data name="PrivacyPage_PolicyInfoBar.Message" xml:space="preserve">
+    <value>Вимкнення доступу тут застосовує параметр групової політики. Налаштування Windows відображатиме «Деякі з цих параметрів керуються вашою організацією».</value>
+  </data>
 </root>
