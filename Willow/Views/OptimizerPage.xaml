@@ -73,29 +73,35 @@
                                 MinHeight="200"
                                 CornerRadius="8">
                             <StackPanel>
+                                <Border Background="Green"
+                                        CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
+                                        HorizontalAlignment="Left"
+                                        Visibility="{x:Bind AppliedBadgeVisibility, Mode=OneWay}">
+                                    <TextBlock x:Uid="OptimizerPage_AppliedBadge" FontSize="11" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
+                                </Border>
                                 <CheckBox HorizontalAlignment="Left"
-                                          Margin="0,8,0,0"
-                                          Content="{x:Bind Name}"
-                                          IsChecked="{x:Bind IsEnabled, Mode=TwoWay}"
-                                          Style="{StaticResource PivotTitleContentControlStyle}"
-                                          Padding="8,3,0,0"
-                                          VerticalAlignment="Center"/>
-                                <TextBlock Text="{x:Bind Category}"
-                                           Foreground="Gray"
-                                           Margin="0,4,0,0"
+                                    Margin="0,8,0,0"
+                                    Content="{x:Bind Name}"
+                                    IsChecked="{x:Bind IsEnabled, Mode=TwoWay}"
+                                    Style="{StaticResource PivotTitleContentControlStyle}"
+                                    Padding="8,3,0,0"
+                                    VerticalAlignment="Center"/>
+                                <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                    CornerRadius="4"
+                                    Padding="6,2" 
+                                    Margin="0,8,0,0"
+                                    HorizontalAlignment="Left">
+                                    <TextBlock Text="{x:Bind Category}"
+                                           Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
+                                           Margin="0,0,0,0"
                                            FontSize="12"/>
+                                </Border>
                                 <TextBlock Text="{x:Bind Description}"
                                            TextWrapping="Wrap"
                                            MaxLines="3"
                                            TextTrimming="CharacterEllipsis"
                                            Margin="0,8,0,0"
                                            ToolTipService.ToolTip="{x:Bind Description}"/>
-                                <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
-                                        CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
-                                        HorizontalAlignment="Left"
-                                        Visibility="{x:Bind AppliedBadgeVisibility, Mode=OneWay}">
-                                    <TextBlock x:Uid="OptimizerPage_AppliedBadge" FontSize="11" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
-                                </Border>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
