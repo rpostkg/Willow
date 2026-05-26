@@ -197,9 +197,9 @@ public partial class DashboardViewModel : ObservableObject
 
     private static string FormatFreeableBytes(long bytes)
     {
-        if (bytes >= 1L << 30) return $"~{bytes / (1024.0 * 1024 * 1024):F1} GB freeable";
-        if (bytes >= 1L << 20) return $"~{bytes / (1024.0 * 1024):F0} MB freeable";
-        return $"~{bytes / 1024:F0} KB freeable";
+        if (bytes >= 1L << 30) return $"~{bytes / (1024.0 * 1024 * 1024):F1} GB";
+        if (bytes >= 1L << 20) return $"~{bytes / (1024.0 * 1024):F0} MB";
+        return $"~{bytes / 1024:F0} KB";
     }
 
     private static string FormatCpuSpeed(double mhz) =>

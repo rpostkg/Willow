@@ -444,4 +444,10 @@
   <data name="StartupPage_OpenLocationButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Open file location</value>
   </data>
+  <data name="SettingsPage_ThemeText.Text" xml:space="preserve">
+    <value>Application theme</value>
+  </data>
+  <data name="DashboardPage_FreeableLabel.Text" xml:space="preserve">
+    <value>freeable</value>
+  </data>
 </root>

@@ -18,6 +18,7 @@
 
             <StackPanel Spacing="8">
                 <TextBlock x:Uid="SettingsPage_ThemeHeader" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <TextBlock x:Uid="SettingsPage_ThemeText" />
                 <ComboBox ItemsSource="{x:Bind ViewModel.AvailableThemes}"
                           SelectedItem="{x:Bind ViewModel.SelectedTheme, Mode=TwoWay}" />
             </StackPanel>

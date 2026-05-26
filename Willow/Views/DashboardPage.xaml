@@ -88,9 +88,12 @@
                         <TextBlock Text="{x:Bind ViewModel.DiskSizeText, Mode=OneWay}"
                                    FontSize="12" Opacity="0.6"
                                    HorizontalAlignment="Center" />
-                        <TextBlock Text="{x:Bind ViewModel.FreeableText, Mode=OneWay}"
-                                   FontSize="12" Opacity="0.6"
-                                   HorizontalAlignment="Center" />
+                        <TextBlock FontSize="12" Opacity="0.6"
+                                   HorizontalAlignment="Center">
+                            <Run Text="{x:Bind ViewModel.FreeableText, Mode=OneWay}" />
+                            <Run Text=" " FontSize="4"/>
+                            <Run x:Uid="DashboardPage_FreeableLabel" />
+                        </TextBlock>
                         <Button x:Uid="DashboardPage_CleanUpButton"
                                 HorizontalAlignment="Center"
                                 Margin="0,4,0,0"

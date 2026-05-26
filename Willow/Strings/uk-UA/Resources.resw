@@ -121,7 +121,7 @@
     <value>Здоров'я диска</value>
   </data>
   <data name="Nav_Startup.Content" xml:space="preserve">
-    <value>Автозавантаження</value>
+    <value>Автозапуск</value>
   </data>
   <data name="StartupPage_Title.Text" xml:space="preserve">
     <value>Автозапуск</value>
@@ -307,7 +307,7 @@
     <value>Зверніть увагу: Точка відновлення системи</value>
   </data>
   <data name="OptimizerPage_InfoBar.Message" xml:space="preserve">
-    <value>Хоча система відкату враховує ваші поточні ключі реєстру та має стандартні варіанти відновлення, шанс того, що глибокі налаштування можуть пошкодити ОС, ніколи не дорівнює нулю. Точка відновлення системи буде створена автоматично перед застосуванням будь-яких налаштувань. Це повідомлення буде показано лише один раз. Закриття цього повідомлення дозволить вам застосовувати налаштування.</value>
+    <value>Хоча система відкату враховує ваші поточні ключі реєстру та має стандартні варіанти відновлення, шанс того, що модифікації можуть пошкодити ОС, ніколи не дорівнює нулю. Точка відновлення системи буде створена автоматично перед застосуванням будь-яких налаштувань. Це повідомлення буде показано лише один раз. Закриття цього повідомлення дозволить вам застосовувати налаштування.</value>
   </data>
   <data name="OptimizerPage_SearchBox.PlaceholderText" xml:space="preserve">
     <value>Пошук за назвою...</value>
@@ -443,5 +443,11 @@
   </data>
   <data name="StartupPage_OpenLocationButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Відкрити розташування файлу</value>
+  </data>
+  <data name="SettingsPage_ThemeText.Text" xml:space="preserve">
+    <value>Тема додатку</value>
+  </data>
+  <data name="DashboardPage_FreeableLabel.Text" xml:space="preserve">
+    <value>можна звільнити</value>
   </data>
 </root>
