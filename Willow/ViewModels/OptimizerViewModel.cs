@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Windows.ApplicationModel.Resources;
+using Microsoft.UI.Xaml;
 
 namespace Willow.ViewModels;
 
@@ -13,6 +15,9 @@ public partial class OptimizerViewModel : ObservableObject
 {
     private readonly TweakLoaderService _loaderService = new();
     private readonly TweakEngineService _engineService = new();
+
+    private readonly string _allLabel;
+    private readonly string _appliedLabel;
 
     [ObservableProperty]
     private ObservableCollection<Tweak> tweaks = new();
@@ -29,12 +34,13 @@ public partial class OptimizerViewModel : ObservableObject
     [ObservableProperty]
     private string nameQuery = string.Empty;
 
-    /// <summary>The category string chosen in the ComboBox. "All" means all categories.</summary>
     [ObservableProperty]
-    private string selectedCategory = "All";
+    private string selectedCategory = string.Empty;
 
-    /// <summary>Distinct category list, prepended with an "All" sentinel, for the ComboBox.</summary>
     public ObservableCollection<string> Categories { get; } = new();
+
+    [ObservableProperty]
+    private Visibility emptyStateVisibility = Visibility.Collapsed;
 
     public IEnumerable<Tweak> FilteredTweaks
     {
@@ -47,7 +53,9 @@ public partial class OptimizerViewModel : ObservableObject
                     t.Name != null &&
                     t.Name.Contains(NameQuery, System.StringComparison.OrdinalIgnoreCase));
 
-            if (!string.IsNullOrWhiteSpace(SelectedCategory) && SelectedCategory != "All")
+            if (SelectedCategory == _appliedLabel)
+                result = result.Where(t => t.IsApplied);
+            else if (!string.IsNullOrWhiteSpace(SelectedCategory) && SelectedCategory != _allLabel)
                 result = result.Where(t =>
                     t.Category != null &&
                     t.Category.Equals(SelectedCategory, System.StringComparison.OrdinalIgnoreCase));
@@ -56,8 +64,17 @@ public partial class OptimizerViewModel : ObservableObject
         }
     }
 
-    partial void OnNameQueryChanged(string value)     => OnPropertyChanged(nameof(FilteredTweaks));
-    partial void OnSelectedCategoryChanged(string? value) => OnPropertyChanged(nameof(FilteredTweaks));
+    partial void OnNameQueryChanged(string value)
+    {
+        OnPropertyChanged(nameof(FilteredTweaks));
+        EmptyStateVisibility = FilteredTweaks.Any() ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    partial void OnSelectedCategoryChanged(string? value)
+    {
+        OnPropertyChanged(nameof(FilteredTweaks));
+        EmptyStateVisibility = FilteredTweaks.Any() ? Visibility.Collapsed : Visibility.Visible;
+    }
 
     // --- Selection state ---
     public bool AreTweaksSelected  => Tweaks.Any(t => t.IsEnabled);
@@ -65,6 +82,10 @@ public partial class OptimizerViewModel : ObservableObject
 
     public OptimizerViewModel()
     {
+        var res = new ResourceLoader();
+        _allLabel     = res.GetString("OptimizerPage_CategoryAll");
+        _appliedLabel = res.GetString("OptimizerPage_CategoryApplied");
+
         var prefs = new PreferencesService().LoadPreferences();
         isInformedOfBackups = prefs.InformedOfBackups;
         LoadTweaks();
@@ -91,19 +112,18 @@ public partial class OptimizerViewModel : ObservableObject
             Tweaks.Add(tweak);
         }
 
-        // Build the category list from whatever tweaks were loaded
         var distinctCategories = Tweaks
             .Select(t => t.Category)
             .Where(c => !string.IsNullOrWhiteSpace(c))
             .Distinct()
             .OrderBy(c => c);
 
-        Categories.Add("All");
+        Categories.Add(_allLabel);
+        Categories.Add(_appliedLabel);
         foreach (var cat in distinctCategories)
             Categories.Add(cat);
 
-        // Ensure default selection after categories are populated
-        SelectedCategory = "All";
+        SelectedCategory = _allLabel;
     }
 
     [RelayCommand]

@@ -321,6 +321,15 @@
   <data name="OptimizerPage_AppliedBadge.Text" xml:space="preserve">
     <value>Застосовано</value>
   </data>
+  <data name="OptimizerPage_CategoryAll" xml:space="preserve">
+    <value>Усі</value>
+  </data>
+  <data name="OptimizerPage_CategoryApplied" xml:space="preserve">
+    <value>Застосовані</value>
+  </data>
+  <data name="OptimizerPage_EmptyState.Text" xml:space="preserve">
+    <value>Жодних налаштувань не відповідає фільтрам.</value>
+  </data>
   <data name="DashboardPage_CleanUpButton.Content" xml:space="preserve">
     <value>Очистити</value>
   </data>

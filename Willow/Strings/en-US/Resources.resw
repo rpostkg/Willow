@@ -321,6 +321,15 @@
   <data name="OptimizerPage_AppliedBadge.Text" xml:space="preserve">
     <value>Applied</value>
   </data>
+  <data name="OptimizerPage_CategoryAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="OptimizerPage_CategoryApplied" xml:space="preserve">
+    <value>Applied</value>
+  </data>
+  <data name="OptimizerPage_EmptyState.Text" xml:space="preserve">
+    <value>No tweaks match your filters.</value>
+  </data>
   <data name="DashboardPage_CleanUpButton.Content" xml:space="preserve">
     <value>Clean Up</value>
   </data>

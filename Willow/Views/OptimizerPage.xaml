@@ -58,56 +58,64 @@
                       VerticalAlignment="Center"/>
         </Grid>
 
-        <!-- Tweak cards -->
-        <ScrollViewer Grid.Row="3">
-            <ItemsRepeater ItemsSource="{x:Bind ViewModel.FilteredTweaks, Mode=OneWay}">
-                <ItemsRepeater.Layout>
-                    <UniformGridLayout MinItemWidth="300" MinRowSpacing="12" MinColumnSpacing="12" />
-                </ItemsRepeater.Layout>
-                <ItemsRepeater.ItemTemplate>
-                    <DataTemplate x:DataType="models:Tweak">
-                        <Border BorderThickness="1"
-                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                Padding="8"
-                                MinHeight="200"
-                                CornerRadius="8">
-                            <StackPanel>
-                                <Border Background="Green"
-                                        CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
-                                        HorizontalAlignment="Left"
-                                        Visibility="{x:Bind AppliedBadgeVisibility, Mode=OneWay}">
-                                    <TextBlock x:Uid="OptimizerPage_AppliedBadge" FontSize="11" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
-                                </Border>
-                                <CheckBox HorizontalAlignment="Left"
-                                    Margin="0,8,0,0"
-                                    Content="{x:Bind Name}"
-                                    IsChecked="{x:Bind IsEnabled, Mode=TwoWay}"
-                                    Style="{StaticResource PivotTitleContentControlStyle}"
-                                    Padding="8,3,0,0"
-                                    VerticalAlignment="Center"/>
-                                <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
-                                    CornerRadius="4"
-                                    Padding="6,2" 
-                                    Margin="0,8,0,0"
-                                    HorizontalAlignment="Left">
-                                    <TextBlock Text="{x:Bind Category}"
-                                           Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
-                                           Margin="0,0,0,0"
-                                           FontSize="12"/>
-                                </Border>
-                                <TextBlock Text="{x:Bind Description}"
-                                           TextWrapping="Wrap"
-                                           MaxLines="3"
-                                           TextTrimming="CharacterEllipsis"
-                                           Margin="0,8,0,0"
-                                           ToolTipService.ToolTip="{x:Bind Description}"/>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsRepeater.ItemTemplate>
-            </ItemsRepeater>
-        </ScrollViewer>
+        <!-- Tweak cards / empty state -->
+        <Grid Grid.Row="3">
+            <ScrollViewer>
+                <ItemsRepeater ItemsSource="{x:Bind ViewModel.FilteredTweaks, Mode=OneWay}">
+                    <ItemsRepeater.Layout>
+                        <UniformGridLayout MinItemWidth="300" MinRowSpacing="12" MinColumnSpacing="12" />
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="models:Tweak">
+                            <Border BorderThickness="1"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                    Padding="8"
+                                    MinHeight="200"
+                                    CornerRadius="8">
+                                <StackPanel>
+                                    <Border Background="Green"
+                                            CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
+                                            HorizontalAlignment="Left"
+                                            Visibility="{x:Bind AppliedBadgeVisibility, Mode=OneWay}">
+                                        <TextBlock x:Uid="OptimizerPage_AppliedBadge" FontSize="11" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
+                                    </Border>
+                                    <CheckBox HorizontalAlignment="Left"
+                                        Margin="0,8,0,0"
+                                        Content="{x:Bind Name}"
+                                        IsChecked="{x:Bind IsEnabled, Mode=TwoWay}"
+                                        Style="{StaticResource PivotTitleContentControlStyle}"
+                                        Padding="8,3,0,0"
+                                        VerticalAlignment="Center"/>
+                                    <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                        CornerRadius="4"
+                                        Padding="6,2"
+                                        Margin="0,8,0,0"
+                                        HorizontalAlignment="Left">
+                                        <TextBlock Text="{x:Bind Category}"
+                                               Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
+                                               Margin="0,0,0,0"
+                                               FontSize="12"/>
+                                    </Border>
+                                    <TextBlock Text="{x:Bind Description}"
+                                               TextWrapping="Wrap"
+                                               MaxLines="3"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="0,8,0,0"
+                                               ToolTipService.ToolTip="{x:Bind Description}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </ScrollViewer>
+            <FontIcon Glyph="&#xE721;" Margin="0,-52,0,0" FontSize="32" Opacity="0.5"/>
+            <TextBlock x:Uid="OptimizerPage_EmptyState"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Opacity="0.5"
+                       Visibility="{x:Bind ViewModel.EmptyStateVisibility, Mode=OneWay}" />
+        </Grid>
 
         <!-- Action buttons -->
         <StackPanel Grid.Row="4"
