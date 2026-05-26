@@ -44,6 +44,9 @@ namespace Willow
                     case "DiskHealth":
                         ContentFrame.Navigate(typeof(DiskHealthPage));
                         break;
+                    case "Privacy":
+                        ContentFrame.Navigate(typeof(PrivacyPage));
+                        break;
                     case "Optimizer":
                         ContentFrame.Navigate(typeof(OptimizerPage));
                         break;
