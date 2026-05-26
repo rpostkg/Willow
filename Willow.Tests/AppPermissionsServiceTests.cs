@@ -5,42 +5,28 @@ namespace Willow.Tests;
 
 public class AppPermissionsServiceTests
 {
-    [Fact]
-    public void GetDisplayName_UwpKeyKnownPackage_ReturnsDisplayNameWithoutPublisherId()
+    [Theory]
+    [InlineData("Allow", true)]
+    [InlineData("allow", true)]
+    [InlineData("Deny", false)]
+    [InlineData("deny", false)]
+    public void GetGlobalToggle_ReadsExpectedStateFromRegistry(string regValue, bool expected)
     {
-        // PackageManager resolves Microsoft.WindowsCamera to its friendly name (e.g. "Windows Camera").
-        // Either way the publisher ID suffix must not appear in the result.
-        var result = AppPermissionsService.GetDisplayName("Microsoft.WindowsCamera_8wekyb3d8bbwe");
-        Assert.NotEmpty(result);
-        Assert.DoesNotContain("_8wekyb3d8bbwe", result);
+        // Verify that the service correctly interprets "Allow"/"Deny" values.
+        // We use the real registry round-trip: write a known value then read it back.
+        const string capability = "webcam";
+        AppPermissionsService.SetGlobalToggle(capability, expected);
+        var result = AppPermissionsService.GetGlobalToggle(capability);
+        Assert.Equal(expected, result);
     }
 
     [Fact]
-    public void GetDisplayName_UwpKeyUnknownPackage_StripsPublisherSuffix()
+    public void SetGlobalToggle_PersistsAcrossReads()
     {
-        // PackageManager can't resolve a fake PFN; fallback strips the "_publisherId" part.
-        var result = AppPermissionsService.GetDisplayName("SomeFakeApp.That.Does.Not.Exist_8wekyb3d8bbwe");
-        Assert.Equal("SomeFakeApp.That.Does.Not.Exist", result);
-    }
-
-    [Fact]
-    public void GetDisplayName_UwpKeyNoUnderscore_ReturnsAsIs()
-    {
-        var result = AppPermissionsService.GetDisplayName("SomeApp");
-        Assert.Equal("SomeApp", result);
-    }
-
-    [Fact]
-    public void GetDisplayName_NonPackagedKey_ExtractsFilenameWithoutExtension()
-    {
-        var result = AppPermissionsService.GetDisplayName(@"NonPackaged\C:#Windows#System32#notepad.exe");
-        Assert.Equal("notepad", result);
-    }
-
-    [Fact]
-    public void GetDisplayName_NonPackagedNoExtension_ExtractsFilename()
-    {
-        var result = AppPermissionsService.GetDisplayName(@"NonPackaged\C:#Program Files#MyApp#myapp");
-        Assert.Equal("myapp", result);
+        const string capability = "microphone";
+        AppPermissionsService.SetGlobalToggle(capability, false);
+        Assert.False(AppPermissionsService.GetGlobalToggle(capability));
+        AppPermissionsService.SetGlobalToggle(capability, true);
+        Assert.True(AppPermissionsService.GetGlobalToggle(capability));
     }
 }

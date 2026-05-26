@@ -5,7 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:Willow.Models"
     mc:Ignorable="d">
 
     <Grid Padding="24">
@@ -59,85 +58,115 @@
             </Grid>
         </Border>
 
-        <!-- App Permissions header -->
-        <TextBlock x:Uid="PrivacyPage_AppPermissionsHeader"
+        <!-- Capability access header -->
+        <TextBlock x:Uid="PrivacyPage_CapabilityHeader"
                    Grid.Row="2"
                    Style="{StaticResource SubtitleTextBlockStyle}"
                    Opacity="0.6"
                    Margin="0,0,0,12"/>
 
-        <!-- App list / empty state -->
-        <Grid Grid.Row="3">
-            <ScrollViewer>
-                <ItemsRepeater ItemsSource="{x:Bind ViewModel.AppPermissions, Mode=OneWay}">
-                    <ItemsRepeater.Layout>
-                        <StackLayout Spacing="8"/>
-                    </ItemsRepeater.Layout>
-                    <ItemsRepeater.ItemTemplate>
-                        <DataTemplate x:DataType="models:AppPermission">
-                            <Border BorderThickness="1"
-                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                    Padding="16,12"
-                                    CornerRadius="8">
-                                <Grid ColumnSpacing="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+        <!-- Global capability toggles -->
+        <StackPanel Grid.Row="3" Spacing="8">
 
-                                    <TextBlock Grid.Column="0"
-                                               Text="{x:Bind DisplayName}"
-                                               VerticalAlignment="Center"
-                                               FontWeight="SemiBold"
-                                               TextTrimming="CharacterEllipsis"/>
+            <!-- Camera -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16,12">
+                <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon Grid.Column="0"
+                              Glyph="&#xE722;"
+                              FontSize="20"
+                              VerticalAlignment="Center"
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                        <TextBlock x:Uid="PrivacyPage_CameraTitle" FontWeight="SemiBold"/>
+                        <TextBlock x:Uid="PrivacyPage_CameraDesc"
+                                   FontSize="12"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ToggleSwitch Grid.Column="2"
+                                  IsOn="{x:Bind ViewModel.CameraEnabled, Mode=TwoWay}"
+                                  OnContent=""
+                                  OffContent=""
+                                  VerticalAlignment="Center"
+                                  Margin="0"/>
+                </Grid>
+            </Border>
 
-                                    <!-- Camera -->
-                                    <CheckBox Grid.Column="1"
-                                              IsChecked="{x:Bind HasCamera, Mode=TwoWay}"
-                                              Visibility="{x:Bind CameraVisibility}"
-                                              VerticalAlignment="Center">
-                                        <StackPanel Orientation="Horizontal" Spacing="6">
-                                            <FontIcon Glyph="&#xE722;" FontSize="14" VerticalAlignment="Center"/>
-                                            <TextBlock x:Uid="PrivacyPage_CameraLabel" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </CheckBox>
+            <!-- Microphone -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16,12">
+                <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon Grid.Column="0"
+                              Glyph="&#xE720;"
+                              FontSize="20"
+                              VerticalAlignment="Center"
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                        <TextBlock x:Uid="PrivacyPage_MicTitle" FontWeight="SemiBold"/>
+                        <TextBlock x:Uid="PrivacyPage_MicDesc"
+                                   FontSize="12"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ToggleSwitch Grid.Column="2"
+                                  IsOn="{x:Bind ViewModel.MicEnabled, Mode=TwoWay}"
+                                  OnContent=""
+                                  OffContent=""
+                                  VerticalAlignment="Center"
+                                  Margin="0"/>
+                </Grid>
+            </Border>
 
-                                    <!-- Microphone -->
-                                    <CheckBox Grid.Column="2"
-                                              IsChecked="{x:Bind HasMic, Mode=TwoWay}"
-                                              Visibility="{x:Bind MicVisibility}"
-                                              VerticalAlignment="Center">
-                                        <StackPanel Orientation="Horizontal" Spacing="6">
-                                            <FontIcon Glyph="&#xE720;" FontSize="14" VerticalAlignment="Center"/>
-                                            <TextBlock x:Uid="PrivacyPage_MicLabel" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </CheckBox>
+            <!-- Location -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16,12">
+                <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <FontIcon Grid.Column="0"
+                              Glyph="&#xE81D;"
+                              FontSize="20"
+                              VerticalAlignment="Center"
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                        <TextBlock x:Uid="PrivacyPage_LocationTitle" FontWeight="SemiBold"/>
+                        <TextBlock x:Uid="PrivacyPage_LocationDesc"
+                                   FontSize="12"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ToggleSwitch Grid.Column="2"
+                                  IsOn="{x:Bind ViewModel.LocationEnabled, Mode=TwoWay}"
+                                  OnContent=""
+                                  OffContent=""
+                                  VerticalAlignment="Center"
+                                  Margin="0"/>
+                </Grid>
+            </Border>
 
-                                    <!-- Location -->
-                                    <CheckBox Grid.Column="3"
-                                              IsChecked="{x:Bind HasLocation, Mode=TwoWay}"
-                                              Visibility="{x:Bind LocationVisibility}"
-                                              VerticalAlignment="Center">
-                                        <StackPanel Orientation="Horizontal" Spacing="6">
-                                            <FontIcon Glyph="&#xE81D;" FontSize="14" VerticalAlignment="Center"/>
-                                            <TextBlock x:Uid="PrivacyPage_LocationLabel" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </CheckBox>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsRepeater.ItemTemplate>
-                </ItemsRepeater>
-            </ScrollViewer>
-
-            <TextBlock x:Uid="PrivacyPage_EmptyState"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Opacity="0.5"
-                       Visibility="{x:Bind ViewModel.EmptyStateVisibility, Mode=OneWay}"/>
-        </Grid>
+        </StackPanel>
     </Grid>
 </Page>

@@ -477,8 +477,8 @@
   <data name="PrivacyPage_ScoreGood" xml:space="preserve">
     <value>Good</value>
   </data>
-  <data name="PrivacyPage_AppPermissionsHeader.Text" xml:space="preserve">
-    <value>App Permissions</value>
+  <data name="PrivacyPage_CapabilityHeader.Text" xml:space="preserve">
+    <value>Device Access</value>
   </data>
   <data name="PrivacyPage_ScoreTitle.Text" xml:space="preserve">
     <value>Privacy level</value>
@@ -486,16 +486,22 @@
   <data name="PrivacyPage_ViewTweaksButton.Content" xml:space="preserve">
     <value>View privacy tweaks</value>
   </data>
-  <data name="PrivacyPage_CameraLabel.Text" xml:space="preserve">
-    <value>Allow Camera</value>
+  <data name="PrivacyPage_CameraTitle.Text" xml:space="preserve">
+    <value>Camera access</value>
   </data>
-  <data name="PrivacyPage_MicLabel.Text" xml:space="preserve">
-    <value>Allow Microphone</value>
+  <data name="PrivacyPage_CameraDesc.Text" xml:space="preserve">
+    <value>Apps can use the camera when this is on</value>
   </data>
-  <data name="PrivacyPage_LocationLabel.Text" xml:space="preserve">
-    <value>Allow Location</value>
+  <data name="PrivacyPage_MicTitle.Text" xml:space="preserve">
+    <value>Microphone access</value>
   </data>
-  <data name="PrivacyPage_EmptyState.Text" xml:space="preserve">
-    <value>No apps have requested access</value>
+  <data name="PrivacyPage_MicDesc.Text" xml:space="preserve">
+    <value>Apps can use the microphone when this is on</value>
+  </data>
+  <data name="PrivacyPage_LocationTitle.Text" xml:space="preserve">
+    <value>Location access</value>
+  </data>
+  <data name="PrivacyPage_LocationDesc.Text" xml:space="preserve">
+    <value>Apps can access your location when this is on</value>
   </data>
 </root>

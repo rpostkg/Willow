@@ -477,8 +477,8 @@
   <data name="PrivacyPage_ScoreGood" xml:space="preserve">
     <value>Хороший</value>
   </data>
-  <data name="PrivacyPage_AppPermissionsHeader.Text" xml:space="preserve">
-    <value>Доступ застосунків</value>
+  <data name="PrivacyPage_CapabilityHeader.Text" xml:space="preserve">
+    <value>Доступ до пристрою</value>
   </data>
   <data name="PrivacyPage_ScoreTitle.Text" xml:space="preserve">
     <value>Рівень приватності</value>
@@ -486,16 +486,22 @@
   <data name="PrivacyPage_ViewTweaksButton.Content" xml:space="preserve">
     <value>Переглянути твіки</value>
   </data>
-  <data name="PrivacyPage_CameraLabel.Text" xml:space="preserve">
-    <value>Дозволити камеру</value>
+  <data name="PrivacyPage_CameraTitle.Text" xml:space="preserve">
+    <value>Доступ до камери</value>
   </data>
-  <data name="PrivacyPage_MicLabel.Text" xml:space="preserve">
-    <value>Дозволити мікрофон</value>
+  <data name="PrivacyPage_CameraDesc.Text" xml:space="preserve">
+    <value>Застосунки можуть використовувати камеру, коли це ввімкнено</value>
   </data>
-  <data name="PrivacyPage_LocationLabel.Text" xml:space="preserve">
-    <value>Дозволити геолокацію</value>
+  <data name="PrivacyPage_MicTitle.Text" xml:space="preserve">
+    <value>Доступ до мікрофона</value>
   </data>
-  <data name="PrivacyPage_EmptyState.Text" xml:space="preserve">
-    <value>Жоден застосунок не запитував доступ</value>
+  <data name="PrivacyPage_MicDesc.Text" xml:space="preserve">
+    <value>Застосунки можуть використовувати мікрофон, коли це ввімкнено</value>
+  </data>
+  <data name="PrivacyPage_LocationTitle.Text" xml:space="preserve">
+    <value>Доступ до геолокації</value>
+  </data>
+  <data name="PrivacyPage_LocationDesc.Text" xml:space="preserve">
+    <value>Застосунки можуть отримувати геолокацію, коли це ввімкнено</value>
   </data>
 </root>

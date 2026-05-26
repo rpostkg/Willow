@@ -1,12 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.Windows.ApplicationModel.Resources;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using Windows.UI;
-using Willow.Models;
 using Willow.Services;
 
 namespace Willow.ViewModels;
@@ -15,7 +11,7 @@ public enum PrivacyScore { Low, Fair, Good }
 
 public partial class PrivacyViewModel : ObservableObject
 {
-    private bool _applying;
+    private bool _loading;
     private string _privacyCategoryFilter = string.Empty;
     public string PrivacyCategoryFilter => _privacyCategoryFilter;
 
@@ -27,15 +23,19 @@ public partial class PrivacyViewModel : ObservableObject
         new(Color.FromArgb(255, 136, 136, 136));
 
     [ObservableProperty]
-    private Visibility emptyStateVisibility = Visibility.Collapsed;
+    private bool cameraEnabled;
 
-    public ObservableCollection<AppPermission> AppPermissions { get; } = new();
+    [ObservableProperty]
+    private bool micEnabled;
+
+    [ObservableProperty]
+    private bool locationEnabled;
 
     public PrivacyViewModel()
     {
         var res = new ResourceLoader();
         LoadScore(res);
-        LoadPermissions();
+        LoadToggles();
     }
 
     private void LoadScore(ResourceLoader res)
@@ -50,46 +50,28 @@ public partial class PrivacyViewModel : ObservableObject
         ScoreBackground = BrushForScore(score);
     }
 
-    private void LoadPermissions()
+    private void LoadToggles()
     {
-        foreach (var item in AppPermissions)
-            item.PropertyChanged -= OnPermissionChanged;
-        AppPermissions.Clear();
-
-        foreach (var perm in AppPermissionsService.GetPermissions())
-        {
-            perm.PropertyChanged += OnPermissionChanged;
-            AppPermissions.Add(perm);
-        }
-
-        EmptyStateVisibility = AppPermissions.Any()
-            ? Visibility.Collapsed
-            : Visibility.Visible;
+        _loading = true;
+        CameraEnabled   = AppPermissionsService.GetGlobalToggle("webcam");
+        MicEnabled      = AppPermissionsService.GetGlobalToggle("microphone");
+        LocationEnabled = AppPermissionsService.GetGlobalToggle("location");
+        _loading = false;
     }
 
-    private void OnPermissionChanged(object? sender, PropertyChangedEventArgs e)
+    partial void OnCameraEnabledChanged(bool value)
     {
-        if (_applying || sender is not AppPermission perm) return;
+        if (!_loading) AppPermissionsService.SetGlobalToggle("webcam", value);
+    }
 
-        var capability = e.PropertyName switch
-        {
-            nameof(AppPermission.HasCamera)   => "webcam",
-            nameof(AppPermission.HasMic)      => "microphone",
-            nameof(AppPermission.HasLocation) => "location",
-            _ => null
-        };
-        if (capability == null) return;
+    partial void OnMicEnabledChanged(bool value)
+    {
+        if (!_loading) AppPermissionsService.SetGlobalToggle("microphone", value);
+    }
 
-        var allow = e.PropertyName switch
-        {
-            nameof(AppPermission.HasCamera)   => perm.HasCamera,
-            nameof(AppPermission.HasMic)      => perm.HasMic,
-            _ => perm.HasLocation
-        };
-
-        _applying = true;
-        try { AppPermissionsService.SetPermission(perm.AppKey, capability, allow); }
-        finally { _applying = false; }
+    partial void OnLocationEnabledChanged(bool value)
+    {
+        if (!_loading) AppPermissionsService.SetGlobalToggle("location", value);
     }
 
     internal static PrivacyScore CalculateScore(int applied, int total)
