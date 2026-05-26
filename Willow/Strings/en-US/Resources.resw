@@ -459,4 +459,37 @@
   <data name="DashboardPage_FreeableLabel.Text" xml:space="preserve">
     <value>freeable</value>
   </data>
+  <data name="Nav_Privacy.Content" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="PrivacyPage_Title.Text" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="PrivacyPage_ScoreSubtitle.Text" xml:space="preserve">
+    <value>Based on applied privacy tweaks</value>
+  </data>
+  <data name="PrivacyPage_ScoreLow" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="PrivacyPage_ScoreFair" xml:space="preserve">
+    <value>Fair</value>
+  </data>
+  <data name="PrivacyPage_ScoreGood" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="PrivacyPage_AppPermissionsHeader.Text" xml:space="preserve">
+    <value>App Permissions</value>
+  </data>
+  <data name="PrivacyPage_CameraLabel.Text" xml:space="preserve">
+    <value>Camera</value>
+  </data>
+  <data name="PrivacyPage_MicLabel.Text" xml:space="preserve">
+    <value>Microphone</value>
+  </data>
+  <data name="PrivacyPage_LocationLabel.Text" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="PrivacyPage_EmptyState.Text" xml:space="preserve">
+    <value>No apps have requested access</value>
+  </data>
 </root>

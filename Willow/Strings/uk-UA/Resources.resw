@@ -459,4 +459,37 @@
   <data name="DashboardPage_FreeableLabel.Text" xml:space="preserve">
     <value>можна звільнити</value>
   </data>
+  <data name="Nav_Privacy.Content" xml:space="preserve">
+    <value>Приватність</value>
+  </data>
+  <data name="PrivacyPage_Title.Text" xml:space="preserve">
+    <value>Приватність</value>
+  </data>
+  <data name="PrivacyPage_ScoreSubtitle.Text" xml:space="preserve">
+    <value>На основі застосованих твіків конфіденційності</value>
+  </data>
+  <data name="PrivacyPage_ScoreLow" xml:space="preserve">
+    <value>Низький</value>
+  </data>
+  <data name="PrivacyPage_ScoreFair" xml:space="preserve">
+    <value>Середній</value>
+  </data>
+  <data name="PrivacyPage_ScoreGood" xml:space="preserve">
+    <value>Хороший</value>
+  </data>
+  <data name="PrivacyPage_AppPermissionsHeader.Text" xml:space="preserve">
+    <value>Доступ застосунків</value>
+  </data>
+  <data name="PrivacyPage_CameraLabel.Text" xml:space="preserve">
+    <value>Камера</value>
+  </data>
+  <data name="PrivacyPage_MicLabel.Text" xml:space="preserve">
+    <value>Мікрофон</value>
+  </data>
+  <data name="PrivacyPage_LocationLabel.Text" xml:space="preserve">
+    <value>Геолокація</value>
+  </data>
+  <data name="PrivacyPage_EmptyState.Text" xml:space="preserve">
+    <value>Жоден застосунок не запитував доступ</value>
+  </data>
 </root>
