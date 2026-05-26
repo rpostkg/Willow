@@ -79,13 +79,13 @@
                                                FontSize="11"
                                                TextTrimming="CharacterEllipsis"/>
 
-                                    <Border Background="{ThemeResource SystemFillColorSolidNeutralBrush}"
+                                    <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
                                             CornerRadius="4"
                                             Padding="6,2"
                                             HorizontalAlignment="Left">
                                         <TextBlock Text="{x:Bind HiveLabel}"
                                                    FontSize="11"
-                                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                   Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
                                     </Border>
                                 </StackPanel>
 

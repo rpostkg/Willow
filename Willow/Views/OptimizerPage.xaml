@@ -94,7 +94,7 @@
                                         CornerRadius="4" Padding="6,2" Margin="0,8,0,0"
                                         HorizontalAlignment="Left"
                                         Visibility="{x:Bind AppliedBadgeVisibility, Mode=OneWay}">
-                                        <TextBlock x:Uid="OptimizerPage_AppliedBadge" FontSize="11" Foreground="White"/>
+                                    <TextBlock x:Uid="OptimizerPage_AppliedBadge" FontSize="11" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
                                 </Border>
                             </StackPanel>
                         </Border>
