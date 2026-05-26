@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Willow (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Willow (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

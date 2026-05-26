@@ -1,0 +1,124 @@
+﻿<Page
+    x:Class="Willow.Views.CleanerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Willow.Models"
+    mc:Ignorable="d">
+
+    <Grid Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title + actions -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Uid="CleanerPage_Title"
+                       Grid.Column="0"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       VerticalAlignment="Center"/>
+
+            <ProgressRing Grid.Column="1"
+                          IsActive="{x:Bind ViewModel.IsScanning, Mode=OneWay}"
+                          Width="24" Height="24"
+                          Margin="0,0,12,0"
+                          VerticalAlignment="Center"/>
+
+            <Button x:Uid="CleanerPage_SelectAllButton"
+                    Grid.Column="2"
+                    Command="{x:Bind ViewModel.SelectAllCommand}"
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"/>
+
+            <Button x:Uid="CleanerPage_SelectNoneButton"
+                    Grid.Column="3"
+                    Command="{x:Bind ViewModel.SelectNoneCommand}"
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"/>
+
+            <Button x:Uid="CleanerPage_CleanSelectedButton"
+                    Grid.Column="4"
+                    Style="{StaticResource AccentButtonStyle}"
+                    Command="{x:Bind ViewModel.CleanSelectedCommand}"
+                    VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Summary strip -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="0,0,0,16">
+            <TextBlock Text="{x:Bind ViewModel.TotalSelectedText, Mode=OneWay}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            <TextBlock Text="|"
+                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+            <TextBlock Text="{x:Bind ViewModel.Status, Mode=OneWay}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+        </StackPanel>
+
+        <!-- Category list -->
+        <ScrollViewer Grid.Row="2">
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}">
+                <ItemsRepeater.Layout>
+                    <StackLayout Spacing="8"/>
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="models:CleanerCategory">
+                        <Border BorderThickness="1"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                Padding="16,12"
+                                CornerRadius="8">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <CheckBox Grid.Column="0"
+                                          IsChecked="{x:Bind IsSelected, Mode=TwoWay}"
+                                          VerticalAlignment="Center"
+                                          Margin="0,0,4,0"/>
+
+                                <StackPanel Padding="-100,0,0,0" Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                    <TextBlock Text="{x:Bind Name}"
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock Text="{x:Bind Description}"
+                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                               FontSize="11"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+
+                                <FontIcon Grid.Column="2"
+                                          x:Uid="CleanerPage_AdminIcon"
+                                          Glyph="&#xEA18;"
+                                          FontSize="14"
+                                          Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                          VerticalAlignment="Center"
+                                          Visibility="{x:Bind AdminIconVisibility}"/>
+
+                                <TextBlock Grid.Column="3"
+                                           Text="{x:Bind SizeText, Mode=OneWay}"
+                                           VerticalAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           FontSize="13"
+                                           MinWidth="70"
+                                           TextAlignment="Right"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </ScrollViewer>
+    </Grid>
+</Page>

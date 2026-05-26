@@ -1,50 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
 
-  <Package Name="Rewind"
+  <Package Name="Willow"
            Manufacturer="WinApps"
            Version="1.0.0.0"
            UpgradeCode="{4E32A1B5-7C8D-4F6E-A9B0-1C2D3E4F5A6B}"
            Scope="perMachine"
            InstallerVersion="500">
 
-    <SummaryInformation Description="Rewind System Optimizer - Setup" />
+    <SummaryInformation Description="Willow System Optimizer - Setup" />
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of Rewind is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Willow is already installed." />
 
     <!-- Extract the icon from the published EXE (resolved via BindPath in .wixproj) -->
-    <Icon Id="RewindIcon.exe" SourceFile="Rewind.exe" />
-    <Property Id="ARPPRODUCTICON" Value="RewindIcon.exe" />
+    <Icon Id="WillowIcon.exe" SourceFile="Willow.exe" />
+    <Property Id="ARPPRODUCTICON" Value="WillowIcon.exe" />
 
-    <!-- Install to %ProgramFiles%\Rewind -->
+    <!-- Install to %ProgramFiles%\Willow -->
     <StandardDirectory Id="ProgramFiles64Folder">
-      <Directory Id="INSTALLFOLDER" Name="Rewind" />
+      <Directory Id="INSTALLFOLDER" Name="Willow" />
     </StandardDirectory>
 
     <!-- Start Menu folder -->
     <StandardDirectory Id="ProgramMenuFolder">
-      <Directory Id="RewindMenuFolder" Name="Rewind" />
+      <Directory Id="WillowMenuFolder" Name="Willow" />
     </StandardDirectory>
 
     <!-- Shortcut component (manual, not harvested — needs explicit GUID) -->
-    <ComponentGroup Id="ApplicationShortcuts" Directory="RewindMenuFolder">
+    <ComponentGroup Id="ApplicationShortcuts" Directory="WillowMenuFolder">
       <Component Id="StartMenuShortcut"
                  Guid="{1A2B3C4D-5E6F-4A7B-8C9D-0E1F2A3B4C5D}">
-        <Shortcut Id="RewindStartMenu"
-                  Name="Rewind"
+        <Shortcut Id="WillowStartMenu"
+                  Name="Willow"
                   Description="Windows system optimization utility"
-                  Target="[INSTALLFOLDER]Rewind.exe"
-                  Icon="RewindIcon.exe"
+                  Target="[INSTALLFOLDER]Willow.exe"
+                  Icon="WillowIcon.exe"
                   WorkingDirectory="INSTALLFOLDER" />
         <!-- Remove the Start Menu folder on uninstall -->
-        <RemoveFolder Id="RemoveRewindMenuFolder"
-                      Directory="RewindMenuFolder"
+        <RemoveFolder Id="RemoveWillowMenuFolder"
+                      Directory="WillowMenuFolder"
                       On="uninstall" />
         <!-- Registry key path — required; shortcuts cannot be KeyPaths.
              Must be HKCU: ICE38/ICE43 require HKCU for components containing Start Menu shortcuts. -->
         <RegistryValue Root="HKCU"
-                       Key="Software\WinApps\Rewind"
+                       Key="Software\WinApps\Willow"
                        Name="StartMenuShortcut"
                        Type="integer"
                        Value="1"
@@ -52,7 +52,7 @@
       </Component>
     </ComponentGroup>
 
-    <Feature Id="ProductFeature" Title="Rewind" Level="1">
+    <Feature Id="ProductFeature" Title="Willow" Level="1">
       <!-- ApplicationFiles is populated by HarvestDirectory in the .wixproj -->
       <ComponentGroupRef Id="ApplicationFiles" />
       <ComponentGroupRef Id="ApplicationShortcuts" />
