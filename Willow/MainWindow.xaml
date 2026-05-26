@@ -20,12 +20,12 @@
                 <NavigationViewItem x:Uid="Nav_Cleaner" Tag="Cleaner" Icon="Delete" />
                 <NavigationViewItem x:Uid="Nav_Startup" Tag="Startup">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE8A5;" />
+                        <FontIcon Glyph="&#xECAA;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Uid="Nav_DiskHealth" Tag="DiskHealth">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE97C;" />
+                        <FontIcon Glyph="&#xE95E;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Uid="Nav_Optimizer" Tag="Optimizer" Icon="Repair" />
