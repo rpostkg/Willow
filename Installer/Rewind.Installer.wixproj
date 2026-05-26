@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+    <PackageReference Include="WixToolset.Heat" Version="5.0.2" />
   </ItemGroup>
 
   <!-- Harvest all published files into the ApplicationFiles component group -->
