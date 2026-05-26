@@ -51,10 +51,44 @@ public class TweakLoaderService
         return tweaks;
     }
 
+    public List<Tweak> LoadTweaksFromFile(string fileName)
+    {
+        var tweaks = new List<Tweak>();
+        var tweaksFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tweaks");
+        var filePath = Path.Combine(tweaksFolder, fileName);
+
+        if (!File.Exists(filePath))
+            return tweaks;
+
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
+            .Build();
+
+        int currentBuild = SystemVersionService.GetCurrentBuildNumber();
+
+        try
+        {
+            var yaml = File.ReadAllText(filePath);
+            var tweakFile = deserializer.Deserialize<TweakFile>(yaml);
+            if (tweakFile?.Tweaks != null)
+                foreach (var tweak in tweakFile.Tweaks)
+                    if (PassesVersionFilter(tweak, currentBuild))
+                        tweaks.Add(tweak);
+        }
+        catch { }
+
+        var locale = new PreferencesService().LoadPreferences().Language;
+        if (!string.IsNullOrEmpty(locale))
+            ApplyLocale(tweaks, tweaksFolder, locale);
+
+        return tweaks;
+    }
+
     internal static bool PassesVersionFilter(Tweak tweak, int buildNumber) =>
         buildNumber >= tweak.MinVersion && buildNumber <= tweak.MaxVersion;
 
-    private void ApplyLocale(List<Tweak> tweaks, string tweaksFolder, string locale)
+    internal void ApplyLocale(List<Tweak> tweaks, string tweaksFolder, string locale)
     {
         var localeFolder = Path.Combine(tweaksFolder, "Locale", locale);
         if (!Directory.Exists(localeFolder)) return;
