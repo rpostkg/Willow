@@ -109,7 +109,7 @@
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>
             </ScrollViewer>
-            <FontIcon Glyph="&#xE721;" Margin="0,-52,0,0" FontSize="32" Opacity="0.5"/>
+            <FontIcon Glyph="&#xE721;" Margin="0,-52,0,0" FontSize="32" Opacity="0.5" Visibility="{x:Bind ViewModel.EmptyStateVisibility, Mode=OneWay}"/>
             <TextBlock x:Uid="OptimizerPage_EmptyState"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
