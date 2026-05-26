@@ -24,6 +24,9 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\Icon.png" />
+    <Content Include="Assets\Icon.svg" />
+	<Content Include="Assets\Icon.ico" />
   </ItemGroup>
 
   <ItemGroup>

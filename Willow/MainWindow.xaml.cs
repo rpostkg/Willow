@@ -2,6 +2,8 @@
 using Microsoft.UI.Xaml.Controls;
 using Willow.ViewModels;
 using Willow.Views;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace Willow
@@ -11,6 +13,7 @@ namespace Willow
         public MainWindow()
         {
             this.InitializeComponent();
+            AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "Icon.ico"));
             _ = new DashboardViewModel();
             NavView.SelectedItem = NavView.MenuItems.OfType<NavigationViewItem>().FirstOrDefault();
         }
