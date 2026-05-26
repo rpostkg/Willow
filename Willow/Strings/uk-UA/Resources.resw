@@ -480,14 +480,20 @@
   <data name="PrivacyPage_AppPermissionsHeader.Text" xml:space="preserve">
     <value>Доступ застосунків</value>
   </data>
+  <data name="PrivacyPage_ScoreTitle.Text" xml:space="preserve">
+    <value>Рівень приватності</value>
+  </data>
+  <data name="PrivacyPage_ViewTweaksButton.Content" xml:space="preserve">
+    <value>Переглянути твіки</value>
+  </data>
   <data name="PrivacyPage_CameraLabel.Text" xml:space="preserve">
-    <value>Камера</value>
+    <value>Дозволити камеру</value>
   </data>
   <data name="PrivacyPage_MicLabel.Text" xml:space="preserve">
-    <value>Мікрофон</value>
+    <value>Дозволити мікрофон</value>
   </data>
   <data name="PrivacyPage_LocationLabel.Text" xml:space="preserve">
-    <value>Геолокація</value>
+    <value>Дозволити геолокацію</value>
   </data>
   <data name="PrivacyPage_EmptyState.Text" xml:space="preserve">
     <value>Жоден застосунок не запитував доступ</value>

@@ -25,11 +25,14 @@ public static class AppPermissionsService
         return allKeys
             .Select(key => new AppPermission
             {
-                AppKey      = key,
-                DisplayName = GetDisplayName(key),
-                HasCamera   = camStates.GetValueOrDefault(key, false),
-                HasMic      = micStates.GetValueOrDefault(key, false),
-                HasLocation = locStates.GetValueOrDefault(key, false),
+                AppKey           = key,
+                DisplayName      = GetDisplayName(key),
+                HasCamera        = camStates.GetValueOrDefault(key, false),
+                HasMic           = micStates.GetValueOrDefault(key, false),
+                HasLocation      = locStates.GetValueOrDefault(key, false),
+                HasCameraEntry   = camStates.ContainsKey(key),
+                HasMicEntry      = micStates.ContainsKey(key),
+                HasLocationEntry = locStates.ContainsKey(key),
             })
             .OrderBy(a => a.DisplayName)
             .ToList();
@@ -67,6 +70,12 @@ public static class AppPermissionsService
             using var root = Registry.CurrentUser.OpenSubKey(registryPath);
             if (root == null) return result;
 
+            // Global toggle: "Let apps access your microphone/camera/location"
+            // If the root Value is "Deny", every per-app entry is effectively denied regardless
+            // of its individual Value, which is exactly what Windows Settings shows.
+            var globalValue = root.GetValue("Value") as string;
+            bool globalAllow = !string.Equals(globalValue, "Deny", StringComparison.OrdinalIgnoreCase);
+
             foreach (var subKeyName in root.GetSubKeyNames())
             {
                 if (subKeyName.Equals("NonPackaged", StringComparison.OrdinalIgnoreCase))
@@ -78,14 +87,14 @@ public static class AppPermissionsService
                         var appKey = $@"NonPackaged\{win32Key}";
                         var allowed = IsAllowed(nonPkg, win32Key);
                         if (allowed.HasValue)
-                            result[appKey] = allowed.Value;
+                            result[appKey] = globalAllow && allowed.Value;
                     }
                 }
                 else
                 {
                     var allowed = IsAllowed(root, subKeyName);
                     if (allowed.HasValue)
-                        result[subKeyName] = allowed.Value;
+                        result[subKeyName] = globalAllow && allowed.Value;
                 }
             }
         }

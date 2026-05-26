@@ -18,8 +18,11 @@ namespace Willow
             NavView.SelectedItem = NavView.MenuItems.OfType<NavigationViewItem>().FirstOrDefault();
         }
 
-        public void NavigateTo(string tag)
+        private object? _navigationParameter;
+
+        public void NavigateTo(string tag, object? parameter = null)
         {
+            _navigationParameter = parameter;
             var item = NavView.MenuItems.OfType<NavigationViewItem>()
                 .FirstOrDefault(i => i.Tag?.ToString() == tag);
             if (item != null) NavView.SelectedItem = item;
@@ -28,6 +31,8 @@ namespace Willow
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             var item = args.SelectedItem as NavigationViewItem;
+            var param = _navigationParameter;
+            _navigationParameter = null;
             if (item != null)
             {
                 switch (item.Tag)
@@ -48,7 +53,7 @@ namespace Willow
                         ContentFrame.Navigate(typeof(PrivacyPage));
                         break;
                     case "Optimizer":
-                        ContentFrame.Navigate(typeof(OptimizerPage));
+                        ContentFrame.Navigate(typeof(OptimizerPage), param);
                         break;
                     case "Settings":
                         ContentFrame.Navigate(typeof(SettingsPage));

@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Windows.ApplicationModel.Resources;
 using Willow.ViewModels;
 using System;
@@ -15,6 +16,13 @@ public sealed partial class OptimizerPage : Page
     public OptimizerPage()
     {
         this.InitializeComponent();
+    }
+
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+        base.OnNavigatedTo(e);
+        if (e.Parameter is string category && !string.IsNullOrEmpty(category))
+            ViewModel.SelectedCategory = category;
     }
 
     private void TweakSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)

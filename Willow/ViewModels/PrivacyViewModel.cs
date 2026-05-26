@@ -16,6 +16,8 @@ public enum PrivacyScore { Low, Fair, Good }
 public partial class PrivacyViewModel : ObservableObject
 {
     private bool _applying;
+    private string _privacyCategoryFilter = string.Empty;
+    public string PrivacyCategoryFilter => _privacyCategoryFilter;
 
     [ObservableProperty]
     private string scoreLabel = string.Empty;
@@ -42,6 +44,7 @@ public partial class PrivacyViewModel : ObservableObject
         var prefs = new PreferencesService().LoadPreferences();
         var applied = tweaks.Count(t => prefs.OldRegistryData.ContainsKey(t.Id));
 
+        _privacyCategoryFilter = tweaks.FirstOrDefault()?.Category ?? string.Empty;
         var score = CalculateScore(applied, tweaks.Count);
         ScoreLabel = LabelForScore(score, res);
         ScoreBackground = BrushForScore(score);
