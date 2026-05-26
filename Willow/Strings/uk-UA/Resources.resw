@@ -388,7 +388,7 @@
     <value>Несправний</value>
   </data>
   <data name="DiskHealthPage_HealthUnknown" xml:space="preserve">
-    <value>Невідомо</value>
+    <value>Невідомо. Цей диск не підтримує систему S.M.A.R.T.</value>
   </data>
   <data name="DiskHealthPage_TempLabel.Text" xml:space="preserve">
     <value>Температура</value>

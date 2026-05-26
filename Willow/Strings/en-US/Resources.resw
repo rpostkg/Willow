@@ -388,7 +388,7 @@
     <value>Failing</value>
   </data>
   <data name="DiskHealthPage_HealthUnknown" xml:space="preserve">
-    <value>Unknown</value>
+    <value>Unknown. This disk does not support S.M.A.R.T.</value>
   </data>
   <data name="DiskHealthPage_TempLabel.Text" xml:space="preserve">
     <value>Temperature</value>
