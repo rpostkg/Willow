@@ -30,6 +30,7 @@
                                       IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
+                        <FontIcon Glyph="&#xEEA1;" FontSize="32" Margin="0,-100,0,0"/>
                         <TextBlock x:Uid="DashboardPage_CpuLabel"
                                    Style="{StaticResource BodyStrongTextBlockStyle}"
                                    HorizontalAlignment="Center" />
@@ -53,6 +54,7 @@
                                       IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
+                        <FontIcon Glyph="&#xEEA0;" FontSize="32" Margin="0,-100,0,0"/>
                         <TextBlock x:Uid="DashboardPage_RamLabel"
                                    Style="{StaticResource BodyStrongTextBlockStyle}"
                                    HorizontalAlignment="Center" />
@@ -76,6 +78,7 @@
                                       IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                                       Maximum="100"
                                       HorizontalAlignment="Center" />
+                        <FontIcon Glyph="&#xEDA2;" FontSize="32" Margin="0,-100,0,0"/>
                         <TextBlock x:Uid="DashboardPage_DiskLabel"
                                    Style="{StaticResource BodyStrongTextBlockStyle}"
                                    HorizontalAlignment="Center" />
