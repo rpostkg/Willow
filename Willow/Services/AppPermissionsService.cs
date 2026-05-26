@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Windows.Management.Deployment;
 using Willow.Models;
 
 namespace Willow.Services;
@@ -11,6 +12,8 @@ public static class AppPermissionsService
 {
     private const string ConsentStoreBase =
         @"Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore";
+
+    private static readonly Dictionary<string, string> _nameCache = new(StringComparer.OrdinalIgnoreCase);
 
     public static List<AppPermission> GetPermissions()
     {
@@ -58,8 +61,31 @@ public static class AppPermissionsService
         }
 
         // UWP apps: "Microsoft.WindowsCamera_8wekyb3d8bbwe"
+        // Resolve via PackageManager to get the localized display name; cache the result.
+        if (_nameCache.TryGetValue(appKey, out var cached))
+            return cached;
+
+        var friendly = TryGetPackageDisplayName(appKey);
         var lastUnderscore = appKey.LastIndexOf('_');
-        return lastUnderscore > 0 ? appKey[..lastUnderscore] : appKey;
+        var fallback = lastUnderscore > 0 ? appKey[..lastUnderscore] : appKey;
+        var result = !string.IsNullOrWhiteSpace(friendly) ? friendly : fallback;
+        _nameCache[appKey] = result;
+        return result;
+    }
+
+    private static string? TryGetPackageDisplayName(string packageFamilyName)
+    {
+        try
+        {
+            var pm = new PackageManager();
+            var pkg = pm.FindPackagesForUser(string.Empty, packageFamilyName).FirstOrDefault();
+            var name = pkg?.DisplayName;
+            return string.IsNullOrWhiteSpace(name) ? null : name;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static Dictionary<string, bool> ReadCapabilityStore(string registryPath)
@@ -107,8 +133,11 @@ public static class AppPermissionsService
         try
         {
             using var key = parent.OpenSubKey(subKeyName);
-            var val = key?.GetValue("Value") as string;
-            if (val == null) return null;
+            if (key == null) return null;
+            var val = key.GetValue("Value") as string;
+            // No explicit Value = implicitly allowed (Windows tracks the access but user
+            // hasn't explicitly managed it; effective permission follows the global toggle).
+            if (val == null) return true;
             return val.Equals("Allow", StringComparison.OrdinalIgnoreCase);
         }
         catch { return null; }

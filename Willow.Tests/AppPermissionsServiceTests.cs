@@ -6,10 +6,21 @@ namespace Willow.Tests;
 public class AppPermissionsServiceTests
 {
     [Fact]
-    public void GetDisplayName_UwpKey_StripsPublisherSuffix()
+    public void GetDisplayName_UwpKeyKnownPackage_ReturnsDisplayNameWithoutPublisherId()
     {
+        // PackageManager resolves Microsoft.WindowsCamera to its friendly name (e.g. "Windows Camera").
+        // Either way the publisher ID suffix must not appear in the result.
         var result = AppPermissionsService.GetDisplayName("Microsoft.WindowsCamera_8wekyb3d8bbwe");
-        Assert.Equal("Microsoft.WindowsCamera", result);
+        Assert.NotEmpty(result);
+        Assert.DoesNotContain("_8wekyb3d8bbwe", result);
+    }
+
+    [Fact]
+    public void GetDisplayName_UwpKeyUnknownPackage_StripsPublisherSuffix()
+    {
+        // PackageManager can't resolve a fake PFN; fallback strips the "_publisherId" part.
+        var result = AppPermissionsService.GetDisplayName("SomeFakeApp.That.Does.Not.Exist_8wekyb3d8bbwe");
+        Assert.Equal("SomeFakeApp.That.Does.Not.Exist", result);
     }
 
     [Fact]
