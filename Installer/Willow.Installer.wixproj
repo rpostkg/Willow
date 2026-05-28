@@ -21,6 +21,17 @@
     </HarvestDirectory>
   </ItemGroup>
 
+  <!-- Stale Rewind.* files left in the publish dir by old builds before the rename -->
+  <ItemGroup>
+    <StaleRewindFiles Include="$(PublishDir)Rewind.*" />
+  </ItemGroup>
+
+  <!-- Delete stale Rewind.* files before harvesting so they don't end up in the MSI -->
+  <Target Name="RemoveStaleRewindArtifacts" BeforeTargets="HarvestDirectory">
+    <Delete Files="@(StaleRewindFiles)" />
+    <Message Text="Removed stale Rewind artifacts: @(StaleRewindFiles)" Importance="normal" />
+  </Target>
+
   <!-- Make the publish directory a bind path so WiX can resolve Willow.exe for the icon -->
   <ItemGroup>
     <BindPath Include="$(PublishDir)" />

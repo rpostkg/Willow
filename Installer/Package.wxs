@@ -29,9 +29,14 @@
       <Directory Id="WillowMenuFolder" Name="Willow" />
     </StandardDirectory>
 
-    <!-- Shortcut component (manual, not harvested — needs explicit GUID) -->
-    <ComponentGroup Id="ApplicationShortcuts" Directory="WillowMenuFolder">
+    <!-- Desktop -->
+    <StandardDirectory Id="DesktopFolder" />
+
+    <!-- Shortcut components (manual, not harvested — need explicit GUIDs) -->
+    <ComponentGroup Id="ApplicationShortcuts">
+      <!-- Start Menu shortcut -->
       <Component Id="StartMenuShortcut"
+                 Directory="WillowMenuFolder"
                  Guid="{1A2B3C4D-5E6F-4A7B-8C9D-0E1F2A3B4C5D}">
         <Shortcut Id="WillowStartMenu"
                   Name="Willow"
@@ -39,15 +44,33 @@
                   Target="[INSTALLFOLDER]Willow.exe"
                   Icon="WillowIcon.exe"
                   WorkingDirectory="INSTALLFOLDER" />
-        <!-- Remove the Start Menu folder on uninstall -->
         <RemoveFolder Id="RemoveWillowMenuFolder"
                       Directory="WillowMenuFolder"
                       On="uninstall" />
-        <!-- Registry key path — required; shortcuts cannot be KeyPaths.
-             Must be HKCU: ICE38/ICE43 require HKCU for components containing Start Menu shortcuts. -->
         <RegistryValue Root="HKCU"
                        Key="Software\WinApps\Willow"
                        Name="StartMenuShortcut"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+
+      <!-- Desktop shortcut -->
+      <Component Id="DesktopShortcut"
+                 Directory="DesktopFolder"
+                 Guid="{2B3C4D5E-6F7A-4B8C-9D0E-1F2A3B4C5D6E}">
+        <Shortcut Id="WillowDesktop"
+                  Name="Willow"
+                  Description="Windows system optimization utility"
+                  Target="[INSTALLFOLDER]Willow.exe"
+                  Icon="WillowIcon.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveDesktopShortcut"
+                      Directory="DesktopFolder"
+                      On="uninstall" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\WinApps\Willow"
+                       Name="DesktopShortcut"
                        Type="integer"
                        Value="1"
                        KeyPath="yes" />

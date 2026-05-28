@@ -16,7 +16,7 @@
   <mp:PhoneIdentity PhoneProductId="7bff1152-6b1b-47ec-b663-73dffb1d47db" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Rewind</DisplayName>
+    <DisplayName>Willow</DisplayName>
     <PublisherDisplayName>WinApps</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -35,8 +35,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Rewind"
-        Description="Rewind"
+        DisplayName="Willow"
+        Description="Windows system optimization utility"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
