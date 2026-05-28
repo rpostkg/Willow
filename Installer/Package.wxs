@@ -13,6 +13,8 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of Willow is already installed." />
 
+    <MediaTemplate EmbedCab="yes" />
+
     <!-- Extract the icon from the published EXE (resolved via BindPath in .wixproj) -->
     <Icon Id="WillowIcon.exe" SourceFile="Willow.exe" />
     <Property Id="ARPPRODUCTICON" Value="WillowIcon.exe" />
