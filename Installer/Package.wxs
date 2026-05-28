@@ -15,9 +15,9 @@
 
     <MediaTemplate EmbedCab="yes" />
 
-    <!-- Extract the icon from the published EXE (resolved via BindPath in .wixproj) -->
-    <Icon Id="WillowIcon.exe" SourceFile="Willow.exe" />
-    <Property Id="ARPPRODUCTICON" Value="WillowIcon.exe" />
+    <!-- Icon resolved via BindPath pointing at Willow\Assets\ in .wixproj -->
+    <Icon Id="WillowIcon.ico" SourceFile="Icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="WillowIcon.ico" />
 
     <!-- Install to %ProgramFiles%\Willow -->
     <StandardDirectory Id="ProgramFiles64Folder">
@@ -42,7 +42,7 @@
                   Name="Willow"
                   Description="Windows system optimization utility"
                   Target="[INSTALLFOLDER]Willow.exe"
-                  Icon="WillowIcon.exe"
+                  Icon="WillowIcon.ico"
                   WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="RemoveWillowMenuFolder"
                       Directory="WillowMenuFolder"
@@ -63,7 +63,7 @@
                   Name="Willow"
                   Description="Windows system optimization utility"
                   Target="[INSTALLFOLDER]Willow.exe"
-                  Icon="WillowIcon.exe"
+                  Icon="WillowIcon.ico"
                   WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="RemoveDesktopShortcut"
                       Directory="DesktopFolder"
