@@ -92,7 +92,7 @@ public partial class PrivacyViewModel : ObservableObject
 
     internal static SolidColorBrush BrushForScore(PrivacyScore score) => score switch
     {
-        PrivacyScore.Good => new SolidColorBrush(Color.FromArgb(255, 22,  198,  12)),
+        PrivacyScore.Good => new SolidColorBrush(Color.FromArgb(255, 0,  128,  0)),
         PrivacyScore.Fair => new SolidColorBrush(Color.FromArgb(255, 202,  80,  16)),
         _                 => new SolidColorBrush(Color.FromArgb(255, 196,  43,  28)),
     };

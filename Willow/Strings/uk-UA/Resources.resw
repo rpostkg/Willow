@@ -157,7 +157,7 @@
     <value>Налаштування</value>
   </data>
   <data name="DashboardPage_Title.Text" xml:space="preserve">
-    <value>Панель керування</value>
+    <value>Інфо-панель</value>
   </data>
   <data name="DashboardPage_ResourcesHeader.Text" xml:space="preserve">
     <value>Системні ресурси</value>

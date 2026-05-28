@@ -37,7 +37,7 @@ public sealed partial class OptimizerPage : Page
         if (!selected.Any()) return;
 
         var report = await ViewModel.GenerateReportAsync(selected, false);
-        var dialog = new ReviewChangesDialog(report) { XamlRoot = this.Content.XamlRoot };
+        var dialog = new ReviewChangesDialog(report) { XamlRoot = this.Content.XamlRoot, RequestedTheme = this.ActualTheme };
 
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
             await ViewModel.ExecuteTweaksAsync(selected, report, false);
@@ -52,6 +52,7 @@ public sealed partial class OptimizerPage : Page
         var dialog = new ReviewChangesDialog(report)
         {
             XamlRoot = this.Content.XamlRoot,
+            RequestedTheme = this.ActualTheme,
             Title = _res.GetString("Optimizer_RevertDialogTitle")
         };
 
