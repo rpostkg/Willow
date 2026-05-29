@@ -29,7 +29,7 @@ public class DiskDriveInfo
 
     public SolidColorBrush HealthBrush => Health switch
     {
-        HealthStatus.Good    => new SolidColorBrush(Color.FromArgb(255, 22,  198, 12)),
+        HealthStatus.Good    => new SolidColorBrush(Color.FromArgb(255, 0,   128, 0)),
         HealthStatus.Caution => new SolidColorBrush(Color.FromArgb(255, 202, 80,  16)),
         HealthStatus.Bad     => new SolidColorBrush(Color.FromArgb(255, 255, 67,  67)),
         _                    => new SolidColorBrush(Color.FromArgb(255, 136, 136, 136)),
