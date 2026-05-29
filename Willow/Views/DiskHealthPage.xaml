@@ -88,13 +88,13 @@
                                         <TextBlock Text="{x:Bind SizeText}"
                                                    FontWeight="SemiBold"
                                                    HorizontalAlignment="Right"/>
-                                        <Border Background="{ThemeResource SystemFillColorSolidNeutralBrush}"
+                                        <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
                                                 CornerRadius="4"
                                                 Padding="6,2"
                                                 HorizontalAlignment="Right">
                                             <TextBlock Text="{x:Bind MediaType}"
                                                        FontSize="11"
-                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                       Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
                                         </Border>
                                     </StackPanel>
                                 </Grid>

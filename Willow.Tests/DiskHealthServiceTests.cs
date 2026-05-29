@@ -74,6 +74,26 @@ public class DiskHealthServiceTests
         Assert.Equal("SSD", DiskHealthService.DeriveMediaType(0, 0, 0xFFFFFFFF, "Crucial SSD"));
     }
 
+    // ── HasSmartData ────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void HasSmartData_NoMetrics_ReturnsFalse()
+    {
+        Assert.False(DiskHealthService.HasSmartData(new DiskDriveInfo()));
+    }
+
+    [Fact]
+    public void HasSmartData_OnlyTemperature_ReturnsTrue()
+    {
+        Assert.True(DiskHealthService.HasSmartData(new DiskDriveInfo { TemperatureCelsius = 36 }));
+    }
+
+    [Fact]
+    public void HasSmartData_PowerOnHours_ReturnsTrue()
+    {
+        Assert.True(DiskHealthService.HasSmartData(new DiskDriveInfo { PowerOnHours = 1000 }));
+    }
+
     // ── MatchesInstance ─────────────────────────────────────────────────────────
 
     [Fact]

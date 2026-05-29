@@ -73,6 +73,14 @@ public class DiskHealthService
             if (info.MediaType == "NVMe")
                 TryReadNvmeLog(index, info);
 
+        // no more gaslighting
+        foreach (var (_, _, info) in results)
+            if (info.Health == HealthStatus.Good && !HasSmartData(info))
+            {
+                info.Health     = HealthStatus.Unknown;
+                info.HealthText = _healthUnknown;
+            }
+
         var drives = new List<DiskDriveInfo>(results.Count);
         foreach (var (_, _, info) in results) drives.Add(info);
         return drives;
@@ -169,6 +177,13 @@ public class DiskHealthService
         => !string.IsNullOrEmpty(instanceName)
            && !string.IsNullOrEmpty(pnpDeviceId)
            && instanceName.StartsWith(pnpDeviceId, StringComparison.OrdinalIgnoreCase);
+
+    // True when at least one SMART/health metric was actually read for the drive.
+    internal static bool HasSmartData(DiskDriveInfo info)
+        => info.PowerOnHours.HasValue
+           || info.ReallocatedSectors.HasValue
+           || info.PowerCycleCount.HasValue
+           || info.TemperatureCelsius.HasValue;
 
     internal static (HealthStatus, string) MapPhysicalDiskHealth(
         ushort healthStatus, string good, string caution, string bad, string unknown)
