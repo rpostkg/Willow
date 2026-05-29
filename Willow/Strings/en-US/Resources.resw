@@ -300,6 +300,18 @@
   <data name="Cleaner_ErrorFormat" xml:space="preserve">
     <value>Error: {0}</value>
   </data>
+  <data name="Cleaner_ConfirmTitle" xml:space="preserve">
+    <value>Confirm cleanup</value>
+  </data>
+  <data name="Cleaner_ConfirmMessageFormat" xml:space="preserve">
+    <value>You're about to free up {0}. The following will be cleaned:</value>
+  </data>
+  <data name="Cleaner_ConfirmPrimary" xml:space="preserve">
+    <value>Proceed</value>
+  </data>
+  <data name="Cleaner_ConfirmCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="OptimizerPage_Title.Text" xml:space="preserve">
     <value>Tweaks</value>
   </data>

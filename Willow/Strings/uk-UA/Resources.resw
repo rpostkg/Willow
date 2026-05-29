@@ -300,6 +300,18 @@
   <data name="Cleaner_ErrorFormat" xml:space="preserve">
     <value>Помилка: {0}</value>
   </data>
+  <data name="Cleaner_ConfirmTitle" xml:space="preserve">
+    <value>Підтвердження очищення</value>
+  </data>
+  <data name="Cleaner_ConfirmMessageFormat" xml:space="preserve">
+    <value>Ви збираєтесь звільнити {0}. Буде очищено такі категорії:</value>
+  </data>
+  <data name="Cleaner_ConfirmPrimary" xml:space="preserve">
+    <value>Продовжити</value>
+  </data>
+  <data name="Cleaner_ConfirmCancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
   <data name="OptimizerPage_Title.Text" xml:space="preserve">
     <value>Твіки</value>
   </data>

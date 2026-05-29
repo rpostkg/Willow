@@ -50,7 +50,7 @@
             <Button x:Uid="CleanerPage_CleanSelectedButton"
                     Grid.Column="4"
                     Style="{StaticResource AccentButtonStyle}"
-                    Command="{x:Bind ViewModel.CleanSelectedCommand}"
+                    Click="CleanSelectedButton_Click"
                     VerticalAlignment="Center"/>
         </Grid>
 
