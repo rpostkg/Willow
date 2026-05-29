@@ -2,7 +2,7 @@ tweaks:
   - id: consumer_features
     name: Disable Consumer Features
     category: QoL
-    description: Windows will not automatically install games, third-party apps, or app shortcuts from the Microsoft Store.
+    description: Windows will not auto-install install random third-party apps from Microsoft Store.
 
   - id: disable_widgets
     name: Disable Widgets
@@ -12,7 +12,7 @@ tweaks:
   - id: disable_hibernation
     name: Disable Hibernation
     category: QoL
-    description: Disables hibernation. Frees up disk space; not recommended on laptops.
+    description: Disables hibernation. Frees up disk space. Not recommended on laptops.
 
   - id: end_task_right_click
     name: End Task from Taskbar
@@ -22,4 +22,4 @@ tweaks:
   - id: wpbt_disable
     name: Disable WPBT
     category: QoL
-    description: Prevents hardware vendors from auto-launching programs via the UEFI WPBT table at boot.
+    description: Disables Windows Partition Binary Table. This stops vendor software from auto-installing.

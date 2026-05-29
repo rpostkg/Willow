@@ -54,7 +54,7 @@ tweaks:
   - id: show_hidden_files
     name: Показувати приховані файли
     category: Налаштування
-    description: Відображає приховані файли та теки у Провіднику Windows.
+    description: Відображає приховані файли та директорії у Провіднику Windows.
     actions:
       - type: Registry
         hive: CurrentUser
@@ -130,9 +130,9 @@ tweaks:
         valueType: DWord
 
   - id: disable_bing_search
-    name: Вимкнути Bing у пошуку
+    name: Вимкнути веб-пошук у пошуку
     category: Налаштування
-    description: Прибирає результати веб-пошуку Bing з меню «Пуск» та рядка пошуку.
+    description: Прибирає результати веб-пошуку з меню Пуск та рядка пошуку.
     actions:
       - type: Registry
         hive: CurrentUser
@@ -141,10 +141,26 @@ tweaks:
         value: 0
         valueType: DWord
 
+  - id: quick_context_menu
+    name: Швидке контекстне меню
+    category: Просунуті твіки
+    description: Відновлює швидке контекстне меню правої кнопки миші у провіднику.
+    minversion: 22000
+    actions:
+      - type: Script
+        script: |
+          New-Item -Path "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" -Force -Value ""
+          Stop-Process -Name "explorer" -Force
+    revertActions:
+      - type: Script
+        script: |
+          Remove-Item -Path "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" -Recurse -Force
+          Stop-Process -Name "explorer" -Force
+
   - id: verbose_bsod
-    name: Детальний синій екран
+    name: Детальніший екран збію
     category: Налаштування
-    description: Відображає технічну інформацію замість смайлика на екрані синього екрану смерті.
+    description: Відображає детальнішу технічну інформацію коли ОС виходить з ладу.
     actions:
       - type: Registry
         hive: LocalMachine
@@ -160,9 +176,9 @@ tweaks:
         valueType: DWord
 
   - id: disable_sticky_keys
-    name: Вимкнути Sticky Keys
+    name: Вимкнути залипання клавіш
     category: Налаштування
-    description: Вимикає спливаюче вікно Sticky Keys при п'ятиразовому натисканні Shift.
+    description: Вимикає спливаюче вікно залипання клавіш при п'ятиразовому натисканні Shift.
     actions:
       - type: Registry
         hive: CurrentUser

@@ -2,19 +2,19 @@ tweaks:
   - id: telemetry_master
     name: Disable Telemetry
     category: Privacy
-    description: Disables Microsoft telemetry, advertising ID, input personalization, speech recognition, and feedback collection.
+    description: Disables telemetry, ads, personalization, speech recognition, and feedback collection.
 
   - id: activity_history
     name: Disable Activity History
     category: Privacy
-    description: Disables the Windows activity feed and prevents user activity from being published or synced to the cloud.
+    description: Disables activity feed and prevents it from being published or synced to the cloud.
 
   - id: location_tracking
     name: Disable Location Tracking
     category: Privacy
-    description: Disables location services and blocks apps from accessing location data.
+    description: Disables location services and app access to location data.
 
   - id: powershell_telemetry
     name: Disable PowerShell Telemetry
     category: Privacy
-    description: Opts out of PowerShell 7 telemetry collection via a system environment variable.
+    description: Disables PowerShell 7 telemetry collection.

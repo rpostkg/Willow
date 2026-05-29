@@ -1,35 +1,30 @@
 tweaks:
-  - id: classic_context_menu
-    name: Classic Context Menu
-    category: Advanced Tweaks
-    description: Restores the Windows 10-style classic right-click context menu in Explorer.
-
   - id: disable_bg_apps
     name: Disable Background Apps
     category: Advanced Tweaks
     description: Prevents Microsoft Store apps from running in the background.
 
   - id: disable_teredo
-    name: Disable Teredo
+    name: Disable Teredo tunneling
     category: Advanced Tweaks
     description: Disables Teredo IPv6 tunneling to reduce potential network latency.
 
   - id: block_razer_autoinstall
     name: Block Razer Auto-install
     category: Advanced Tweaks
-    description: Prevents Razer Synapse from automatically installing when Razer devices are connected.
+    description: Prevents Razer software from auto-installing upon device connection.
 
   - id: performance_visual_effects
     name: Disable Visual Effects
     category: Advanced Tweaks
-    description: Sets Windows visual effects to "Best performance" (disables animations, shadows, etc.).
+    description: Sets Windows visual effects to "Best performance".
 
   - id: utc_time
     name: Set Clock to UTC
     category: Advanced Tweaks
-    description: Configures the hardware clock to use UTC. Recommended when dual-booting with Linux.
+    description: Configures the hardware clock to use UTC. Useful when dual-booting with other OSes.
 
   - id: disable_ipv6
     name: Disable IPv6
     category: Advanced Tweaks
-    description: Completely disables the IPv6 protocol on all network adapters.
+    description: Completely disables the IPv6 protocol on all network adapters. Not every ISP supports IPv6.

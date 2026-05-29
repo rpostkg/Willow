@@ -1,20 +1,4 @@
 tweaks:
-  - id: classic_context_menu
-    name: Класичне контекстне меню
-    category: Просунуті твіки
-    description: Відновлює класичне контекстне меню правої кнопки миші у Провіднику (стиль Windows 10).
-    minversion: 22000
-    actions:
-      - type: Script
-        script: |
-          New-Item -Path "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" -Force -Value ""
-          Stop-Process -Name "explorer" -Force
-    revertActions:
-      - type: Script
-        script: |
-          Remove-Item -Path "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" -Recurse -Force
-          Stop-Process -Name "explorer" -Force
-
   - id: disable_bg_apps
     name: Вимкнути фонові програми
     category: Просунуті твіки
@@ -35,7 +19,7 @@ tweaks:
         valueType: DWord
 
   - id: disable_teredo
-    name: Вимкнути Teredo
+    name: Вимкнути тунелювання Teredo
     category: Просунуті твіки
     description: Вимикає тунелювання Teredo IPv6 для зменшення потенційної затримки мережі.
     actions:
@@ -70,9 +54,9 @@ tweaks:
         valueType: DWord
       - type: Script
         script: |
-          $RazerPath = "C:\Windows\Installer\Razer"
-          if (!(Test-Path $RazerPath)) { New-Item -Path $RazerPath -ItemType Directory }
-          icacls $RazerPath /deny "Everyone:(W)"
+          $RazerSlop = "C:\Windows\Installer\Razer"
+          if (!(Test-Path $RazerSlop)) { New-Item -Path $RazerSlop -ItemType Directory }
+          icacls $RazerSlop /deny "Everyone:(W)"
     revertActions:
       - type: Script
         script: icacls "C:\Windows\Installer\Razer" /remove:d Everyone
@@ -103,7 +87,7 @@ tweaks:
   - id: utc_time
     name: Годинник у форматі UTC
     category: Просунуті твіки
-    description: Налаштовує системний годинник на UTC. Рекомендується при подвійному завантаженні з Linux.
+    description: Налаштовує системний годинник на UTC. Рекомендується якщо на машині встановлено більше однієї ОС.
     actions:
       - type: Registry
         hive: LocalMachine

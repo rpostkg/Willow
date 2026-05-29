@@ -2,59 +2,64 @@ tweaks:
   - id: dark_theme
     name: Dark Theme
     category: Preferences
-    description: Enables the dark theme for Windows system UI and applications.
+    description: Forcefully enables OS & app-wide dark mode.
+
+  - id: quick_context_menu
+    name: Quick Context Menu
+    category: Preferences
+    description: Restores the quick context menu
 
   - id: long_paths
     name: Enable Long File Paths
     category: Preferences
-    description: Removes the 260-character limit for file and folder paths.
+    description: Removes the character limit for file and folder paths.
 
   - id: show_file_extensions
     name: Show File Extensions
     category: Preferences
-    description: Displays file extensions in Windows Explorer.
+    description: Forcefully enables the display of file extensions in Windows Explorer.
 
   - id: show_hidden_files
     name: Show Hidden Files
     category: Preferences
-    description: Displays hidden files and folders in Windows Explorer.
+    description: Forcefully enables the display of hidden files and folders in Windows Explorer.
 
   - id: game_mode
     name: Game Mode
     category: Preferences
-    description: Enables Windows Game Mode to improve performance while gaming.
+    description: Enables Windows Game Mode to improve gaming performance.
 
   - id: disable_mouse_accel
     name: Disable Mouse Acceleration
     category: Preferences
-    description: Disables pointer precision enhancement for consistent, linear mouse movement.
+    description: Makes the mouse movement linear.
 
   - id: disable_bing_search
-    name: Disable Bing Search
+    name: Disable web search
     category: Preferences
-    description: Removes Bing web search results from the Start menu and search bar.
+    description: Removes web search results from the Start menu and search bar.
 
   - id: verbose_bsod
-    name: Verbose Blue Screen
+    name: Verbose BSOD
     category: Preferences
-    description: Shows technical information instead of the smiley face on Blue Screen of Death.
+    description: Shows technical information in the BSOD.
 
   - id: disable_sticky_keys
     name: Disable Sticky Keys
     category: Preferences
-    description: Disables the Sticky Keys prompt when Shift is pressed five times.
+    description: Disables the prompt that appears when you hit Shift five times in rapid succession.
 
   - id: battery_percentage
     name: Battery Percentage in Tray
     category: Preferences
-    description: Displays the battery charge percentage next to the power icon in the system tray.
+    description: Displays the battery charge percentage if the machine has a battery.
 
   - id: numlock_on_startup
     name: NumLock on Startup
     category: Preferences
-    description: Automatically enables the Num Lock key when Windows boots.
+    description: Num Lock starts enabled upon login.
 
   - id: logon_acrylic_blur
     name: Remove Logon Blur
     category: Preferences
-    description: Removes the acrylic blur effect from the Windows login screen background.
+    description: Removes the blur effect from the login screen.
